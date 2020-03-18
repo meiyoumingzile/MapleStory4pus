@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Seadragon_run_right",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 1.0166666666666666,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "140c5e4c-8e56-46e2-902c-4ce5518fd10c"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "b5c07c5c-a0c7-4199-88da-ab29843af2c0"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "140c5e4c-8e56-46e2-902c-4ce5518fd10c"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "82b81f3c-67ca-43a1-8ad6-ef1cb26a721e"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "140c5e4c-8e56-46e2-902c-4ce5518fd10c"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

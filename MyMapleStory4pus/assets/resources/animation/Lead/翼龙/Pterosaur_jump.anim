@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Pterosaur_fly_right",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 0.6833333333333333,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "1564112d-1f7f-46b1-b724-6b07e0ebd1eb"
+            }
+          },
+          {
+            "frame": 0.16666666666666666,
+            "value": {
+              "__uuid__": "31c65fb6-6cee-42fd-826e-3a8cc927eca4"
+            }
+          },
+          {
+            "frame": 0.3333333333333333,
+            "value": {
+              "__uuid__": "1564112d-1f7f-46b1-b724-6b07e0ebd1eb"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "6dba8683-fa00-417e-9986-462eed11696d"
+            }
+          },
+          {
+            "frame": 0.6666666666666666,
+            "value": {
+              "__uuid__": "1564112d-1f7f-46b1-b724-6b07e0ebd1eb"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

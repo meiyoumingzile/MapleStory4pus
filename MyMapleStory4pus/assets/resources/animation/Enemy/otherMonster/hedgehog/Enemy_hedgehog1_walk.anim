@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_hedgehog1_walk",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.6333333333333333,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "5da14cc9-0a19-4fbc-85d8-a3487b6f9013"
+            }
+          },
+          {
+            "frame": 0.3,
+            "value": {
+              "__uuid__": "7ad43571-d08f-4b3b-b6d1-298ba4d72bb7"
+            }
+          },
+          {
+            "frame": 0.6166666666666667,
+            "value": {
+              "__uuid__": "5da14cc9-0a19-4fbc-85d8-a3487b6f9013"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

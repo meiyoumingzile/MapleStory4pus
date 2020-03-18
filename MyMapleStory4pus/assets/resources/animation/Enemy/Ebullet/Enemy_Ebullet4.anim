@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_Ebullet4",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.5166666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "b7e2e235-06bc-4ddc-9adc-ee1adcb25bab"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "84b04780-9b14-4e49-a492-26cbae97b92a"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "b7e2e235-06bc-4ddc-9adc-ee1adcb25bab"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

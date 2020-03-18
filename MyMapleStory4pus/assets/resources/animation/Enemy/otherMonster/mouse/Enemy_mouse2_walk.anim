@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_mouse2_walk",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.8,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "3941c12e-5551-4c49-b1d9-e1c641095e53"
+            }
+          },
+          {
+            "frame": 0.36666666666666664,
+            "value": {
+              "__uuid__": "332667d2-d259-4c48-ab1f-ff7982292858"
+            }
+          },
+          {
+            "frame": 0.7833333333333333,
+            "value": {
+              "__uuid__": "3941c12e-5551-4c49-b1d9-e1c641095e53"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

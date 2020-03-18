@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "90799029-6970-4a81-99f4-eb53b2004d44",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "Brontosaurus_walk_left2": {
+      "ver": "1.0.4",
+      "uuid": "a03cc684-9917-4134-93e4-aa6a30fea3cb",
+      "rawTextureUuid": "90799029-6970-4a81-99f4-eb53b2004d44",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -1,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 98,
+      "height": 95,
+      "rawWidth": 100,
+      "rawHeight": 95,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

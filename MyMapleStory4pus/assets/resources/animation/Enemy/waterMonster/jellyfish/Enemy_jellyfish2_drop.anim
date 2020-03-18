@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_jellyfish2_drop",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.43333333333333335,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "5c61170a-3891-4e45-a542-717961f1052c"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "38df1748-ccb9-4802-b0ee-fe80825801df"
+            }
+          },
+          {
+            "frame": 0.4166666666666667,
+            "value": {
+              "__uuid__": "5c61170a-3891-4e45-a542-717961f1052c"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

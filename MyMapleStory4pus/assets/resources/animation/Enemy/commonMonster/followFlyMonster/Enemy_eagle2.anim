@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_eagle2",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.3333333333333333,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "e200c299-8383-4f1f-9ac3-5e8d7b18cda2"
+            }
+          },
+          {
+            "frame": 0.6666666666666666,
+            "value": {
+              "__uuid__": "4234c9a2-110b-4e56-ba42-3ef0bfe637c1"
+            }
+          },
+          {
+            "frame": 1.3166666666666667,
+            "value": {
+              "__uuid__": "e200c299-8383-4f1f-9ac3-5e8d7b18cda2"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

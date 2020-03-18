@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_whelk2",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.2666666666666666,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "8b784087-dfa4-4ed0-b0f0-550877429d43"
+            }
+          },
+          {
+            "frame": 0.6666666666666666,
+            "value": {
+              "__uuid__": "e579de84-121a-47de-b0dc-e8e27cb136da"
+            }
+          },
+          {
+            "frame": 1.25,
+            "value": {
+              "__uuid__": "8b784087-dfa4-4ed0-b0f0-550877429d43"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

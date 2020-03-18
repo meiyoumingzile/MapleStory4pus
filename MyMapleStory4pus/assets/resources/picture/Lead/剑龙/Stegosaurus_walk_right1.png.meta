@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "b7a05c4a-6820-4098-890c-6fcc3884718d",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "Stegosaurus_walk_right1": {
+      "ver": "1.0.4",
+      "uuid": "e8a69ece-5ea3-4d5f-b946-6c53d461623b",
+      "rawTextureUuid": "b7a05c4a-6820-4098-890c-6fcc3884718d",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 110,
+      "height": 90,
+      "rawWidth": 110,
+      "rawHeight": 90,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
