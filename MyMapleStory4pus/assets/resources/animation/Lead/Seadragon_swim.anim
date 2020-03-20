@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Seadragon_swim",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.2666666666666666,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "4ec17e09-1bca-4e03-a72d-02b92a281655"
+            }
+          },
+          {
+            "frame": 0.3333333333333333,
+            "value": {
+              "__uuid__": "dd166c40-1572-42a0-940e-32d404b5c3b7"
+            }
+          },
+          {
+            "frame": 0.6666666666666666,
+            "value": {
+              "__uuid__": "462646e3-a03f-40ff-8fbe-654e5ea59944"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "dd166c40-1572-42a0-940e-32d404b5c3b7"
+            }
+          },
+          {
+            "frame": 1.25,
+            "value": {
+              "__uuid__": "4ec17e09-1bca-4e03-a72d-02b92a281655"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

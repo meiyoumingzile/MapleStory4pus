@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Pterosaur_jump",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.6833333333333333,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0.016666666666666666,
+            "value": {
+              "__uuid__": "94f05e2d-341d-4067-a58e-b9aa3b57e2bb"
+            }
+          },
+          {
+            "frame": 0.16666666666666666,
+            "value": {
+              "__uuid__": "efa9d8f2-287e-4c97-b59b-e17cd407ce0c"
+            }
+          },
+          {
+            "frame": 0.3333333333333333,
+            "value": {
+              "__uuid__": "d3274835-ad91-4d2d-a554-483788fd522d"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "efa9d8f2-287e-4c97-b59b-e17cd407ce0c"
+            }
+          },
+          {
+            "frame": 0.6666666666666666,
+            "value": {
+              "__uuid__": "94f05e2d-341d-4067-a58e-b9aa3b57e2bb"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

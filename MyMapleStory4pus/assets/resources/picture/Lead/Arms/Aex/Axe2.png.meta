@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "05e94119-b883-48d6-bb49-89af01977f59",
+  "uuid": "3bf929a8-5d46-4261-b2c6-bd78db086907",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -11,8 +11,8 @@
   "subMetas": {
     "Axe2": {
       "ver": "1.0.4",
-      "uuid": "7ef66ef3-284f-4b8b-a3bd-1ce84664c123",
-      "rawTextureUuid": "05e94119-b883-48d6-bb49-89af01977f59",
+      "uuid": "0ef6e199-1eb8-4878-be7b-dc2070c63208",
+      "rawTextureUuid": "3bf929a8-5d46-4261-b2c6-bd78db086907",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

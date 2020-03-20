@@ -123,7 +123,9 @@
       "__id__": 1
     },
     "_enabled": true,
-    "_defaultClip": null,
+    "_defaultClip": {
+      "__uuid__": "f1988574-8967-482c-bb19-a7bf07b56264"
+    },
     "_clips": [
       {
         "__uuid__": "f1988574-8967-482c-bb19-a7bf07b56264"
@@ -197,6 +199,7 @@
       "x": 0,
       "y": 0
     },
+    "category": "DragonFire",
     "_id": ""
   },
   {

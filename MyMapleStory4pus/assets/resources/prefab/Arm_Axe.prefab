@@ -100,9 +100,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "8a1221a6-04d9-4af8-b267-21b0a25107d3"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 1,
     "_fillType": 0,
@@ -201,6 +199,8 @@
       "y": 0
     },
     "damage": 1,
+    "category": "Axe",
+    "reboundCnt": 0,
     "_id": ""
   },
   {

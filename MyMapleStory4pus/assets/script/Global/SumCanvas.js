@@ -20,6 +20,7 @@ cc.Class({
 		lifeGroup:[],
 		timeGroup:[],
 		fruitFrameList:[],
+		_onLoadlist:[false,false,false],
     },
  
     // use this for initialization
@@ -44,7 +45,6 @@ cc.Class({
     },
 	__preload: function () {//3种样式，5种类型
 		cc.director.pause();
-
 		this.onLoadResources();
 		
     },
@@ -129,8 +129,18 @@ cc.Class({
 	onLoadResources:function(){
 		var self=this;
 		var fruitUrl="picture/Goods/Fruit";
+		var oll=this._onLoadlist;
+		var resSuccess=function(){
+			var i=0;
+			for(i=0;i<oll.length&&oll[i];i++);
+			return i==oll.length;
+		};
 		cc.loader.loadResDir(fruitUrl,cc.SpriteFrame,function (err, assets) {
 			self.fruitFrameList=assets;
+			oll[0]=true;
+			if(resSuccess()){
+				cc.director.resume();
+			}
 		});
 		cc.loader.loadResDir("prefab",cc.Prefab,function (err, assets) {
 			for(var i=0;i<assets.length;i++){
@@ -139,12 +149,24 @@ cc.Class({
 			for(var k in ENDATA.IND){//索引怪物小类别和大类别
 				ALL.FAB[k]=ALL.FAB[ENDATA.IND[k]];
 			}
-			cc.director.resume();
-			//self.visable=true;
-			//cc.log(ALL.FAB);
+			oll[1]=true;
+			if(resSuccess()){
+				cc.director.resume();
+			}
 		});
-	
+		cc.loader.loadResDir("animation/Lead",function (err, assets) {
+			var an=ALL.Lead.getComponent(cc.Animation);
+			for(var i=0;i<assets.length;i++){
+				an.addClip(assets[i]);
+			}
+			oll[2]=true;
+			if(resSuccess()){
+				cc.director.resume();
+			}
+		});
 	},
+	
+	
 	deepClone:function(a,obj) {
 		let tmp = JSON.stringify(obj); 
 		let result = JSON.parse(tmp); 

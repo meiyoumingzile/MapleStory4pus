@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "0df943fe-8f3e-4099-bb45-7a6f3a9830d2",
+  "uuid": "dee1ec3b-5786-4d7d-997f-58aa2e58fbeb",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -11,8 +11,8 @@
   "subMetas": {
     "FireDarts4": {
       "ver": "1.0.4",
-      "uuid": "3f5c7cd8-fe46-4dc6-a2b1-ffea283c36f9",
-      "rawTextureUuid": "0df943fe-8f3e-4099-bb45-7a6f3a9830d2",
+      "uuid": "7921b522-57c7-44af-b309-a01d4ef170f1",
+      "rawTextureUuid": "dee1ec3b-5786-4d7d-997f-58aa2e58fbeb",
       "trimType": "custom",
       "trimThreshold": 1,
       "rotated": false,

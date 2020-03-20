@@ -2,27 +2,6 @@
 全局变量
 *///////////////////
 window.MainLead=cc.node;
-window.ARMS ={
-	maxCnt:{
-		Axe:2,
-		DragonFire:1,
-		DragonBattery:3,
-		DragonSto:2,
-		Stegosaurus:2,
-	}
-	/*AexArmsNum:cc.v2(0,2),//
-    FierydragonArmNum: cc.v2(0,2),
-    BrontosaurusArmNum: cc.v2(0,3),
-    PterosaurArmNum: cc.v2(0,2),
-    nowArmsNum:cc.v2(0,0),
-    nowArms:"Axe",
-	
-    Prop:{
-        Axe:true,
-        FireDarts:false,
-    },
-	*/
-};
 window.ALL = {
     MainCanSc:{//公用脚本,也就是sumcanvas
         default:null,
@@ -47,25 +26,6 @@ window.ALL = {
     		door1:cc.v2(4770,-220),
     	},
     },
-	DAM:{//攻击的伤害
-		Stegosaurus:2,
-	},
-	AttackTime:{//物理参数
-		yes:{//攻击动画长度
-			Axe:15,
-			DragonFire:10,
-			DragonBattery:15,
-			DragonSto:10,
-			Stegosaurus:60,
-		},
-		no:{//间隔攻击动画长度
-			Axe:10,
-			DragonFire:15,
-			DragonBattery:0,
-			DragonSto:10,
-			Stegosaurus:20,
-		},
-	},
     NextSence:"",
     nowSence:"",
     lastSence:"",
@@ -92,110 +52,4 @@ window.KEY={
     acc:cc.macro.KEY.l,
     jump:cc.macro.KEY.k,
 };
-
-window.BeginSpeedKind={//各种动作获得的初速度
-	water:{
-		jump:100,
-	},
-	air:{
-		jump:320,
-	},
-},
-window.BeginAccKind={//各种动作获得的初速度
-	water:{
-		down:{
-			Lead:0,
-			Seadragon:0,
-		},
-		up:{
-			Lead:0,
-			Seadragon:0,
-		},
-		walk:{
-			Lead:100,
-			Seadragon:300,
-		},
-		run:{
-			Lead:200,
-			Seadragon:600,
-		},
-		climb:{
-			Lead:400,
-		},
-	},
-	air:{
-		up:0,
-		dwon:0,
-		walk:{
-			Lead:350,
-			Fierydragon:400,
-			Brontosaurus:400,
-			Seadragon:320,
-			Pterosaur:400,
-			Stegosaurus:400,
-		},
-		run:{
-			Lead:560,
-			Fierydragon:800,
-			Brontosaurus:800,
-			Seadragon:560,
-			Pterosaur:800,
-			Stegosaurus:800,
-		},
-		climb:{
-			Lead:400,
-		},
-	},
-},
-window.MaxSpeedKind={//各种状态最大速度
-	water:{
-		down:200,//竖直下落最大速度
-		up:200,//竖直上升最大速度
-		walk:{
-			Lead:120,
-			Seadragon:150,
-		},
-		run:{
-			Lead:200,
-			Seadragon:300,
-		},
-		climb:{
-			Lead:100,
-		},
-	},
-	air:{
-		down:480,//竖直下落最大速度
-		up:400,//竖直上升最大速度
-		walk:{
-			Lead:170,
-			Fierydragon:200,
-			Brontosaurus:200,
-			Seadragon:170,
-			Pterosaur:200,
-			Stegosaurus:200,
-		},
-		run:{
-			Lead:300,
-			Fierydragon:420,
-			Brontosaurus:420,
-			Seadragon:300,
-			Pterosaur:500,
-			Stegosaurus:420,
-		},
-		climb:{
-			Lead:120,
-		},
-	},
-};
-window.PhysicalPara={//物理参数
-	water:{
-		gravityScale:0.2,
-		linearDamping: 0,
-	},
-	air:{
-		gravityScale:1,
-		linearDamping: 0.2,
-	},
-};
-
 

@@ -13,7 +13,7 @@ cc.Class({
 		this.node.scale=ALL.scaleLead;
         this.body = this.getComponent(cc.RigidBody);
 		this.body.linearVelocity=beginSpeed;
-		this.leadPos=MainLead.node.convertToWorldSpaceAR(cc.Vec2.ZERO);
+		this.leadPos=cc.v2(MainLead.node.x,MainLead.node.y);
 	},
     onLoad: function () {},
 
