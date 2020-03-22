@@ -3,7 +3,7 @@
   "_name": "Lead_walk",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.85,
+  "_duration": 0.6833333333333333,
   "sample": 60,
   "speed": 1,
   "wrapMode": 2,
@@ -18,13 +18,13 @@
             }
           },
           {
-            "frame": 0.4166666666666667,
+            "frame": 0.3333333333333333,
             "value": {
               "__uuid__": "1bf45c28-7866-4ed0-acd9-6ef9b0a12ca2"
             }
           },
           {
-            "frame": 0.8333333333333334,
+            "frame": 0.6666666666666666,
             "value": {
               "__uuid__": "eb0be25b-6e6d-4147-85dd-f3a9da1cc000"
             }

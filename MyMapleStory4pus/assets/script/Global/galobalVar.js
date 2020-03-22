@@ -26,13 +26,16 @@ window.ALL = {
     		door1:cc.v2(4770,-220),
     	},
     },
+	
     NextSence:"",
     nowSence:"",
     lastSence:"",
 
 	FAB:{},//预制体资源
+	GamePropFrame:{},//道具图标资源
     INF:1000000000,
-	inf:0.1,
+    inf:0.1,
+    jumpScenesList:[],
     EnemyScript:[],
 	enemyUpdateSize:cc.v2(1000,1000),//怪物刷新范围
 	scaleLead:cc.v2(1,1),

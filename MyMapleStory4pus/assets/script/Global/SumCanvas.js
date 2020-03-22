@@ -20,7 +20,6 @@ cc.Class({
 		lifeGroup:[],
 		timeGroup:[],
 		fruitFrameList:[],
-		_onLoadlist:[false,false,false],
     },
  
     // use this for initialization
@@ -31,7 +30,8 @@ cc.Class({
         cc.director.getPhysicsManager().enabled = true; // 开启了物理引擎
 		cc.director.getPhysicsManager().enabledDebugDraw = true;//显示碰撞框
 		cc.director.getCollisionManager().enabled = true;//初始化启用碰撞系统
-        cc.director.getCollisionManager().enabledDebugDraw = true;//显示碰撞框
+		cc.director.getCollisionManager().enabledDebugDraw = true;//显示碰撞框
+		ALL.jumpScenesList=this.findChildren(this.node,"JUMPSCENES").getChildren(); //
 		this.initGalobalVar();
         // 独立的形状，打开一个调试区域,游戏图像的，逻辑区域;
         // 开始调试模式:
@@ -129,11 +129,16 @@ cc.Class({
 	onLoadResources:function(){
 		var self=this;
 		var fruitUrl="picture/Goods/Fruit";
-		var oll=this._onLoadlist;
-		var resSuccess=function(){
+		var oll=[false,false,false,false];
+		var resSuccess=function(){//临时函数，判断异步加载完毕
 			var i=0;
 			for(i=0;i<oll.length&&oll[i];i++);
-			return i==oll.length;
+			if(i==oll.length){
+				MainLead.dataBegin();
+				return true;
+			}else{
+				return false;
+			}
 		};
 		cc.loader.loadResDir(fruitUrl,cc.SpriteFrame,function (err, assets) {
 			self.fruitFrameList=assets;
@@ -160,6 +165,15 @@ cc.Class({
 				an.addClip(assets[i]);
 			}
 			oll[2]=true;
+			if(resSuccess()){
+				cc.director.resume();
+			}
+		});
+		cc.loader.loadResDir("picture/Goods/GameProp",cc.SpriteFrame,function (err, assets) {
+			for(var i=0;i<assets.length;i++){
+				ALL.GamePropFrame[assets[i].name]=assets[i];
+			}
+			oll[3]=true;
 			if(resSuccess()){
 				cc.director.resume();
 			}
