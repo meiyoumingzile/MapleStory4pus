@@ -17,9 +17,10 @@ cc.Class({
 */			
 			collFloorCnt:0,
 			collCeilCnt:0,
-			inLadder:false,
 			isLie:false,
 			isFall:false,
+			isClimb:false,
+			climbOb:[null,null],//0是梯子，1是梯子头
 	        act:"walk", //state[2]+"_"+act+"_"+左右是状态。
 			
 			
@@ -118,10 +119,9 @@ cc.Class({
     update: function (dt) {//dt是距离上一帧的时间间隔
         var speed = this.body.linearVelocity;
 		this.dealKey(dt,speed);//判断按键状态
-		this.calSpeed(dt,speed);
 		this.dealState(dt,speed);//处理人物状态和动画切换
-		//cc.log(this.data.selfacc.x);
-		//cc.log(ALL.GamePropFrame);
+		this.updateParameter(dt,speed);
+		this.calSpeed(dt,speed);
         this.body.linearVelocity = speed;
     }, 
 	    
@@ -133,11 +133,16 @@ cc.Class({
 				this.data.collFloorCnt++;
 			}
 		}else if(self.tag==2){
-			
 			if(other.node.name.indexOf("Object")!=-1){
 				this.data.collCeilCnt++;
 			}
 		}else{//self.tag==0
+			if(other.node.name=="Object_Ladder"){//爬梯子
+				this.data.climbOb[1]=other.node;
+				if(this.data.key_down||this.data.isClimb){
+					contact.disabled=true;
+				}
+			}
 			if(other.node.name.indexOf("Enemy")!=-1){
 				this.collEnemy(contact, self, other);
 			}else if(other.node.name.indexOf("Object")!=-1){
@@ -159,14 +164,26 @@ cc.Class({
 				this.data.collCeilCnt--;
 			}
 		}else{//self.tag==0
-			
+			if(other.node.name=="Object_Ladder"){//爬梯子
+				this.data.climbOb[1]=null;
+			}
 		}
     },
-    onPreSolve: function (contact, self, other) {// 每次将要处理碰撞体接触逻辑时被调用
-		var worldManifold = contact.getWorldManifold();
-		var points = worldManifold.points;
-		if(other.node.name.indexOf("Enemy")!=-1){
-			this.collEnemy(contact, self, other);
+    onPreSolve: function (contact, self, other) {// 每次处理碰撞体接触逻辑时每一帧都调用
+		if(self.tag==1){
+			
+		}else if(self.tag==2){
+
+		}else{//self.tag==0
+			if(other.node.name=="Object_Ladder"){//爬梯子
+				if(this.data.key_down||this.data.isClimb){
+					contact.disabled=true;
+					this.data.isClimb=true;
+				}
+			}
+			if(other.node.name.indexOf("Enemy")!=-1){
+				this.collEnemy(contact, self, other);
+			}
 		}
     }, 
     onPostSolve: function (contact, self, other) {// 每次处理完碰撞体接触逻辑时被调用
@@ -179,7 +196,7 @@ cc.Class({
 				this.setPhy("Lead");
 			}
 		}else if(other.node.name.indexOf("Ladder")!=-1){
-			this.data.inLadder=true;
+			this.data.climbOb[0]=other.node;
 		}
 	},
 	onCollisionStay: function (other,self){
@@ -188,7 +205,7 @@ cc.Class({
 		if(other.name.indexOf("WATER")!=-1){
 			this.data.state[0]="air";
 		}else if(other.node.name.indexOf("Ladder")!=-1){
-			this.data.inLadder=false;
+			this.data.climbOb[0]=null;
 		}
 	},
 	dataBegin:function(){
@@ -217,23 +234,17 @@ cc.Class({
 		//this.data.maxSpeedup=MaxSpeedKind[this.data.state[0]]["up"];
 		//this.data.maxSpeeddown=MaxSpeedKind[this.data.state[0]]["down"];
 		//this.data.jumpSpeedy=BeginSpeedKind[this.data.state[0]]["jump"];
+		this.judgeClimb(speed);
 		this.data.preisLie=this.data.isLie;
-		this.data.isLie=(this.data.key_down ||this.data.collCeilCnt>0)&& this.data.collFloorCnt>0 &&this.data.state[2].indexOf("Lead")!=-1;
-		this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"];
-		this.body.linearDamping=LEADDATA.PhysicalPara[this.data.state[0]]["linearDamping"];
+		this.data.isLie=(this.data.key_down ||this.data.collCeilCnt>0)&& this.data.collFloorCnt>0 &&this.data.state[2].indexOf("Lead")!=-1&&(this.data.climbOb[1]==null);
+		//cc.log(this.data.climbOb==null);
 		if(this.data.isLie){//判断碰撞体形状
 			this.setPhy("lieLead");
 		}else if(this.data.preisLie!=this.data.isLie){//上一帧和当前帧的isLie不同
 			this.setPhy("Lead");
 		}
-		if(this.data.key_up){
-			this.judgeJumpScene();
-			if(this.data.state[2].indexOf("Lead")!=-1&&this.data.inLadder){
-				this.phyColl.gravityScale=0;
-			}
-		}else{
-			
-		}
+		
+		this.judgeJumpScene();
 		if(this.data.state[0].indexOf("air")!=-1){
 			var maxJumptime=8;
 			if(this.data.key_jump&&!this.data.isLie){//按了跳跃还没有趴着
@@ -286,9 +297,6 @@ cc.Class({
 
 		if(this.data.state[2].indexOf("Pterosaur")!=-1){//是飞龙
 			this.data.maxSpeeddown/=3;
-			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"]/2;
-		}else{
-			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"];
 		}
 		this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
 		if(this.data.key_left&&this.data.key_right==false){//左边
@@ -302,26 +310,17 @@ cc.Class({
 		}
 		
 	},
-	calSpeed: function(dt,speed){
-		var nextx=speed.x+this.data.selfacc.x* dt;
-		if(Math.abs(nextx) < this.data.maxSpeedx||Math.abs(nextx) < Math.abs(speed.x)){
-			speed.x=nextx;
-		}
-		var nexty=speed.y+this.data.selfacc.y* dt;
-		if((-nexty < this.data.maxSpeeddown&&nexty<0)||(nexty < this.data.maxSpeeddown&&nexty>0)||Math.abs(nexty) < Math.abs(speed.y)){
-			speed.y=nexty;
-		}
-		if(Math.abs(speed.x)<1&&this.data.selfacc.x<1){//控制精度
-			speed.x=0;
-		}
-		if(Math.abs(speed.y)<1&&this.data.selfacc.y<1){//控制精度
-			speed.y=0;
-		}
-	},
 	dealState: function (dt,speed){//改变人物状态:act
 		if(this.judgeAttack()){
 		}else if(this.data.state[0].indexOf("air")!=-1){
-			if(this.data.isLie){
+			if(this.data.isClimb){
+				this.setPhy();
+				var x=Math.ceil(this.node.x/20)%2;
+				var y=Math.ceil(this.node.y/60)%2;
+				this.node.scaleX=(x+y==1?1:-1);
+				this.data.act="climb";
+
+			}else if(this.data.isLie){
 				this.data.state[2]="lieLead";
 				if(Math.abs(speed.x)<10){//在地板上,判断速度
 					this.data.act="walk";
@@ -344,7 +343,13 @@ cc.Class({
 			}
 
 		}else if(this.data.state[0].indexOf("water")!=-1){
-			if(this.data.collFloorCnt<=0){//没在地板上就跳
+			if(this.data.isClimb){
+				this.setPhy();
+				var x=Math.ceil(this.node.x/20)%2;
+				var y=Math.ceil(this.node.y/60)%2;
+				this.node.scaleX=(x+y==1?1:-1);
+				this.data.act="climb";
+			}else if(this.data.collFloorCnt<=0){//没在地板上就跳
 				this.data.act="swim";
 			}else if(Math.abs(speed.x)<100){//在地板上,判断速度
 				this.data.act="walk";
@@ -362,6 +367,34 @@ cc.Class({
         }
 	},
 	
+	updateParameter:function(dt,speed){
+		if(this.data.isClimb){
+			this.body.gravityScale=0;
+		}else if(this.data.state[2].indexOf("Pterosaur")!=-1){//是飞龙
+			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"]/2;
+		}else{
+			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"];
+		}
+		
+		this.body.linearDamping=LEADDATA.PhysicalPara[this.data.state[0]]["linearDamping"];
+	},
+	calSpeed: function(dt,speed){
+		var nextx=speed.x+this.data.selfacc.x* dt;
+		if(Math.abs(nextx) < this.data.maxSpeedx||Math.abs(nextx) < Math.abs(speed.x)){
+			speed.x=nextx;
+		}
+		var nexty=speed.y+this.data.selfacc.y* dt;
+		if((-nexty < this.data.maxSpeeddown&&nexty<0)||(nexty < this.data.maxSpeeddown&&nexty>0)||Math.abs(nexty) < Math.abs(speed.y)){
+			speed.y=nexty;
+		}
+		if(Math.abs(speed.x)<1&&this.data.selfacc.x<1){//控制精度
+			speed.x=0;
+		}
+		if(Math.abs(speed.y)<1&&this.data.selfacc.y<1){//控制精度
+			speed.y=0;
+		}
+	},
+
 	collEnemy:function(contact, self, other){
 		var ep=other.node.getComponent("EnemyPublic");
 		if(ep==null){
@@ -427,7 +460,7 @@ cc.Class({
 		}
 	},
 	
-	changeLife:function(chLife,chLifeUp=0){//改变体力和体力上限
+	changeLife: function(chLife,chLifeUp=0){//改变体力和体力上限
 		var child = ALL.MainCanSc.lifeGroup.getChildren();
 		var i=child.length;
 		while(chLifeUp>0){//加一个上限
@@ -585,7 +618,7 @@ cc.Class({
 	},
 	judgeAttack:function(){
 		//cc.log(this.data.nowArms);
-		if(this.data.isFall){
+		if(this.data.isFall||this.data.isClimb){
 			return false;
 		}
 		if(this.data.key_attack&&this.data.act.indexOf("attack")==-1&&this.data.noattacktime==0&&this.data.nowArmsCnt<LEADDATA.ARMS.maxCnt[this.data.nowArms]){//按了攻击有没处于攻击动作,还没有处于非攻击实践
@@ -641,20 +674,38 @@ cc.Class({
 			return false;
 		}
 	},
-	climb:function(){
-		if(1){
-			
-		}
-	},
 	judgeJumpScene:function(){
-		var ch=ALL.jumpScenesList;
-		for(var i=0;i<ch.length;i++){
-			if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
-				//携带信息
-				
-				cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
+		if(this.data.key_up){
+			var ch=ALL.jumpScenesList;
+			for(var i=0;i<ch.length;i++){
+				if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
+					//携带信息
+					
+					cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
+				}
 			}
 		}
+	},
+	judgeClimb:function(speed){
+		if(this.data.isClimb){
+			if(this.data.state[2].indexOf("Lead")==-1||this.data.climbOb[0]==null||this.data.key_jump||(this.data.collFloorCnt>0&&this.data.key_down)){
+				this.data.isClimb=false;
+			}else{
+				speed.x=0;
+				this.node.x=this.data.climbOb[0].x;
+				if(this.data.key_up){
+					speed.y=140;
+				}else if(this.data.key_down){
+					speed.y=-140;
+				}else{
+					speed.y=0;
+				}
+			}
+		}else if(this.data.state[2].indexOf("Lead")!=-1&&this.data.climbOb[0]&&Math.abs(this.node.x-this.data.climbOb[0].x)<10
+			&&(this.data.climbOb[0].y>this.node.y&&this.data.key_up||this.data.climbOb[0].y<this.node.y&&this.data.key_down)){
+			this.data.isClimb=true;
+		}
+		
 	},
 });
 
