@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Lead_attack_fire",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.5166666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "dbe290b7-1a22-4f46-95d9-19c6df29be85"
+            }
+          },
+          {
+            "frame": 0.3333333333333333,
+            "value": {
+              "__uuid__": "03f21fc3-fa37-4aca-ba7a-20bf7f88cf07"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "959befaa-9c3b-4878-ad62-fa52504a58b1"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

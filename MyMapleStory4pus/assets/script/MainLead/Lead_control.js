@@ -8,7 +8,7 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
 		this.pets=["Fierydragon","Brontosaurus","Pterosaur","Stegosaurus","Seadragon"];
-    	this.preArms="Axe";
+    	this.preArms="axe";
 		this.data={
 	        state:["air","walk","Lead"],
 			specialEffect:"null",
@@ -23,13 +23,13 @@ cc.Class({
 			climbOb:[null,null],//0是梯子，1是梯子头
 	        act:"walk", //state[2]+"_"+act+"_"+左右是状态。
 			
-			
 	        player:null,
-	        img:cc.SpriteFrame,
+			img:cc.SpriteFrame,
+			canAttack:true,
+			isAttackAct:false,//是否处于攻击状态
 	        //speed: cc.v2(0, 0),
 			jumpSpeedy: 0,      //跳跃初始速度
 			jumptime:0,
-			attacktime:0,
 	        maxSpeedx:0,        //限制的最大速度
 			maxSpeedup:0, 		//限制的最大速度
 			maxSpeeddown:0,     //限制的最大速度
@@ -45,7 +45,7 @@ cc.Class({
 
 	        leadCollSize:cc.v2(0,0),//人物站立碰撞体大小
 			nowArmsCnt:0,
-			nowArms:"Axe",
+			nowArms:"axe",
 			life:cc.v2(0,0),
 			time:cc.v2(0,8),
     	};
@@ -148,7 +148,6 @@ cc.Class({
 			}else if(other.node.name.indexOf("Object")!=-1){
 				this.data.isFall=false;//
 			}
-			this.getGoods(contact, self, other);
 		}
 		
     },
@@ -197,6 +196,8 @@ cc.Class({
 			}
 		}else if(other.node.name.indexOf("Ladder")!=-1){
 			this.data.climbOb[0]=other.node;
+		}else if(other.node.name.indexOf("goods")!=-1){
+			this.getGoods(self, other);
 		}
 	},
 	onCollisionStay: function (other,self){
@@ -222,8 +223,6 @@ cc.Class({
 		
 		this.node.scale=ALL.scaleLead; //人物大小适配场景
 		//this.node.scaleX=用来调整开场方向
-		this.data.noattacktime=0;
-		this.data.attacktime=0;
 		this.data.player.play(nowDraw);
 		this.data.preDraw=nowDraw;
 		
@@ -311,7 +310,7 @@ cc.Class({
 		
 	},
 	dealState: function (dt,speed){//改变人物状态:act
-		if(this.judgeAttack()){
+		if(this.judgeAttack()){//返回是否处在攻击动作
 		}else if(this.data.state[0].indexOf("air")!=-1){
 			if(this.data.isClimb){
 				this.setPhy();
@@ -405,7 +404,7 @@ cc.Class({
 		if(this.data.specialEffect=="null"){
 			
 			if(ep.specialEffect=="null"){
-				if(this.data.state[2]=="Stegosaurus"&&this.data.act=="attack"){//是剑龙攻击     
+				if(this.data.state[2]=="Stegosaurus"&&this.data.act.indexOf("attack")!=-1){//是剑龙攻击     
 					ep.changeLife(-LEADDATA.DAM["Stegosaurus"],"Stegosaurus");//怪物掉血，剑龙攻击成功
 				}else{
 					this.speed=this.body.linearVelocity;
@@ -527,17 +526,16 @@ cc.Class({
 		}
 	},
 	newArm:function(){//用来加载一个新武器
-        if(this.data.nowArms=="Axe"){
-				this.data.nowArmsCnt++;
-				var newarm=cc.instantiate(ALL.FAB["Arm_Axe"]);
-				newarm.getComponent("Arm_Axe").init(cc.v2(800*(this.node.scaleX>0?1:-1),150));
+		this.data.nowArmsCnt++;
+        if(this.data.nowArms=="axe"){
+				var newarm=cc.instantiate(ALL.FAB["Arm_axe"]);
+				newarm.getComponent("Arm_axe").init(cc.v2(800*(this.node.scaleX>0?1:-1),150));
 				//cc.log(newarm);
 				var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
 				var armY=this.node.y+newarm.height/2;
 				newarm.setPosition(armX,armY);
 				this.node.parent.addChild(newarm);
         }else if(this.data.nowArms=="DragonFire"){
-				this.data.nowArmsCnt++;
 				var newarm=cc.instantiate(ALL.FAB["Arm_DragonFire"]);
 				var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
 				var armY=this.node.y+this.phyColl.offset.y+10;
@@ -545,7 +543,6 @@ cc.Class({
 				newarm.setPosition(armX,armY); 
 				this.node.parent.addChild(newarm);
 		}else if(this.data.nowArms=="DragonBattery"){
-				this.data.nowArmsCnt++;
 				var newarm=cc.instantiate(ALL.FAB["Arm_DragonBattery"]);
 				var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
 				var armY=this.node.y+this.phyColl.offset.y+(newarm.height-this.phyColl.size.height)/2;
@@ -553,7 +550,6 @@ cc.Class({
 				newarm.setPosition(armX,armY);
 				this.node.parent.addChild(newarm);
 		}else if(this.data.nowArms=="DragonSto"){
-				this.data.nowArmsCnt++;
 				var newarm=cc.instantiate(ALL.FAB["Arm_DragonSto"]);
 				var armX=this.node.x+this.phyColl.size.width/2*(this.node.scaleX>0?1:-1);
 				var armY=this.node.y-this.phyColl.size.height/2;
@@ -561,6 +557,20 @@ cc.Class({
 				newarm.setPosition(armX,armY);
 				this.node.parent.addChild(newarm);
 			
+		}else if(this.data.nowArms=="Stegosaurus"){
+				this.data.nowArmsCnt=0;
+		}else if(this.data.nowArms=="waterGun"){
+			this.callbackwaterGun = function(){//前摇时间0.2
+				var newarm=cc.instantiate(ALL.FAB["Arm_waterBullet"]);
+				newarm.getComponent("Arm_waterBullet").init(cc.v2(500*(this.node.scaleX>0?1:-1),50));
+				//cc.log(newarm);
+				var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
+				var armY=this.node.y;
+				newarm.setPosition(armX,armY);
+				this.node.parent.addChild(newarm);
+				this.unschedule(this.callbackwaterGun);
+			}
+			this.schedule(this.callbackwaterGun,0.2,0,0);
 		}
     },
 	
@@ -616,35 +626,42 @@ cc.Class({
 		}
 		return fp;
 	},
-	judgeAttack:function(){
-		//cc.log(this.data.nowArms);
+	judgeAttack:function(){//返回是否处理后面动作。false代表继续处理
 		if(this.data.isFall||this.data.isClimb){
 			return false;
 		}
-		if(this.data.key_attack&&this.data.act.indexOf("attack")==-1&&this.data.noattacktime==0&&this.data.nowArmsCnt<LEADDATA.ARMS.maxCnt[this.data.nowArms]){//按了攻击有没处于攻击动作,还没有处于非攻击实践
+		if(this.data.key_attack&&this.data.canAttack&&this.data.nowArmsCnt<LEADDATA.ARMS.maxCnt[this.data.nowArms]){//按了攻击有没处于攻击动作,还没有处于非攻击实践
 			this.newArm();
-			this.data.act="attack";
-			this.data.attacktime=1;
-			this.data.noattacktime=LEADDATA.AttackTime["no"][this.data.nowArms];
-		}else if(this.data.attacktime>0&&this.data.attacktime<LEADDATA.AttackTime["yes"][this.data.nowArms]){//在攻击动画时间内
-			this.data.attacktime++;
-		}else{//不能攻击
-			if(this.data.noattacktime>0){
-				this.data.noattacktime--;
+			this.data.act="attack"+"_"+this.data.nowArms;
+			this.data.canAttack=false;
+			this.data.isAttackAct=true;
+			var attackActCnt=LEADDATA.AttackTime["yes"][this.data.nowArms]*10;
+			var sumCnt=LEADDATA.AttackTime["no"][this.data.nowArms]*10+attackActCnt;
+			var count=0;
+			this.callbackAttack1 = function(){
+				if(count==attackActCnt){
+					this.data.isAttackAct=false;
+				}
+				if(count==sumCnt){
+					this.data.canAttack=true;
+					this.unschedule(this.callbackAttack1);
+				}
+				count++;
 			}
-			this.data.attacktime=0;
-			return false;
+			this.schedule(this.callbackAttack1,0.1,sumCnt,0);
 		}
-		return true;
+		return this.data.isAttackAct;
 	},
-	getGoods:function(contact, self, other){
+	getGoods:function(self, other){
 		var i=0;
-		for(i=0;i<this.pets.length&&other.name.indexOf(this.pets[i])==-1;i++);
+		for(i=0;i<this.pets.length&&other.node.name.indexOf(this.pets[i])==-1;i++);
 		if(i<this.pets.length){//判断是不是骑着龙
 			this.setPhy(this.pets[i]);
 			this.changeArm();
 		}else{
-			
+			this.changeArm(other.node.name.replace("goods_",""));
+			cc.log(other.node.name.replace("goods_",""));
+			cc.log(this.data.nowArms);
 		}
 		
 	},

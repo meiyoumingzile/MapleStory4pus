@@ -1,7 +1,9 @@
 window.LEADDATA={
 	ARMS:{
 		maxCnt:{
-			Axe:2,
+			axe:2,
+			waterGun:1,
+
 			DragonFire:1,
 			DragonBattery:3,
 			DragonSto:2,
@@ -12,25 +14,49 @@ window.LEADDATA={
 		BrontosaurusArmNum: cc.v2(0,3),
 		PterosaurArmNum: cc.v2(0,2),
 		nowArmsNum:cc.v2(0,0),
-		nowArms:"Axe",
+		nowArms:"axe",
 		
 		Prop:{
-			Axe:true,
+			axe:true,
 			FireDarts:false,
 		},
 		*/
 		indList:{
-			Lead:["Axe","waterGun","boomerang","fire","hammer","spear","bomb","umbrella","scooter"],
-			lieLead:["Axe","waterGun","boomerang","fire","hammer","spear","bomb","umbrella","scooter"],
+			Lead:["axe","waterGun","boomerang","fire","hammer","spear","bomb","umbrella","scooter"],
+			lieLead:["axe","waterGun","boomerang","fire","hammer","spear","bomb","umbrella","scooter"],
 			umbrellaLead:["umbrella"],
 			scooterLead:[],
 			Fierydragon:["DragonFire"],
 			Brontosaurus:["DragonBattery"],
 			Pterosaur:["DragonSto"],
 			Stegosaurus:["Stegosaurus"],
-			Seadragon:["Axe","bomb","boomerang"],
+			Seadragon:["axe","bomb","boomerang"],
 		},
 	},
+	DAM:{//攻击的伤害
+		Stegosaurus:2,
+	},
+	AttackTime:{
+		yes:{//攻击动画长度
+			axe:0.1,
+			waterGun:0.5,
+
+			DragonFire:0.5,
+			DragonBattery:0.1,
+			DragonSto:0.1,
+			Stegosaurus:1,
+		},
+		no:{//间隔攻击动画长度
+			axe:0.2,
+			waterGun:0.7,
+
+			DragonFire:0.4,
+			DragonBattery:0.1,
+			DragonSto:0.4,
+			Stegosaurus:0.4,
+		},
+	},
+
 	BeginSpeedKind:{//各种动作获得的初速度
 		water:{
 			jump:100,
@@ -150,25 +176,5 @@ window.LEADDATA={
 		},
 	},
 	
-	
-	DAM:{//攻击的伤害
-		Stegosaurus:2,
-	},
-	AttackTime:{//物理参数
-		yes:{//攻击动画长度
-			Axe:15,
-			DragonFire:10,
-			DragonBattery:15,
-			DragonSto:10,
-			Stegosaurus:60,
-		},
-		no:{//间隔攻击动画长度
-			Axe:10,
-			DragonFire:15,
-			DragonBattery:0,
-			DragonSto:10,
-			Stegosaurus:20,
-		},
-	},
 	
 };
