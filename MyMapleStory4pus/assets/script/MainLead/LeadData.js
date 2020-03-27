@@ -1,8 +1,13 @@
 window.LEADDATA={
 	ARMS:{
+		attackUp:["spear","boomerang"],
+		attackWater:["spear","ham","axe","boomerang","bomb"],
 		maxCnt:{
 			axe:2,
 			waterGun:1,
+			ham:1,
+			fire:1,
+			spear:1,
 
 			DragonFire:1,
 			DragonBattery:3,
@@ -21,11 +26,12 @@ window.LEADDATA={
 			FireDarts:false,
 		},
 		*/
-		indList:{
-			Lead:["axe","waterGun","boomerang","fire","hammer","spear","bomb","umbrella","scooter"],
-			lieLead:["axe","waterGun","boomerang","fire","hammer","spear","bomb","umbrella","scooter"],
+
+		indList:{//
+			Lead:["axe","waterGun","boomerang","fire","ham","spear","bomb","umbrella"],
+			lieLead:["axe","waterGun","boomerang","fire","ham","spear","bomb"],
 			umbrellaLead:["umbrella"],
-			scooterLead:[],
+			scooterLead:["scooter"],
 			Fierydragon:["DragonFire"],
 			Brontosaurus:["DragonBattery"],
 			Pterosaur:["DragonSto"],
@@ -39,8 +45,10 @@ window.LEADDATA={
 	AttackTime:{
 		yes:{//攻击动画长度
 			axe:0.1,
-			waterGun:0.5,
-
+			waterGun:0.4,
+			ham:1,
+			fire:0.8,
+			spear:0.1,
 			DragonFire:0.5,
 			DragonBattery:0.1,
 			DragonSto:0.1,
@@ -48,8 +56,10 @@ window.LEADDATA={
 		},
 		no:{//间隔攻击动画长度
 			axe:0.2,
-			waterGun:0.7,
-
+			waterGun:0.5,
+			ham:0.1,
+			fire:0.1,
+			spear:0.1,
 			DragonFire:0.4,
 			DragonBattery:0.1,
 			DragonSto:0.4,
@@ -92,6 +102,7 @@ window.LEADDATA={
 			walk:{
 				Lead:350,
 				lieLead:400,
+				scooterLead:600,
 				Fierydragon:400,
 				Brontosaurus:400,
 				Seadragon:320,
@@ -101,6 +112,7 @@ window.LEADDATA={
 			run:{
 				Lead:560,
 				lieLead:400,
+				scooterLead:1000,
 				Fierydragon:800,
 				Brontosaurus:800,
 				Seadragon:560,
@@ -130,6 +142,7 @@ window.LEADDATA={
 			walk:{
 				Lead:170,
 				lieLead:120,
+				scooterLead:300,
 				Fierydragon:200,
 				Brontosaurus:200,
 				Seadragon:170,
@@ -139,6 +152,7 @@ window.LEADDATA={
 			run:{
 				Lead:300,
 				lieLead:120,
+				scooterLead:500,
 				Fierydragon:420,
 				Brontosaurus:420,
 				Seadragon:300,
@@ -158,7 +172,9 @@ window.LEADDATA={
 		},
 		size:{
 			Lead:cc.v2(70,86),
+			scooterLead:cc.v2(100,120),
 			lieLead:cc.v2(120,44),
+			
 			Fierydragon:cc.v2(90,100),
 			Brontosaurus:cc.v2(90,100),
 			Seadragon:cc.v2(100,100),
@@ -168,6 +184,7 @@ window.LEADDATA={
 		offset:{
 			Lead:cc.v2(0,0),
 			lieLead:cc.v2(0,-22),//
+			scooterLead:cc.v2(0,0),
 			Fierydragon:cc.v2(0,-25),//
 			Brontosaurus:cc.v2(0,-25),//
 			Seadragon:cc.v2(0,0),

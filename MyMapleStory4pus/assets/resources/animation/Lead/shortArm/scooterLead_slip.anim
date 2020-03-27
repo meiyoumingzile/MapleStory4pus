@@ -1,12 +1,12 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "Lead_attack_ham",
+  "_name": "scooterLead_walk",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.43333333333333335,
+  "_duration": 0.6166666666666667,
   "sample": 60,
   "speed": 1,
-  "wrapMode": 1,
+  "wrapMode": 2,
   "curveData": {
     "comps": {
       "cc.Sprite": {
@@ -14,19 +14,19 @@
           {
             "frame": 0,
             "value": {
-              "__uuid__": "1468d67d-dd0c-4ca4-a895-ac6ab49b6ad3"
+              "__uuid__": "758b33b2-6a47-4ef5-984c-6638d5dad139"
             }
           },
           {
-            "frame": 0.3333333333333333,
+            "frame": 0.3,
             "value": {
-              "__uuid__": "ce8b3045-32be-49bd-ae7b-5ca1869f750a"
+              "__uuid__": "0220d172-023b-4b7f-8ae8-c74abc915c38"
             }
           },
           {
-            "frame": 0.4166666666666667,
+            "frame": 0.6,
             "value": {
-              "__uuid__": "1e604c39-8939-457d-8ba4-f29973d50aa6"
+              "__uuid__": "758b33b2-6a47-4ef5-984c-6638d5dad139"
             }
           }
         ]

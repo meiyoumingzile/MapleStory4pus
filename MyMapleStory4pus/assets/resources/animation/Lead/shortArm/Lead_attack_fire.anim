@@ -3,7 +3,7 @@
   "_name": "Lead_attack_fire",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.5166666666666667,
+  "_duration": 0.26666666666666666,
   "sample": 60,
   "speed": 1,
   "wrapMode": 1,
@@ -18,13 +18,13 @@
             }
           },
           {
-            "frame": 0.3333333333333333,
+            "frame": 0.16666666666666666,
             "value": {
               "__uuid__": "03f21fc3-fa37-4aca-ba7a-20bf7f88cf07"
             }
           },
           {
-            "frame": 0.5,
+            "frame": 0.25,
             "value": {
               "__uuid__": "959befaa-9c3b-4878-ad62-fa52504a58b1"
             }
