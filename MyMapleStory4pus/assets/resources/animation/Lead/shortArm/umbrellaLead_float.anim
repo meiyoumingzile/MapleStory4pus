@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "umbrellaLead_float",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.5166666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "4f2e8fd5-32a5-4d33-bec9-2b58d60cf3d8"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "7c7b08ae-409f-4b45-aa3c-3151dd268111"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "4f2e8fd5-32a5-4d33-bec9-2b58d60cf3d8"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

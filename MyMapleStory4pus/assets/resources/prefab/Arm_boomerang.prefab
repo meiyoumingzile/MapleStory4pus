@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Arm_waterBullet",
+    "_name": "Arm_boomerang",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -30,10 +30,13 @@
       },
       {
         "__id__": 5
+      },
+      {
+        "__id__": 6
       }
     ],
     "_prefab": {
-      "__id__": 6
+      "__id__": 7
     },
     "_opacity": 255,
     "_color": {
@@ -45,8 +48,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 44,
-      "height": 29
+      "width": 73,
+      "height": 40
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -57,8 +60,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        1,
-        51,
+        0,
+        100,
         0,
         0,
         0,
@@ -98,7 +101,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "b4512ab9-dbae-42c8-aa07-5f87b3f5fb43"
+      "__uuid__": "7f705343-c2b6-4d0e-86ce-b7f30729542e"
     },
     "_type": 0,
     "_sizeMode": 2,
@@ -122,9 +125,9 @@
       "__id__": 1
     },
     "_enabled": true,
-    "_type": 2,
+    "_type": 1,
     "_allowSleep": true,
-    "_gravityScale": 1,
+    "_gravityScale": 0,
     "_linearDamping": 0,
     "_angularDamping": 0,
     "_linearVelocity": {
@@ -148,7 +151,7 @@
     },
     "_enabled": true,
     "tag": 0,
-    "_density": 0.4,
+    "_density": 1,
     "_sensor": true,
     "_friction": 0,
     "_restitution": 0,
@@ -160,27 +163,40 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 34,
-      "height": 20
+      "width": 66,
+      "height": 30
     },
     "_id": ""
   },
   {
-    "__type__": "e4000ud+PtNv5oIH60YNUSA",
+    "__type__": "cc.Animation",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
-    "minspeed": {
-      "__type__": "cc.Vec2",
-      "x": 600,
-      "y": 0
+    "_defaultClip": {
+      "__uuid__": "d00d3069-03b2-4033-941b-af1938e8ed06"
     },
-    "damage": 0.5,
-    "category": "waterBullet",
-    "reboundCnt": 0,
+    "_clips": [
+      {
+        "__uuid__": "d00d3069-03b2-4033-941b-af1938e8ed06"
+      }
+    ],
+    "playOnLoad": true,
+    "_id": ""
+  },
+  {
+    "__type__": "b8bbaC7KeBK34HzJ2vGlm6Z",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "damage": 1,
+    "category": "boomerang",
     "_id": ""
   },
   {
@@ -189,9 +205,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "1ee3c49e-0220-41cf-af7b-3d497f85dd7e"
+      "__uuid__": "4684899c-4a35-4161-a3b9-e7c39bca699c"
     },
-    "fileId": "62Tis7UOJP2KUoYkprXOoF",
+    "fileId": "0dN0hctq5Mh7EQfpqSobnc",
     "sync": false
   }
 ]

@@ -320,12 +320,12 @@ window.ENDATA={
 	rock:{
 		beginSpeed:[cc.v2(160,0),cc.v2(200,100),cc.v2(200,100)],
 		phySize:[cc.v2(120,78),cc.v2(110,70),cc.v2(110,70)],
-		life:[2,2,2],
+		life:[1,1,1],
 		damArm:["DragonFire","DragonBattery","Stegosaurus","ham","boomerang","bomb"],
 	},
 	specialStone:{
 		beginSpeed:[cc.v2(0,0),cc.v2(0,0)],
-		life:[2,2],
+		life:[1,1],
 		damArm:["DragonFire","DragonBattery","Stegosaurus","ham","boomerang","bomb"],
 	},
 };

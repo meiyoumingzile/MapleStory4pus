@@ -31,7 +31,10 @@ cc.Class({
         if(other.node.name.indexOf("Enemy")==0){
 			var js=other.node.getComponent("EnemyPublic");
             if(js&&js.specialEffect=="null"){
-				var d=js.changeLife(-this.damage,this.category);
+                var d=js.changeLife(-this.damage,this.category);
+                if(this.category=="scooter"){
+					MainLead.body.linearVelocity=cc.v2(MainLead.body.linearVelocity.x,300);
+                }
             }
         }
     },

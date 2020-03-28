@@ -5,7 +5,8 @@
     "Arm",
     "other",
     "Object1",
-    "enemy"
+    "enemy",
+    "ALL"
   ],
   "collision-matrix": [
     [
@@ -14,13 +15,24 @@
       true,
       true,
       false,
+      true,
       true
     ],
     [
       true,
       false,
+      true,
+      false,
+      true,
+      true,
+      true
+    ],
+    [
+      true,
+      true,
       false,
       false,
+      null,
       true,
       true
     ],
@@ -30,19 +42,24 @@
       false,
       false,
       null,
+      null,
+      true
+    ],
+    [
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
       true
     ],
     [
       true,
-      false,
-      false,
-      false
-    ],
-    [
-      false,
+      true,
       true,
       false,
-      false,
+      true,
       false,
       true
     ],
@@ -50,9 +67,10 @@
       true,
       true,
       true,
-      false,
       true,
-      false
+      true,
+      true,
+      true
     ]
   ],
   "excluded-modules": [],
@@ -78,6 +96,5 @@
     "live": {
       "enable": false
     }
-  },
-  "start-scene": "current"
+  }
 }

@@ -8,6 +8,8 @@ window.LEADDATA={
 			ham:1,
 			fire:1,
 			spear:1,
+			bomb:1,
+			boomerang:1,
 
 			DragonFire:1,
 			DragonBattery:3,
@@ -49,6 +51,9 @@ window.LEADDATA={
 			ham:1,
 			fire:0.8,
 			spear:0.1,
+			bomb:0.1,
+			boomerang:0.1,
+
 			DragonFire:0.5,
 			DragonBattery:0.1,
 			DragonSto:0.1,
@@ -60,6 +65,9 @@ window.LEADDATA={
 			ham:0.1,
 			fire:0.1,
 			spear:0.1,
+			bomb:0.1,
+			boomerang:0.5,
+
 			DragonFire:0.4,
 			DragonBattery:0.1,
 			DragonSto:0.4,
@@ -112,7 +120,7 @@ window.LEADDATA={
 			run:{
 				Lead:560,
 				lieLead:400,
-				scooterLead:1000,
+				scooterLead:800,
 				Fierydragon:800,
 				Brontosaurus:800,
 				Seadragon:560,
@@ -142,7 +150,7 @@ window.LEADDATA={
 			walk:{
 				Lead:170,
 				lieLead:120,
-				scooterLead:300,
+				scooterLead:400,
 				Fierydragon:200,
 				Brontosaurus:200,
 				Seadragon:170,
@@ -152,7 +160,7 @@ window.LEADDATA={
 			run:{
 				Lead:300,
 				lieLead:120,
-				scooterLead:500,
+				scooterLead:560,
 				Fierydragon:420,
 				Brontosaurus:420,
 				Seadragon:300,
@@ -190,6 +198,10 @@ window.LEADDATA={
 			Seadragon:cc.v2(0,0),
 			Pterosaur:cc.v2(0,0),
 			Stegosaurus:cc.v2(0,-25),//
+		},
+		friction:{
+			scooterLead:0,
+			other:0.2,
 		},
 	},
 	

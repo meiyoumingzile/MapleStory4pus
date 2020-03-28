@@ -59,7 +59,7 @@ cc.Class({
         }else if(other.node.name.indexOf("Object")!=-1){
 			var points =  contact.getWorldManifold().points;
 			var f=this.ep.getFpWithObject(contact, self, other);
-			if(this.fp==f.x&&(points.length>1||points[0].y+this.phyColl.size.height/2>this.node.y)){//碰撞点多余一个或者碰到了非
+			if(this.fp==f.x&&points.length>0&&(points.length>1||points[0].y+20>this.node.y)){//碰撞点多余一个或者碰到了非
 				this.fp=-this.fp;
 				this.node.scaleX=-this.node.scaleX;
 				this.body.linearVelocity=cc.v2(-this.body.linearVelocity.x,0);
