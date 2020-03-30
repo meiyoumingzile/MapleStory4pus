@@ -1,5 +1,6 @@
 window.LEADDATA={
 	ARMS:{
+		changePhyArm:{"umbrellaLead":"umbrella","scooterLead":"scooter"},
 		attackUp:["spear","boomerang"],
 		attackWater:["spear","ham","axe","boomerang","bomb"],
 		maxCnt:{
@@ -31,7 +32,7 @@ window.LEADDATA={
 
 		indList:{//
 			Lead:["axe","waterGun","boomerang","fire","ham","spear","bomb","umbrella"],
-			lieLead:["axe","waterGun","boomerang","fire","ham","spear","bomb"],
+			lieLead:["axe","waterGun","boomerang","fire","ham","spear","bomb","umbrella"],
 			umbrellaLead:["umbrella"],
 			scooterLead:["scooter"],
 			Fierydragon:["DragonFire"],
@@ -109,8 +110,10 @@ window.LEADDATA={
 			dwon:0,
 			walk:{
 				Lead:350,
+				umbrellaLead:350,
 				lieLead:400,
 				scooterLead:600,
+				
 				Fierydragon:400,
 				Brontosaurus:400,
 				Seadragon:320,
@@ -119,8 +122,10 @@ window.LEADDATA={
 			},
 			run:{
 				Lead:560,
+				umbrellaLead:560,
 				lieLead:400,
 				scooterLead:800,
+
 				Fierydragon:800,
 				Brontosaurus:800,
 				Seadragon:560,
@@ -149,8 +154,10 @@ window.LEADDATA={
 			up:400,//竖直上升最大速度
 			walk:{
 				Lead:170,
+				umbrellaLead:170,
 				lieLead:120,
 				scooterLead:400,
+
 				Fierydragon:200,
 				Brontosaurus:200,
 				Seadragon:170,
@@ -159,8 +166,10 @@ window.LEADDATA={
 			},
 			run:{
 				Lead:300,
+				umbrellaLead:300,
 				lieLead:120,
 				scooterLead:560,
+
 				Fierydragon:420,
 				Brontosaurus:420,
 				Seadragon:300,
@@ -182,7 +191,8 @@ window.LEADDATA={
 			Lead:cc.v2(70,86),
 			scooterLead:cc.v2(100,120),
 			lieLead:cc.v2(120,44),
-			
+			umbrellaLead:cc.v2(70,86),
+
 			Fierydragon:cc.v2(90,100),
 			Brontosaurus:cc.v2(90,100),
 			Seadragon:cc.v2(100,100),
@@ -193,6 +203,8 @@ window.LEADDATA={
 			Lead:cc.v2(0,0),
 			lieLead:cc.v2(0,-22),//
 			scooterLead:cc.v2(0,0),
+			umbrellaLead:cc.v2(0,0),
+
 			Fierydragon:cc.v2(0,-25),//
 			Brontosaurus:cc.v2(0,-25),//
 			Seadragon:cc.v2(0,0),

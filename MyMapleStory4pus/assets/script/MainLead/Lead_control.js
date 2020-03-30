@@ -18,10 +18,13 @@ cc.Class({
 			collFloorCnt:0,
 			collFloorDir:{},
 			collCeilCnt:0,
+			collSideCnt:[0,0],
+			collSideDir:[{},{}],
 			isLie:false,
 			isFall:false,
 			isClimb:false,
 			climbOb:[null,null],//0是梯子，1是梯子头
+
 	        act:"walk", //state[2]+"_"+act+"_"+左右是状态。
 			
 	        
@@ -34,7 +37,8 @@ cc.Class({
 	        maxSpeedx:0,        //限制的最大速度
 			maxSpeedup:0, 		//限制的最大速度
 			maxSpeeddown:0,     //限制的最大速度
-	        selfacc: cc.v2(0,0),//自己的加速度
+			selfacc: cc.v2(0,0),//自己的加速度
+			
 			
 	        key_left:false,
 	        key_right:false,
@@ -47,6 +51,7 @@ cc.Class({
 	        
 			nowArmsCnt:0,
 			nowArms:"axe",
+			armColl:{},
 			player:null,
 			life:cc.v2(0,0),
 			time:cc.v2(0,8),
@@ -127,9 +132,7 @@ cc.Class({
     }, 
 	    
     onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
-		var worldManifold = contact.getWorldManifold();
-		var points = worldManifold.points;
-		
+		var cf=this.collFp(contact);
 		if(self.tag==1){
 			if(other.node.name.indexOf("Object")!=-1){
 				this.data.collCeilCnt++;
@@ -142,12 +145,19 @@ cc.Class({
 				}
 			}
 			if(other.node.name.indexOf("Enemy")!=-1){
-				this.collEnemy(contact, self, other);
+				this.collEnemy(contact, other,cf);
 			}else if(other.node.name.indexOf("Object")!=-1){
-				if(this.isOnFloor(contact)){
+				if(cf.y==-1){
 					this.data.collFloorDir[other._id]=true;
 					this.data.collFloorCnt++;
-					
+				}
+				if(cf.x==-1){
+					this.data.collSideDir[0][other._id]=true;
+					this.data.collSideCnt[0]++;
+				}
+				if(cf.x==1){
+					this.data.collSideDir[1][other._id]=true;
+					this.data.collSideCnt[1]++;
 				}
 				this.data.isFall=false;//
 			}
@@ -155,8 +165,6 @@ cc.Class({
 		
     },
     onEndContact: function (contact, self, other) {// 只在两个碰撞体结束接触时被调用一次
-		var worldManifold = contact.getWorldManifold();
-		var points = worldManifold.points;
 		if(self.tag==1){
 			if(other.node.name.indexOf("Object")!=-1){
 				this.data.collCeilCnt--;
@@ -169,6 +177,14 @@ cc.Class({
 				if(this.data.collFloorDir[other._id]){
 					delete this.data.collFloorDir[other._id];
 					this.data.collFloorCnt--;
+				}
+				if(this.data.collSideDir[0][other._id]){
+					delete this.data.collSideDir[0][other._id];
+					this.data.collSideCnt[0]--;
+				}
+				if(this.data.collSideDir[1][other._id]){
+					delete this.data.collSideDir[1][other._id];
+					this.data.collSideCnt[1]--;
 				}
 				this.data.isFall=false;//
 			}
@@ -185,7 +201,8 @@ cc.Class({
 				}
 			}
 			if(other.node.name.indexOf("Enemy")!=-1){
-				this.collEnemy(contact, self, other);
+				var cf=this.collFp(contact);
+				this.collEnemy(contact, other,cf);
 			}
 		}
     }, 
@@ -311,10 +328,15 @@ cc.Class({
 			if(speed.x*keyFp<0){//如果减速,则加速度减半
 				leadAcc/=2;
 			}
+		}else if(this.data.state[2]=="umbrellaLead"){//是雨伞下落速度减慢
+			this.data.maxSpeeddown/=3;
 		}
 
 		this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
-		if(keyFp!=0){//左边
+		if(this.data.collFloorCnt==0&&(this.data.collSideCnt[0]>0||this.data.collSideCnt[1]>0)){
+			this.data.selfacc.x=0;
+			
+		}else if(keyFp!=0){//左右运动
 			this.node.scaleX=keyFp*ALL.scaleLead.x;
 			this.data.selfacc.x=keyFp*leadAcc;//加速度方向和脸的方向一样。
 		}else{
@@ -384,6 +406,8 @@ cc.Class({
 			this.body.gravityScale=0;
 		}else if(this.data.state[2].indexOf("Pterosaur")!=-1){//是飞龙
 			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"]/2;
+		}else if(this.data.state[2]=="umbrellaLead"&&speed.y<-1){//向下运动且举着雨伞，则中立减半
+			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"]/8;
 		}else{
 			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"];
 		}
@@ -407,7 +431,7 @@ cc.Class({
 		}
 	},
 
-	collEnemy:function(contact, self, other){
+	collEnemy:function(contact,other,cf){
 		var ep=other.node.getComponent("EnemyPublic");
 		if(ep==null){
 			cc.log("公用怪物脚本丢失");
@@ -419,7 +443,7 @@ cc.Class({
 			if(ep.specialEffect=="null"){
 				if(this.data.state[2]=="Stegosaurus"&&this.data.act.indexOf("attack")!=-1){//是剑龙攻击     
 					ep.changeLife(-LEADDATA.DAM["Stegosaurus"],"Stegosaurus");//怪物掉血，剑龙攻击成功
-				}else if(this.data.state[2]=="scooterLead"&&this.isOnFloor(contact)){
+				}else if(this.data.state[2]=="scooterLead"&&cf.y==-1){
 					
 				}else{
 					this.speed=this.body.linearVelocity;
@@ -660,12 +684,12 @@ cc.Class({
 		}else if(this.data.nowArms=="scooter"){
 			this.data.nowArmsCnt=0;
 		
-			this.data.__scooter=cc.instantiate(ALL.FAB["Arm_short"]);
+			this.data.armColl.scooter=cc.instantiate(ALL.FAB["Arm_short"]);
 			var height=2;
-			var off=cc.v2(0,-(this.phyColl.size.height+10)/2);
-			this.data.__scooter.getComponent("Arm_short").init("scooter",off,cc.v2(this.phyColl.size.width-8,height));
-			this.data.__scooter.setPosition(this.node.x+off.x*(this.node.scaleX>0?1:-1),this.node.y+off.y);
-			this.node.parent.addChild(this.data.__scooter);
+			var off=cc.v2(0,-(this.phyColl.size.height+44)/2);
+			this.data.armColl.scooter.getComponent("Arm_short").init("scooter",off,cc.v2(this.phyColl.size.width+10,height));
+			this.data.armColl.scooter.setPosition(this.node.x+off.x*(this.node.scaleX>0?1:-1),this.node.y+off.y);
+			this.node.parent.addChild(this.data.armColl.scooter);
 		}else if(this.data.nowArms=="bomb"){
 			var newarm=cc.instantiate(ALL.FAB["Object_bomb"]);
 			var sx=0;
@@ -695,6 +719,18 @@ cc.Class({
 			
 			newarm.setPosition(armX,armY);
 			this.node.parent.addChild(newarm);
+		}else if(this.data.nowArms=="umbrella"){
+			this.data.nowArmsCnt=0;
+			this.data.armColl[this.data.nowArms]=cc.instantiate(ALL.FAB["Arm_short"]);
+			var arm=this.data.armColl[this.data.nowArms];
+			var height=5;
+			var fp=(this.node.scaleX>0?1:-1);
+			var off=cc.v2(15,this.phyColl.size.height-height);
+			arm.getComponent("Arm_short").init("umbrella",off,cc.v2(130,height));
+			arm.name="Object0_umbrellaColl";
+			//arm.group="Object0";
+			arm.setPosition(this.node.x+off.x*fp,this.node.y+off.y);
+			this.node.parent.addChild(arm);
 		}
     },
 	
@@ -714,27 +750,27 @@ cc.Class({
 		}
 		return null;
 	},
-	isOnFloor:function(contact){//判断是不是站在地面上
-		var points =  contact.getWorldManifold().points;
-		let i=0;
-		for(i=0;i<points.length&&points[i].y<this.node.y-this.phyColl.size.height/2+1;i++);
-		
-		return i==points.length;
+	borderX:function(fp=1){//判断是不是站在地面上
+		return this.node.x+this.phyColl.offset.x+this.phyColl.size.width/2*fp;
 	},
-	getFpWithObject:function(contact, self, other){//判断碰撞物关系，一个向量,不确定返回(0,0)，若怪物的坐标大于碰撞点的坐标，结果是-1
+	borderY:function(fp=1){//判断是不是站在地面上
+		return this.node.y+this.phyColl.offset.y+this.phyColl.size.height/2*fp;
+	},
+	collFp:function(contact){//判断碰撞物关系，一个向量,不确定返回(0,0)，若怪物的坐标大于碰撞点的坐标，结果是-1
 		var points =  contact.getWorldManifold().points;
 		var fp=cc.v2(0,0);
+		if(points.length<1)
+			return fp;
 		var cnt=[0,0,0,0];
-		//cc.log(self);
 		for(var i=0;i<points.length;i++){
-			if(points[i].x<this.node.x){
+			if(points[i].x<this.borderX(-1)){
 				cnt[0]++;
-			}else if(points[i].x>this.node.x){
+			}else if(points[i].x>this.borderX(1)){
 				cnt[1]++;
 			}
-			if(points[i].y<this.node.y){
+			if(points[i].y<this.borderY(-1)){
 				cnt[2]++;
-			}else if(points[i].y>this.node.y){
+			}else if(points[i].y>this.borderY(1)){
 				cnt[3]++;
 			}
 		}
@@ -751,6 +787,19 @@ cc.Class({
 		return fp;
 	},
 	judgeAttack:function(){//返回是否处理后面动作。false代表继续处理
+		if(this.data.nowArms=="umbrella"){
+			if(this.data.state[2]!="umbrellaLead"&&this.data.key_attack//没举着雨伞 且按了攻击
+				&&!this.data.isLie&&!this.data.isClimb&&!this.data.isFall){
+				this.setPhy("umbrellaLead");
+			}else if(this.data.state[2]=="umbrellaLead"&&!this.data.key_attack){//举着雨伞 且没按攻击
+				this.setPhy("Lead");
+				
+				if(this.data.armColl[this.data.nowArms]){
+					this.data.armColl[this.data.nowArms].destroy();
+				}
+			}
+			return false;
+		}
 		if(this.data.isFall||this.data.isClimb||this.data.nowArms=="scooter"){
 			return false;
 		}
@@ -783,6 +832,15 @@ cc.Class({
 			this.setPhy(this.pets[i]);
 		}else{
 			this.setArm(name);
+			if(this.data.state[2].indexOf("Lead")==-1){
+				this.setPhy();
+			}else if(name=="scooter"){
+				this.setPhy("scooterLead");
+			}else if(this.data.isLie){
+				this.setPhy("lieLead");
+			}else{
+				this.setPhy();
+			}
 			//cc.log(other.node.name.replace("goods_",""));
 		//	cc.log(this.data.nowArms);
 		}
@@ -798,15 +856,20 @@ cc.Class({
 	setPhy:function(man="Lead"){
 		if(this.data.state[2]!=man){
 			this.data.state[2]=man;
-			if(LEADDATA.ARMS.indList[man].indexOf(this.data.nowArms)==-1){
-				if(this.data.nowArms=="scooter"){
-					this.data.__scooter.destroy();
-				}
-				this.data.nowArms=LEADDATA.ARMS.indList[man][0];
+			var arm=LEADDATA.ARMS.changePhyArm[man];
+			if(arm&&this.data.armColl[arm]){
+				this.data.armColl[arm].destroy();
 			}
-			if(this.data.state[2]=="umbrella"){
+			if(LEADDATA.ARMS.indList[man].indexOf(this.data.nowArms)==-1){
+				//cc.log(man,this.data.nowArms,LEADDATA.ARMS.indList[man].indexOf(this.data.nowArms));
+				this.setArm(LEADDATA.ARMS.indList[man][0]);
+			}
+			if(this.data.state[2]=="umbrellaLead"){
 				this.newArm();
 			}else{
+				if(this.data.state[2]=="scooterLead"){
+					this.newArm();
+				}
 				var sz=LEADDATA.PhysicalPara.size[man];
 				this.phyColl.size.width=sz.x;
 				this.phyColl.size.height=sz.y;
@@ -821,6 +884,10 @@ cc.Class({
 	},
 	setArm:function(arm){
 		if(this.data.nowArms!=arm){
+		//	cc.log(this.data.armColl[this.data.nowArms]);
+			if(this.data.armColl[this.data.nowArms]){
+				this.data.armColl[this.data.nowArms].destroy();
+			}
 			if(this.data.state[0]=="water"){
 				if(LEADDATA.attackWater.indexOf(arm)!=-1){
 					this.data.nowArms=arm;
@@ -828,13 +895,6 @@ cc.Class({
 				}
 				return false;
 			}else{
-				if(arm=="scooter"){
-					this.setPhy("scooterLead");
-					this.newArm();
-				}else if(arm=="umbrella"){
-					this.setPhy("umbrellaLead");
-				}
-				
 				this.data.nowArms=arm;
 				return true;
 			}

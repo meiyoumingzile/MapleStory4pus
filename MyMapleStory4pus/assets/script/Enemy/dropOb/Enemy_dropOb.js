@@ -11,7 +11,7 @@ cc.Class({
     },
 
     onLoad: function () {
-		//this.init(7);
+		this.init(7);
 		this.player = this.node.getComponent(cc.Animation);//初始化动画
         this.body = this.node.getComponent(cc.RigidBody);
 		this.phyColl=this.node.getComponent(cc.PhysicsPolygonCollider);//获得碰撞体
@@ -56,7 +56,9 @@ cc.Class({
 	onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
 		if(other.node.name=="Lead"){
 			
-        }else if(other.node.name.indexOf("Object")!=-1){
+        }else if(other.node.name=="Object0_umbrellaColl"){
+			this.die();
+		}else if(other.node.name.indexOf("Object")!=-1){
 			if(this.ep.kind==3){
 				if(this.ep.isOnFloor(contact)&&this.collFloorCnt++==0){
 					this.body.linearVelocity=cc.v2(177*(this.node.x>ALL.Lead.x?-1:1),401);

@@ -28,7 +28,7 @@ cc.Class({
         this.node.y=ALL.Lead.y+this.beginOffset.y;
     },
     onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
-        if(other.node.name.indexOf("Enemy")==0){
+        if(other.node.name.indexOf("Enemy")==0&&this.category!="umbrella"){
 			var js=other.node.getComponent("EnemyPublic");
             if(js&&js.specialEffect=="null"){
                 var d=js.changeLife(-this.damage,this.category);
