@@ -41,7 +41,7 @@ cc.Class({
         } else { // 关闭调试信息
             cc.director.getPhysicsManager().debugDrawFlags = 0;
         }
-        cc.director.getPhysicsManager().gravity = this.gravity;// 重力加速度的配置
+		cc.director.getPhysicsManager().gravity = this.gravity;// 重力加速度的配置
     },
 	__preload: function () {//3种样式，5种类型
 		cc.director.pause();

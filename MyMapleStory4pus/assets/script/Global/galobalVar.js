@@ -26,7 +26,8 @@ window.ALL = {
     		door1:cc.v2(4770,-220),
     	},
     },
-	
+    
+    SaveLead:null,
     NextSence:"",
     nowSence:"",
     lastSence:"",

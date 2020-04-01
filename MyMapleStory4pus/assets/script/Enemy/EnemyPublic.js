@@ -142,7 +142,9 @@ cc.Class({
 			fun();
 		}
 		if(this.canDie){
-			this.mkScript.__cnt--;
+			if(this.mkScript){
+				this.mkScript.__cnt--;
+			}
 			this.node.destroy();
 		}
 	},
@@ -156,4 +158,11 @@ cc.Class({
 		this.category=category;
 		this.kind=kind;
 	},
+
+	pause:function(is=true){
+
+	},
+	clone(){
+		
+	}
 });

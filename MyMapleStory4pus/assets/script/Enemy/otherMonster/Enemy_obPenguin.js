@@ -49,8 +49,9 @@ cc.Class({
 				//this.node.scaleX=Math.abs(this.node.scaleX)*this.fp;
 				this.__attack=true;
 				this.body.linearVelocity=cc.v2(0,this.beginSpeed.y);
+				this.unschedule(this.callbackAttack);
 			}
-			this.schedule(this.callbackAttack,this.stopGap,1,0);
+			this.schedule(this.callbackAttack,this.stopGap,0,0);
 		}
 		this.changeAction(speed);
     },
@@ -60,6 +61,8 @@ cc.Class({
 			contact.disabled=true;
         }else if(other.node.name.indexOf("Object")!=-1){
 			var points =  contact.getWorldManifold().points;
+			if(points.length<0)
+				return ;
 			var f=this.ep.getFpWithObject(contact, self, other);
 			if(this.fp==f.x&&(points.length>1||points[0].y+this.phyColl.size.height/2>this.node.y)){//碰撞点多余一个或者碰到了非
 				this.fp=-this.fp;

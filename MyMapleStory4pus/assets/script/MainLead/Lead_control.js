@@ -20,13 +20,16 @@ cc.Class({
 			collCeilCnt:0,
 			collSideCnt:[0,0],
 			collSideDir:[{},{}],
+			collWaterCnt:0,
+			collWaterDir:{},
+
 			isLie:false,
 			isFall:false,
 			isClimb:false,
 			climbOb:[null,null],//0是梯子，1是梯子头
 
 	        act:"walk", //state[2]+"_"+act+"_"+左右是状态。
-			
+			preActList:["walk","walk"],
 	        
 			canAttack:true,
 			isAttackAct:false,//是否处于攻击状态
@@ -63,6 +66,12 @@ cc.Class({
 		this.coll=this.node.getComponent(cc.BoxCollider);//获得碰撞体
 		this.phyColl=this.node.getComponents(cc.PhysicsBoxCollider)[0];//获得碰撞体
 		this.head = this.node.getComponents(cc.PhysicsBoxCollider)[1];
+		//var g=this.node.getComponents(cc.script);
+		if(ALL.SaveLead!=null){
+			this.node.destroy();
+			this.node=ALL.SaveLead;
+			cc.log(this.node.data);
+		}
     },
 
     onKeyDown (event) {
@@ -104,11 +113,11 @@ cc.Class({
 				this.data.key_acc=false;
 				break;
             case KEY.left:
-				this.node.scaleX=-ALL.scaleLead.x;
+				
 				this.data.key_left=false;
                 break;
             case KEY.right:
-				this.node.scaleX=ALL.scaleLead.x;
+			
 				this.data.key_right=false;
                 break;
             case KEY.up:
@@ -122,8 +131,9 @@ cc.Class({
 
 
 	update: function (dt) {//dt是距离上一帧的时间间隔
-	
-        var speed = this.body.linearVelocity;
+		
+		this.data.preScaleX=this.node.scaleX;
+		var speed = this.body.linearVelocity;
 		this.dealKey(dt,speed);//判断按键状态
 		this.dealState(dt,speed);//处理人物状态和动画切换
 		this.updateParameter(dt,speed);
@@ -133,11 +143,21 @@ cc.Class({
 	    
     onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
 		var cf=this.collFp(contact);
+		var sc=Math.abs(this.data.preScaleX-this.node.scaleX);
 		if(self.tag==1){
 			if(other.node.name.indexOf("Object")!=-1){
 				this.data.collCeilCnt++;
 			}
+			if(other.name.indexOf("WATER")!=-1){
+				this.intoWater();
+			}
 		}else{//self.tag==0
+			if(other.name.indexOf("WATER")!=-1){
+				if(sc<ALL.inf&&!this.data.collWaterDir[other._id]){
+					this.data.collWaterCnt++;
+					this.data.collWaterDir[other._id]=true;
+				}
+			}
 			if(other.node.name=="Object_Ladder"){//爬梯子
 				this.data.climbOb[1]=other.node;
 				if(this.data.key_down||this.data.isClimb){
@@ -146,16 +166,16 @@ cc.Class({
 			}
 			if(other.node.name.indexOf("Enemy")!=-1){
 				this.collEnemy(contact, other,cf);
-			}else if(other.node.name.indexOf("Object")!=-1){
-				if(cf.y==-1){
+			}else if(other.node.name.indexOf("Object")!=-1&&sc<ALL.inf){
+				if(cf.y==-1&&!this.data.collFloorDir[other._id]){
 					this.data.collFloorDir[other._id]=true;
 					this.data.collFloorCnt++;
 				}
-				if(cf.x==-1){
+				if(cf.x==-1&&!this.data.collSideDir[0][other._id]){
 					this.data.collSideDir[0][other._id]=true;
 					this.data.collSideCnt[0]++;
 				}
-				if(cf.x==1){
+				if(cf.x==1&&!this.data.collSideDir[1][other._id]){
 					this.data.collSideDir[1][other._id]=true;
 					this.data.collSideCnt[1]++;
 				}
@@ -164,16 +184,28 @@ cc.Class({
 		}
 		
     },
-    onEndContact: function (contact, self, other) {// 只在两个碰撞体结束接触时被调用一次
+	onEndContact: function (contact, self, other) {// 只在两个碰撞体结束接触时被调用一次
+		var points =  contact.getWorldManifold().points;
+		var sc=Math.abs(this.data.preScaleX-this.node.scaleX);
+		
 		if(self.tag==1){
 			if(other.node.name.indexOf("Object")!=-1){
 				this.data.collCeilCnt--;
 			}
+			if(other.name.indexOf("WATER")!=-1){
+				this.data.state[0]="air";
+			}
 		}else{//self.tag==0
+			if(other.name.indexOf("WATER")!=-1){
+				if(this.data.collWaterDir[other._id]&&sc<ALL.inf){
+					delete this.data.collWaterDir[other._id];
+					this.data.collWaterCnt--;
+				}
+			}
 			if(other.node.name=="Object_Ladder"){//爬梯子
 				this.data.climbOb[1]=null;
 			}
-			if(other.node.name.indexOf("Object")!=-1){
+			if(other.node.name.indexOf("Object")!=-1&&sc<ALL.inf){
 				if(this.data.collFloorDir[other._id]){
 					delete this.data.collFloorDir[other._id];
 					this.data.collFloorCnt--;
@@ -192,8 +224,8 @@ cc.Class({
     },
     onPreSolve: function (contact, self, other) {// 每次处理碰撞体接触逻辑时每一帧都调用
 		if(self.tag==1){
-			
 		}else{//self.tag==0
+			
 			if(other.node.name=="Object_Ladder"){//爬梯子
 				if(this.data.key_down||this.data.isClimb){
 					contact.disabled=true;
@@ -206,27 +238,15 @@ cc.Class({
 			}
 		}
     }, 
-    onPostSolve: function (contact, self, other) {// 每次处理完碰撞体接触逻辑时被调用
-	
-    },  
 	onCollisionEnter: function (other, self){
-		if(other.name.indexOf("WATER")!=-1){
-			this.data.state[0]="water";
-			if(this.data.state[2]!="Lead"&&this.data.state[2]!="Seadragon"){
-				this.setPhy("Lead");
-			}
-		}else if(other.node.name.indexOf("Ladder")!=-1){
+		if(other.node.name.indexOf("Ladder")!=-1){
 			this.data.climbOb[0]=other.node;
 		}else if(other.node.name.indexOf("goods")!=-1){
 			this.getGoods(other.node.name.replace("goods_",""));
 		}
 	},
-	onCollisionStay: function (other,self){
-	},
 	onCollisionExit: function (other, self){
-		if(other.name.indexOf("WATER")!=-1){
-			this.data.state[0]="air";
-		}else if(other.node.name.indexOf("Ladder")!=-1){
+		if(other.node.name.indexOf("Ladder")!=-1){
 			this.data.climbOb[0]=null;
 		}
 	},
@@ -268,7 +288,9 @@ cc.Class({
 		this.judgeJumpScene();
 		if(this.data.state[0].indexOf("air")!=-1){
 			var maxJumptime=8;
-			if(this.data.key_jump&&!this.data.isLie){//按了跳跃还没有趴着
+			if(this.data.key_attack&&this.data.collWaterCnt>0&&this.data.state[2]=="umbrellaLead"){
+				speed.y=0;
+			}else if(this.data.key_jump&&!this.data.isLie){//按了跳跃还没有趴着
 				if(this.data.state[2].indexOf("Pterosaur")!=-1){
 					speed.y=this.data.jumpSpeedy/2;
 				}else if(this.data.collFloorCnt>0){//如果在地面上，且 按了跳跃，则就挑起
@@ -303,7 +325,6 @@ cc.Class({
 			}
 			if(this.data.key_acc){//按了加速
 				this.data.state[1]="run";
-
 			}else{
 				this.data.state[1]="walk";
 			}
@@ -330,24 +351,30 @@ cc.Class({
 			}
 		}else if(this.data.state[2]=="umbrellaLead"){//是雨伞下落速度减慢
 			this.data.maxSpeeddown/=3;
+			if(this.data.act=="float"){//雨伞滑行速度减慢。
+				this.data.maxSpeedx=LEADDATA.MaxSpeedKind["water"][this.data.state[1]][this.data.state[2]];
+				leadAcc=LEADDATA.BeginAccKind["water"][this.data.state[1]][this.data.state[2]];
+			}
 		}
 
 		this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
 		if(this.data.collFloorCnt==0&&(this.data.collSideCnt[0]>0||this.data.collSideCnt[1]>0)){
 			this.data.selfacc.x=0;
-			
 		}else if(keyFp!=0){//左右运动
 			this.node.scaleX=keyFp*ALL.scaleLead.x;
 			this.data.selfacc.x=keyFp*leadAcc;//加速度方向和脸的方向一样。
 		}else{
 			this.data.selfacc.x=0;
 		}
-		
 	},
 	dealState: function (dt,speed){//改变人物状态:act
+
+		
 		if(this.judgeAttack()){//返回是否处在攻击动作
 		}else if(this.data.state[0].indexOf("air")!=-1){
-			if(this.data.isClimb){
+			if(this.data.collWaterCnt>0&&this.data.key_attack&&this.data.state[0]=="air"){//举着伞按了攻击
+				this.data.act="float";
+			}else if(this.data.isClimb){
 				this.setPhy();
 				var x=Math.ceil(this.node.x/20)%2;
 				var y=Math.ceil(this.node.y/60)%2;
@@ -377,6 +404,7 @@ cc.Class({
 			}
 
 		}else if(this.data.state[0].indexOf("water")!=-1){
+		//	cc.log();
 			if(this.data.isClimb){
 				this.setPhy();
 				var x=Math.ceil(this.node.x/20)%2;
@@ -394,6 +422,7 @@ cc.Class({
 
 		
 		//以上是改变this.data.act
+		
 		var nowDraw=this.data.state[2]+"_"+this.data.act;
         if(this.data.preDraw!=nowDraw){
             this.data.preDraw=nowDraw;
@@ -402,7 +431,7 @@ cc.Class({
 	},
 	
 	updateParameter:function(dt,speed){
-		if(this.data.isClimb){
+		if(this.data.isClimb||(this.data.state[2]=="umbrellaLead"&&this.data.key_attack&&this.data.collWaterCnt>0)){//举着伞按了攻击
 			this.body.gravityScale=0;
 		}else if(this.data.state[2].indexOf("Pterosaur")!=-1){//是飞龙
 			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"]/2;
@@ -763,14 +792,14 @@ cc.Class({
 			return fp;
 		var cnt=[0,0,0,0];
 		for(var i=0;i<points.length;i++){
-			if(points[i].x<this.borderX(-1)){
+			if(points[i].x<this.borderX(-1)+2){
 				cnt[0]++;
-			}else if(points[i].x>this.borderX(1)){
+			}else if(points[i].x>this.borderX(1)-2){
 				cnt[1]++;
 			}
-			if(points[i].y<this.borderY(-1)){
+			if(points[i].y<this.borderY(-1)+2){
 				cnt[2]++;
-			}else if(points[i].y>this.borderY(1)){
+			}else if(points[i].y>this.borderY(1)-2){
 				cnt[3]++;
 			}
 		}
@@ -789,14 +818,11 @@ cc.Class({
 	judgeAttack:function(){//返回是否处理后面动作。false代表继续处理
 		if(this.data.nowArms=="umbrella"){
 			if(this.data.state[2]!="umbrellaLead"&&this.data.key_attack//没举着雨伞 且按了攻击
-				&&!this.data.isLie&&!this.data.isClimb&&!this.data.isFall){
+				&&!this.data.isLie&&!this.data.isClimb&&!this.data.isFall&&this.data.state[0]!="water"){
 				this.setPhy("umbrellaLead");
 			}else if(this.data.state[2]=="umbrellaLead"&&!this.data.key_attack){//举着雨伞 且没按攻击
 				this.setPhy("Lead");
-				
-				if(this.data.armColl[this.data.nowArms]){
-					this.data.armColl[this.data.nowArms].destroy();
-				}
+				this.delArm();
 			}
 			return false;
 		}
@@ -859,13 +885,15 @@ cc.Class({
 			var arm=LEADDATA.ARMS.changePhyArm[man];
 			if(arm&&this.data.armColl[arm]){
 				this.data.armColl[arm].destroy();
+				delete this.data.armColl[arm];
 			}
 			if(LEADDATA.ARMS.indList[man].indexOf(this.data.nowArms)==-1){
 				//cc.log(man,this.data.nowArms,LEADDATA.ARMS.indList[man].indexOf(this.data.nowArms));
 				this.setArm(LEADDATA.ARMS.indList[man][0]);
 			}
 			if(this.data.state[2]=="umbrellaLead"){
-				this.newArm();
+				if(this.data.collWaterCnt<=0)
+					this.newArm();
 			}else{
 				if(this.data.state[2]=="scooterLead"){
 					this.newArm();
@@ -885,9 +913,7 @@ cc.Class({
 	setArm:function(arm){
 		if(this.data.nowArms!=arm){
 		//	cc.log(this.data.armColl[this.data.nowArms]);
-			if(this.data.armColl[this.data.nowArms]){
-				this.data.armColl[this.data.nowArms].destroy();
-			}
+			this.delArm();
 			if(this.data.state[0]=="water"){
 				if(LEADDATA.attackWater.indexOf(arm)!=-1){
 					this.data.nowArms=arm;
@@ -907,7 +933,7 @@ cc.Class({
 			for(var i=0;i<ch.length;i++){
 				if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
 					//携带信息
-					
+					ALL.SaveLead=cc.instantiate(this.node);
 					cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
 				}
 			}
@@ -932,7 +958,20 @@ cc.Class({
 			&&(this.data.climbOb[0].y>this.node.y&&this.data.key_up||this.data.climbOb[0].y<this.node.y&&this.data.key_down)){
 			this.data.isClimb=true;
 		}
-		
 	},
+	intoWater: function(){
+		this.data.state[0]="water";
+		if(this.data.state[2]!="Lead"&&this.data.state[2]!="Seadragon"){
+			this.delArm();
+			this.setPhy("Lead");
+		}
+	},
+	delArm:function(){
+		if(this.data.armColl[this.data.nowArms]){
+			this.data.armColl[this.data.nowArms].destroy();
+			delete this.data.armColl[this.data.nowArms];
+		}
+	},
+
 });
 

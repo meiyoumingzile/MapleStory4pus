@@ -89,18 +89,22 @@ window.LEADDATA={
 			down:{
 				Lead:0,
 				Seadragon:0,
+				umbrellaLead:0,
 			},
 			up:{
 				Lead:0,
 				Seadragon:0,
+				umbrellaLead:0,
 			},
 			walk:{
 				Lead:100,
+				umbrellaLead:200,
 				lieLead:400,
 				Seadragon:300,
 			},
 			run:{
 				Lead:200,
+				umbrellaLead:200,
 				lieLead:400,
 				Seadragon:600,
 			},
@@ -142,11 +146,13 @@ window.LEADDATA={
 				Lead:120,
 				lieLead:120,
 				Seadragon:150,
+				umbrellaLead:200,
 			},
 			run:{
 				Lead:200,
 				lieLead:120,
 				Seadragon:300,
+				umbrellaLead:200,
 			},
 		},
 		air:{

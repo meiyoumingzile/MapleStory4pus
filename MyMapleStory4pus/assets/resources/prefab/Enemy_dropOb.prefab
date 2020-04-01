@@ -146,7 +146,7 @@
     },
     "_enabled": true,
     "_type": 2,
-    "_allowSleep": false,
+    "_allowSleep": true,
     "_gravityScale": 0,
     "_linearDamping": 0,
     "_angularDamping": 0,
@@ -158,7 +158,7 @@
     "_angularVelocity": 0,
     "_fixedRotation": true,
     "enabledContactListener": true,
-    "bullet": false,
+    "bullet": true,
     "awakeOnLoad": true,
     "_id": ""
   },
@@ -247,6 +247,7 @@
     "damage": 1,
     "category": "",
     "kind": 1,
+    "canDie": true,
     "dieDis": {
       "__type__": "cc.Vec2",
       "x": 0,
