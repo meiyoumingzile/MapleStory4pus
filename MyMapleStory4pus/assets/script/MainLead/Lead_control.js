@@ -2,7 +2,8 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        data:null,
+		data:null,
+		//SchedulerDir:{},
     },
 	
     // use this for initialization
@@ -58,6 +59,7 @@ cc.Class({
 			player:null,
 			life:cc.v2(0,0),
 			time:cc.v2(0,8),
+			pause:false,
     	};
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
@@ -67,11 +69,17 @@ cc.Class({
 		this.phyColl=this.node.getComponents(cc.PhysicsBoxCollider)[0];//获得碰撞体
 		this.head = this.node.getComponents(cc.PhysicsBoxCollider)[1];
 		//var g=this.node.getComponents(cc.script);
-		if(ALL.SaveLead!=null){
+		/*if(ALL.SaveLead!=null){
+			var root=this.node.parent;
+			this.node=ALL.SaveLead;
+			//this.node.parent=root;
+			ALL.SaveLead=null;
+		}*/
+		/*if(ALL.SaveLead!=null){
 			this.node.destroy();
 			this.node=ALL.SaveLead;
 			cc.log(this.node.data);
-		}
+		}*/
     },
 
     onKeyDown (event) {
@@ -125,13 +133,18 @@ cc.Class({
                 break;
 			case KEY.down:
 				this.data.key_down=false;
-                break;
+				break;
+			case KEY.pause:
+				this.pause(!this.data.pause);
+				break;
         }
     },
 
 
 	update: function (dt) {//dt是距离上一帧的时间间隔
-		
+		if(this.data.pause)
+			return ;
+		//cc.log(this.node.scaleX);
 		this.data.preScaleX=this.node.scaleX;
 		var speed = this.body.linearVelocity;
 		this.dealKey(dt,speed);//判断按键状态
@@ -362,6 +375,7 @@ cc.Class({
 			this.data.selfacc.x=0;
 		}else if(keyFp!=0){//左右运动
 			this.node.scaleX=keyFp*ALL.scaleLead.x;
+			
 			this.data.selfacc.x=keyFp*leadAcc;//加速度方向和脸的方向一样。
 		}else{
 			this.data.selfacc.x=0;
@@ -972,6 +986,20 @@ cc.Class({
 			delete this.data.armColl[this.data.nowArms];
 		}
 	},
-
+	pause:function(is=true){
+		if(is){
+			this.data.pause=true;
+			this.data.player.pause();
+			ALL.menu.active=true;
+			cc.director.pause();
+		
+			
+		}else{
+			this.data.pause=false;
+			this.data.player.resume();
+			ALL.menu.active=false;
+			cc.director.resume();
+		}
+	}
 });
 

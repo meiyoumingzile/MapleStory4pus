@@ -41,7 +41,8 @@ window.ALL = {
 	enemyUpdateSize:cc.v2(1000,1000),//怪物刷新范围
 	scaleLead:cc.v2(1,1),
 	scaleEnemy:cc.v2(1,1),
-	scaleOb:cc.v2(1,1),
+    scaleOb:cc.v2(1,1),
+    menu:null,
 };
 
 
@@ -55,5 +56,9 @@ window.KEY={
     attack:cc.macro.KEY.j,
     acc:cc.macro.KEY.l,
     jump:cc.macro.KEY.k,
+    pause:cc.macro.KEY.space,
 };
 
+window.SchedulerList={
+   
+};

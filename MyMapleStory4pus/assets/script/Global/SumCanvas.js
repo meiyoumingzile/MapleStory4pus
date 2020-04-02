@@ -62,7 +62,7 @@ cc.Class({
 		var scale=sz.width/this.bottomBar.width;
 		this.bottomBar.scaleX=scale;//屏幕适配
 		this.bottomBar.scaleY=scale;//屏幕适配
-		
+		ALL.menu=this.findChildren(this.bottomBar.parent,"MENU");
 	},
     // update: function (dt) {
  
@@ -208,5 +208,9 @@ cc.Class({
 	getWindows:function(){
 		let windowSize=cc.view.getVisibleSize();
 		return cc.v2(windowSize.width,windowSize.height);
+	},
+
+	isBaseVar(a){
+		return a instanceof String||a instanceof Boolean||a instanceof Number; 
 	},
 });
