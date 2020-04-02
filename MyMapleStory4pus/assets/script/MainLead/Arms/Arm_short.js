@@ -39,8 +39,8 @@ cc.Class({
         }
     },
 	
-	die(){
-		MainLead.data.nowArmsCnt= (MainLead.data.nowArmsCnt==0?0:MainLead.data.nowArmsCnt-1);
+    die(){
+		MainLead.data.nowArmsCnt[this.category]--;
 		this.node.destroy();
 	},
 });

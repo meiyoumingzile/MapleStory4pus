@@ -53,7 +53,7 @@ cc.Class({
 	        key_jump:false,
 
 	        
-			nowArmsCnt:0,
+			nowArmsCnt:{},
 			nowArms:"axe",
 			armColl:{},
 			player:null,
@@ -142,6 +142,7 @@ cc.Class({
 
 
 	update: function (dt) {//dt是距离上一帧的时间间隔
+		cc.log(this.data.collFloorCnt,this.data.act);
 		if(this.data.pause)
 			return ;
 		//cc.log(this.node.scaleX);
@@ -287,6 +288,7 @@ cc.Class({
 		//this.data.maxSpeedup=MaxSpeedKind[this.data.state[0]]["up"];
 		//this.data.maxSpeeddown=MaxSpeedKind[this.data.state[0]]["down"];
 		//this.data.jumpSpeedy=BeginSpeedKind[this.data.state[0]]["jump"];
+	
 		this.judgeClimb(speed);
 		this.data.preisLie=this.data.isLie;
 		this.data.isLie=(this.data.key_down ||this.data.collCeilCnt>0)&& this.data.collFloorCnt>0
@@ -304,9 +306,11 @@ cc.Class({
 			if(this.data.key_attack&&this.data.collWaterCnt>0&&this.data.state[2]=="umbrellaLead"){
 				speed.y=0;
 			}else if(this.data.key_jump&&!this.data.isLie){//按了跳跃还没有趴着
+				
 				if(this.data.state[2].indexOf("Pterosaur")!=-1){
 					speed.y=this.data.jumpSpeedy/2;
 				}else if(this.data.collFloorCnt>0){//如果在地面上，且 按了跳跃，则就挑起
+			
 					speed.y=this.data.jumpSpeedy;
 					this.data.jumptime=1;
 				}else if(this.data.jumptime>0&&this.data.jumptime<maxJumptime){//如果不在地面上且还按了跳跃且之前几帧按过跳跃可以“大跳”
@@ -611,7 +615,7 @@ cc.Class({
 		}
 	},
 	newArm:function(){//用来加载一个新武器
-		this.data.nowArmsCnt++;
+		this.data.nowArmsCnt[this.data.nowArms]++;
         if(this.data.nowArms=="axe"){
 				var newarm=cc.instantiate(ALL.FAB["Arm_axe"]);
 				newarm.getComponent("Arm_axe").init(cc.v2(800*(this.node.scaleX>0?1:-1),150));
@@ -643,11 +647,11 @@ cc.Class({
 				this.node.parent.addChild(newarm);
 			
 		}else if(this.data.nowArms=="Stegosaurus"){
-				this.data.nowArmsCnt=0;
+				this.data.nowArmsCnt[this.data.nowArms]=0;
 		}else if(this.data.nowArms=="waterGun"){
 			this.callbackwaterGun = function(){//前摇时间0.2
-				var newarm=cc.instantiate(ALL.FAB["Arm_waterBullet"]);
-				newarm.getComponent("Arm_waterBullet").init(cc.v2(500*(this.node.scaleX>0?1:-1),50));
+				var newarm=cc.instantiate(ALL.FAB["Arm_waterGun"]);
+				newarm.getComponent("Arm_waterGun").init(cc.v2(500*(this.node.scaleX>0?1:-1),50));
 				//cc.log(newarm);
 				var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
 				var armY=this.node.y;
@@ -657,7 +661,7 @@ cc.Class({
 			}
 			this.schedule(this.callbackwaterGun,0.2,0,0);
 		}else if(this.data.nowArms=="ham"){
-			this.data.nowArmsCnt=0;
+			this.data.nowArmsCnt[this.data.nowArms]=0;
 			
 			var attackActCnt=LEADDATA.AttackTime["yes"][this.data.nowArms]*10;
 			var cnt=0;
@@ -678,7 +682,7 @@ cc.Class({
 			}
 			this.schedule(this.callbackHam,0.1,attackActCnt,0);
 		}else if(this.data.nowArms=="fire"){
-			this.data.nowArmsCnt=0;
+			this.data.nowArmsCnt[this.data.nowArms]=0;
 			
 			var attackActCnt=LEADDATA.AttackTime["yes"][this.data.nowArms]*10;
 			var cnt=0;
@@ -698,7 +702,7 @@ cc.Class({
 			}
 			this.schedule(this.callbackHam,0.1,attackActCnt,0);
 		}else if(this.data.nowArms=="spear"){
-			this.data.nowArmsCnt=0;
+			this.data.nowArmsCnt[this.data.nowArms]=0;
 
 			var attackActCnt=LEADDATA.AttackTime["yes"][this.data.nowArms]*10;
 			var cnt=0;
@@ -725,7 +729,7 @@ cc.Class({
 			}
 			this.schedule(this.callbackHam,0.1,attackActCnt,0);
 		}else if(this.data.nowArms=="scooter"){
-			this.data.nowArmsCnt=0;
+			this.data.nowArmsCnt[this.data.nowArms]=0;
 		
 			this.data.armColl.scooter=cc.instantiate(ALL.FAB["Arm_short"]);
 			var height=2;
@@ -763,7 +767,7 @@ cc.Class({
 			newarm.setPosition(armX,armY);
 			this.node.parent.addChild(newarm);
 		}else if(this.data.nowArms=="umbrella"){
-			this.data.nowArmsCnt=0;
+			this.data.nowArmsCnt[this.data.nowArms]=0;
 			this.data.armColl[this.data.nowArms]=cc.instantiate(ALL.FAB["Arm_short"]);
 			var arm=this.data.armColl[this.data.nowArms];
 			var height=5;
@@ -843,7 +847,11 @@ cc.Class({
 		if(this.data.isFall||this.data.isClimb||this.data.nowArms=="scooter"){
 			return false;
 		}
-		if(this.data.key_attack&&this.data.canAttack&&this.data.nowArmsCnt<LEADDATA.ARMS.maxCnt[this.data.nowArms]){//按了攻击有没处于攻击动作,还没有处于非攻击实践
+	//	cc.log(this.data.nowArms,this.data.nowArmsCnt[this.data.nowArms]);
+		if(this.data.nowArmsCnt[this.data.nowArms]==undefined){
+			this.data.nowArmsCnt[this.data.nowArms]=0;
+		}
+		if(this.data.key_attack&&this.data.canAttack&&this.data.nowArmsCnt[this.data.nowArms]<LEADDATA.ARMS.maxCnt[this.data.nowArms]){//按了攻击有没处于攻击动作,还没有处于非攻击实践
 			this.newArm();
 			this.data.act="attack"+"_"+this.data.nowArms+this.getAttackFp();
 			this.data.canAttack=false;
@@ -875,6 +883,9 @@ cc.Class({
 			if(this.data.state[2].indexOf("Lead")==-1){
 				this.setPhy();
 			}else if(name=="scooter"){
+				if(this.data.collFloorCnt>0){
+					
+				}
 				this.setPhy("scooterLead");
 			}else if(this.data.isLie){
 				this.setPhy("lieLead");

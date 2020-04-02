@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Arm_waterBullet",
+    "_name": "Arm_waterGun",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -173,14 +173,8 @@
       "__id__": 1
     },
     "_enabled": true,
-    "minspeed": {
-      "__type__": "cc.Vec2",
-      "x": 600,
-      "y": 0
-    },
     "damage": 0.5,
-    "category": "waterBullet",
-    "reboundCnt": 0,
+    "category": "waterGun",
     "_id": ""
   },
   {

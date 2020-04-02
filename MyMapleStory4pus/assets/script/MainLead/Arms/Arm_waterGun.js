@@ -1,10 +1,8 @@
 cc.Class({
     extends: cc.Component,
     properties: {
-        minspeed:cc.v2(100,0),
         damage:0.5,
-		category:"waterBullet",
-		reboundCnt:0,
+		category:"waterGun",
     },
 
 	init: function(beginSpeed){
@@ -18,15 +16,14 @@ cc.Class({
 
     
     update :function(dt){
+	
 		if(Math.abs(this.node.x-this.leadPos.x)>1000||Math.abs(this.node.y-this.leadPos.y)>1000){
-			 MainLead.data.nowArmsCnt= (MainLead.data.nowArmsCnt==0?0:MainLead.data.nowArmsCnt-1);
-			 this.node.destroy();
+			this.die();
 		}
     },
     onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
         if(other.node.name.indexOf("Object0")!=-1){//碰撞的了第一类物体，就消失
-            MainLead.data.nowArmsCnt= (MainLead.data.nowArmsCnt==0?0:MainLead.data.nowArmsCnt-1);
-            this.node.destroy();
+            this.die();
         }else if(other.node.name.indexOf("Enemy")==0){
 			var js=other.node.getComponent("EnemyPublic");
             if(js&&js.specialEffect=="null"){
@@ -41,7 +38,8 @@ cc.Class({
     },
 	
 	die(){
-		MainLead.data.nowArmsCnt= (MainLead.data.nowArmsCnt==0?0:MainLead.data.nowArmsCnt-1);
+		cc.log(MainLead.data.nowArmsCnt,this.category);
+		MainLead.data.nowArmsCnt[this.category]--;
 		this.node.destroy();
 	},
 });
