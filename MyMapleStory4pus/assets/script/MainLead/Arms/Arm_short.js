@@ -10,6 +10,10 @@ cc.Class({
     init:function(category,offset,phySize){//偏离人物的距离，和碰撞体大小
        // cc.log(category,offset,phySize);
         this.category=category;
+        this.node.category=category;
+        MainLead.data.nowArmsCnt[this.category]++;
+        this.node.die=this.die;
+		
         this.node.name="Arm_"+category;
         this.beginOffset=offset;
         this.beginOffset.x=Math.abs(this.beginOffset.x);
@@ -40,7 +44,11 @@ cc.Class({
     },
 	
     die(){
-		MainLead.data.nowArmsCnt[this.category]--;
-		this.node.destroy();
+        MainLead.data.nowArmsCnt[this.category]--;//this.category和this.node.category都有
+		if(this.node){
+			this.node.destroy();
+		}else if(this.destroy){
+			this.destroy();
+		}
 	},
 });

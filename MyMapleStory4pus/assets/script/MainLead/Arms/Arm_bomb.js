@@ -7,6 +7,7 @@ cc.Class({
     },
 
 	init: function(beginSpeed,time1=3,time2=1){//time1是多久爆炸，time2是爆炸持续时间
+		MainLead.data.nowArmsCnt[this.category]++;
 		this.node.scale=ALL.scaleLead;
 		this.body = this.node.getComponent(cc.RigidBody);
 		this.phyCir=this.node.getComponent(cc.PhysicsCircleCollider);//获得碰撞体

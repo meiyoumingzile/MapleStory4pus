@@ -10,6 +10,7 @@ cc.Class({
     start:function(){
     },
 	init: function(beginSpeed){
+		MainLead.data.nowArmsCnt[this.category]++;
 		this.node.scale=ALL.scaleLead;
         this.body = this.getComponent(cc.RigidBody);
 		this.body.linearVelocity=beginSpeed;

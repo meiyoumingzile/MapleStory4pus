@@ -169,7 +169,7 @@ cc.Class({
 				cc.director.resume();
 			}
 		});
-		cc.loader.loadResDir("picture/Goods/GameProp",cc.SpriteFrame,function (err, assets) {
+		cc.loader.loadResDir("picture/Goods",cc.SpriteFrame,function (err, assets) {
 			for(var i=0;i<assets.length;i++){
 				ALL.GamePropFrame[assets[i].name]=assets[i];
 			}

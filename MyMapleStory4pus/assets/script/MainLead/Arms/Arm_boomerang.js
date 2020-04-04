@@ -8,6 +8,7 @@ cc.Class({
     start:function(){
     },
 	init: function(beginSpeed,rotFp,beginAngle){//rotFp==1代表逆时针
+		MainLead.data.nowArmsCnt[this.category]++;
 		this.node.scale=ALL.scaleLead;
         this.body = this.getComponent(cc.RigidBody);
 		this.body.linearVelocity=beginSpeed;
@@ -22,8 +23,9 @@ cc.Class({
 	},
 
     update :function(dt){
-		if(Math.abs(this.node.x-this.leadPos.x)>1000||Math.abs(this.node.y-this.leadPos.y)>1000){
+		if(Math.abs(this.node.x-ALL.Lead.x)<this.node.width/2&&Math.abs(this.node.y-ALL.Lead.y)<this.node.height/2){
 			this.die();
+			return;
 		}
 		var speed=this.body.linearVelocity;
 		
@@ -53,9 +55,7 @@ cc.Class({
             if(js&&js.specialEffect=="null"){
 				js.changeLife(-this.damage,this.category);
             }
-        }else if(other.node.name=="Lead"){
-			this.die();
-		}
+        }
     },
 	
 	die(){
