@@ -20,6 +20,7 @@ cc.Class({
 			collFloorCnt:0,
 			collFloorDir:{},
 			collCeilCnt:0,
+			collCeilDir:{},
 			collSideCnt:[0,0],
 			collSideDir:[{},{}],
 			collWaterCnt:0,
@@ -155,6 +156,7 @@ cc.Class({
 		}
 		this.data.preScaleX=this.node.scaleX;
 		var speed = this.body.linearVelocity;
+		cc.log(this.data.collCeilCnt,speed.y);
 		this.updatePhyColl(dt,speed);//判断按键状态
 		this.dealKey(dt,speed);//判断按键状态
 		this.dealState(dt,speed);//处理人物状态和动画切换
@@ -171,7 +173,10 @@ cc.Class({
 		var sc=Math.abs(this.data.preScaleX-this.node.scaleX);
 		if(self.tag==1){
 			if(other.node.name.indexOf("Object")!=-1){
-				this.data.collCeilCnt++;
+				if(!this.data.collCeilDir[other._id]){
+					this.data.collCeilDir[other._id]=other;
+					this.data.collCeilCnt++;
+				}
 			}
 			if(other.name.indexOf("WATER")!=-1){
 				this.intoWater();
@@ -213,7 +218,10 @@ cc.Class({
 		var sc=Math.abs(this.data.preScaleX-this.node.scaleX);
 		if(self.tag==1){
 			if(other.node.name.indexOf("Object")!=-1){
-				this.data.collCeilCnt--;
+				if(this.data.collCeilDir[other._id]){
+					delete this.data.collCeilDir[other._id];
+					this.data.collCeilCnt--;
+				}
 			}
 			if(other.name.indexOf("WATER")!=-1){
 				this.data.state[0]="air";
@@ -232,7 +240,6 @@ cc.Class({
 				if(this.data.collFloorDir[other._id]){
 					delete this.data.collFloorDir[other._id];
 					this.data.collFloorCnt--;
-					var p=contact.getWorldManifold().points;
 				}
 				if(this.data.collSideDir[0][other._id]){
 					delete this.data.collSideDir[0][other._id];
@@ -340,7 +347,12 @@ cc.Class({
 				if(this.data.act=="climb"&&this.data.climbOb[1]&&this.data.climbOb[0]){
 					this.node.y=this.data.climbOb[0].y+this.data.climbOb[1].y+(this.data.climbOb[1].height+this.node.height)/2;
 				}else if(this.data.state[2].indexOf("Pterosaur")!=-1){
-					speed.y=this.data.jumpSpeedy/2;
+					//cc.log(this.data.collCeilCnt,speed.y);
+					if(this.data.collCeilCnt==0){
+						speed.y=this.data.jumpSpeedy/2;
+					}else{
+						speed.y=0;
+					}
 				}else if(this.data.collFloorCnt>0){//如果在地面上，且 按了跳跃，则就挑起
 			
 					speed.y=this.data.jumpSpeedy;
@@ -883,17 +895,17 @@ cc.Class({
 			var attackActCnt=LEADDATA.AttackTime["yes"][this.data.nowArms]*10;
 			var sumCnt=LEADDATA.AttackTime["no"][this.data.nowArms]*10+attackActCnt;
 			var count=0;
-			this.callbackAttack1 = function(){
+			this.callbackAttackFun = function(){
 				if(count==attackActCnt){
 					this.data.isAttackAct=false;
 				}
 				if(count==sumCnt){
 					this.data.canAttack=true;
-					this.unschedule(this.callbackAttack1);
+					this.unschedule(this.callbackAttackFun);
 				}
 				count++;
 			}
-			this.schedule(this.callbackAttack1,0.1,sumCnt,0);
+			this.schedule(this.callbackAttackFun,0.1,sumCnt,0);
 		}
 		return this.data.isAttackAct;
 	},
@@ -963,6 +975,8 @@ cc.Class({
 				this.phyColl.size.height=sz.y;
 				this.phyColl.friction=man in LEADDATA.PhysicalPara.friction?LEADDATA.PhysicalPara.friction[man]:LEADDATA.PhysicalPara.friction.other;
 				this.phyColl.offset=cc.v2(off.x,off.y);
+				var h=man.indexOf("lie")==-1?sz.y:LEADDATA.PhysicalPara.size["Lead"].y;
+				this.head.offset.y=(h-this.head.size.height)/2+1;
 				//要根据下边界调整y的位置，否则改变碰撞盒子的offset会导致碰撞体下移。
 				this.phyColl.apply();
 			}
@@ -978,11 +992,17 @@ cc.Class({
 			if(this.data.state[0]=="water"){
 				if(LEADDATA.ARMS.attackWater.indexOf(arm)!=-1){
 					this.data.nowArms=arm;
+					this.data.isAttackAct=false;//
+					this.data.canAttack=true;//
+					this.unschedule(this.callbackAttackFun);//取消攻击计时器
 					return true;
 				}
 				return false;
 			}else{
 				this.data.nowArms=arm;
+				this.data.isAttackAct=false;//
+				this.data.canAttack=true;//
+				this.unschedule(this.callbackAttackFun);//取消攻击计时器
 				return true;
 			}
 		}
