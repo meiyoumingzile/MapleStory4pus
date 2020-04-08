@@ -155,8 +155,9 @@ cc.Class({
 			return ;
 		}
 		this.data.preScaleX=this.node.scaleX;
+		this.data.preAct=this.data.act;
 		var speed = this.body.linearVelocity;
-		cc.log(this.data.collCeilCnt,speed.y);
+	
 		this.updatePhyColl(dt,speed);//判断按键状态
 		this.dealKey(dt,speed);//判断按键状态
 		this.dealState(dt,speed);//处理人物状态和动画切换
@@ -236,7 +237,7 @@ cc.Class({
 			if(other.node.name=="Object_Ladder"){//爬梯子
 				this.data.climbOb[1]=null;
 			}
-			if(other.node.name.indexOf("Object")!=-1&&sc<ALL.inf){
+			if(other.node.name.indexOf("Object")!=-1){
 				if(this.data.collFloorDir[other._id]){
 					delete this.data.collFloorDir[other._id];
 					this.data.collFloorCnt--;
@@ -337,8 +338,6 @@ cc.Class({
 		}else if(this.data.preisLie!=this.data.isLie){//上一帧和当前帧的isLie不同
 			this.setPhy("Lead");
 		}
-		
-		this.judgeJumpScene();
 		if(this.data.state[0].indexOf("air")!=-1){
 			var maxJumptime=8;
 			if(this.data.key_attack&&this.data.collWaterCnt>0&&this.data.state[2]=="umbrellaLead"){
@@ -433,7 +432,9 @@ cc.Class({
 	/*	if((this.data.act!="walk"||this.data.act!="run")&&this.data.collFloorCnt>0){
 			this.data.
 		}*/
-		if(this.judgeAttack()){//返回是否处在攻击动作
+		if(this.judgeJumpScene()){
+			return;
+		}else if(this.judgeAttack()){//返回是否处在攻击动作
 		}else if(this.data.state[0].indexOf("air")!=-1){
 			if(this.data.collWaterCnt>0&&this.data.key_attack&&this.data.state[0]=="air"){//举着伞按了攻击
 				this.data.act="float";
@@ -1026,9 +1027,11 @@ cc.Class({
 					//携带信息
 					ALL.SaveLead=cc.instantiate(this.node);
 					cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
+					return true;
 				}
 			}
 		}
+		return false;
 	},
 	judgeClimb:function(speed){
 		if(this.data.isClimb){
