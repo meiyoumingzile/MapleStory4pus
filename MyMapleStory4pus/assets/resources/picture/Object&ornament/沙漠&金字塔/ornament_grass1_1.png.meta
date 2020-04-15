@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "b10cf27b-352a-4fe6-b6b6-03b800c39327",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "ornament_grass1_1": {
+      "ver": "1.0.4",
+      "uuid": "1ec449d7-64c5-4426-9ec9-3a55af911c7c",
+      "rawTextureUuid": "b10cf27b-352a-4fe6-b6b6-03b800c39327",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 358,
+      "height": 116,
+      "rawWidth": 358,
+      "rawHeight": 116,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

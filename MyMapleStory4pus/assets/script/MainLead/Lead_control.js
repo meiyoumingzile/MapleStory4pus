@@ -36,13 +36,14 @@ cc.Class({
 	        
 			canAttack:true,
 			isAttackAct:false,//是否处于攻击状态
-
+			scaleReverse:false,
 	        //speed: cc.v2(0, 0),
 			jumpSpeedy: 0,      //跳跃初始速度
 			jumptime:0,
 	        maxSpeedx:0,        //限制的最大速度
 			maxSpeedup:0, 		//限制的最大速度
 			maxSpeeddown:0,     //限制的最大速度
+			
 			selfacc: cc.v2(0,0),//自己的加速度
 			
 			
@@ -421,7 +422,7 @@ cc.Class({
 		if(this.data.collFloorCnt==0&&(this.data.collSideCnt[0]>0||this.data.collSideCnt[1]>0||this.data.act=="climb")){
 			this.data.selfacc.x=0;
 		}else if(keyFp!=0){//左右运动
-			this.node.scaleX=keyFp*ALL.scaleLead.x;
+			this.setScaleX(ALL.scaleLead.x,keyFp);
 			this.data.selfacc.x=keyFp*leadAcc;//加速度方向和脸的方向一样。
 		}else{
 			this.data.selfacc.x=0;
@@ -432,6 +433,10 @@ cc.Class({
 	/*	if((this.data.act!="walk"||this.data.act!="run")&&this.data.collFloorCnt>0){
 			this.data.
 		}*/
+		if(this.data.scaleReverse){
+			this.data.scaleReverse=false;
+			return;
+		}
 		if(this.judgeJumpScene()){
 			return;
 		}else if(this.judgeAttack()){//返回是否处在攻击动作
@@ -439,10 +444,11 @@ cc.Class({
 			if(this.data.collWaterCnt>0&&this.data.key_attack&&this.data.state[0]=="air"){//举着伞按了攻击
 				this.data.act="float";
 			}else if(this.data.isClimb){
+				//cc.log(this.node.scaleX);
 				this.setPhy();
-				var x=Math.ceil(this.node.x/20)%2;
-				var y=Math.ceil(this.node.y/60)%2;
-				this.node.scaleX=(x+y==1?1:-1);
+				var x=Math.abs(Math.ceil(this.node.x/20))%2;
+				var y=Math.abs(Math.ceil(this.node.y/60))%2;
+				this.setScaleX(ALL.scaleLead.x,(x+y==1?1:-1));
 				this.data.act="climb";
 			}else if(this.data.isLie){
 				this.data.state[2]="lieLead";
@@ -470,9 +476,9 @@ cc.Class({
 		//	cc.log();
 			if(this.data.isClimb){
 				this.setPhy();
-				var x=Math.ceil(this.node.x/20)%2;
-				var y=Math.ceil(this.node.y/60)%2;
-				this.node.scaleX=(x+y==1?1:-1);
+				var x=Math.abs(Math.ceil(this.node.x/20))%2;
+				var y=Math.abs(Math.ceil(this.node.y/60))%2;
+				this.setScaleX(ALL.scaleLead.x,(x+y==1?1:-1));
 				this.data.act="climb";
 			}else if(this.data.collFloorCnt<=0){//没在地板上就跳
 				this.data.act="swim";
@@ -515,10 +521,10 @@ cc.Class({
 		if((-nexty < this.data.maxSpeeddown&&nexty<0)||(nexty < this.data.maxSpeeddown&&nexty>0)||Math.abs(nexty) < Math.abs(speed.y)){
 			speed.y=nexty;
 		}
-		if(Math.abs(speed.x)<1&&this.data.selfacc.x<1){//控制精度
+		if(Math.abs(speed.x)<1&&this.data.selfacc.x<5){//控制精度
 			speed.x=0;
 		}
-		if(Math.abs(speed.y)<1&&this.data.selfacc.y<1){//控制精度
+		if(Math.abs(speed.y)<1&&this.data.selfacc.y<5){//控制精度
 			speed.y=0;
 		}
 	},
@@ -1034,12 +1040,13 @@ cc.Class({
 		return false;
 	},
 	judgeClimb:function(speed){
+		var clob=this.data.climbOb[0];
 		if(this.data.isClimb){
-			if(this.data.state[2].indexOf("Lead")==-1||this.data.climbOb[0]==null||this.data.key_jump||(this.data.collFloorCnt>0&&this.data.key_down)){
+			if(this.data.state[2].indexOf("Lead")==-1||clob==null||this.data.key_jump||(this.data.collFloorCnt>0&&this.data.key_down)){
 				this.data.isClimb=false;
 			}else{
 				speed.x=0;
-				this.node.x=this.data.climbOb[0].x;
+				this.node.x=clob.x;
 				if(this.data.key_up){
 					speed.y=140;
 				}else if(this.data.key_down){
@@ -1048,13 +1055,14 @@ cc.Class({
 					speed.y=0;
 				}
 			}
-		}else if(this.data.state[2].indexOf("Lead")!=-1&&this.data.climbOb[0]&&Math.abs(this.node.x-this.data.climbOb[0].x)<5
-			&&(this.data.climbOb[0].y>this.node.y&&this.data.key_up||this.data.climbOb[0].y<this.node.y&&this.data.key_down)){
+		}else if(this.data.state[2].indexOf("Lead")!=-1&&clob&&Math.abs(this.node.x-clob.x)<5
+			&&(clob.y+clob.height/2>this.node.y&&this.data.key_up
+				||clob.y-clob.height/2<this.node.y&&this.data.key_down)){
 			this.data.isClimb=true;
-			/*if(Math.abs(this.node.x-this.data.climbOb[0].x)<5&&(this.data.climbOb[0].y>this.node.y&&this.data.key_up||this.data.climbOb[0].y<this.node.y&&this.data.key_down)){
+			/*if(Math.abs(this.node.x-clob.x)<5&&(clob.y>this.node.y&&this.data.key_up||clob.y<this.node.y&&this.data.key_down)){
 				this.data.isClimb=true;
 			}
-			if(Math.abs(this.node.x-this.data.climbOb[0].x)>=5&&this.data.climbOb[0].y<this.node.y&&this.data.key_down){
+			if(Math.abs(this.node.x-clob.x)>=5&&clob.y<this.node.y&&this.data.key_down){
 				this.data.isLie=true;
 			}*/
 		}
@@ -1085,6 +1093,13 @@ cc.Class({
 			ALL.menu.active=false;
 			cc.director.resume();
 		}
+	},
+	setScaleX:function(v,fp){
+		var sc=v*fp;
+		if(sc>0&&this.node.scaleX<0||sc<0&&this.node.scaleX>0){
+			this.data.scaleReverse=true;
+		}
+		this.node.scaleX=sc;
 	},
 	resetKey:function(is){
 		this.data.key_left=is;

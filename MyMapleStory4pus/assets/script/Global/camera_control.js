@@ -14,23 +14,22 @@ cc.Class({
 		ALL.CamNode=this.node;
         this.canvas = this.target.parent;//得到父节点是Canvas
         this.node.position =ALL.Lead.position;
-        var winSize=ALL.MainCanSc.getWindows();
-        this.fixSz=cc.v2(winSize.x/16,winSize.y/16);
+        this.winSize=ALL.MainCanSc.getWindows();
+        this.fixSz=cc.v2(this.winSize.x/16,this.winSize.y/16);
     },
 
     // called every frame, uncomment this function to activate update callback
     lateUpdate: function (dt) {
-		let targetPos = this.target.convertToWorldSpaceAR(cc.Vec2.ZERO);
-    
-        var dx=this.node.position.x-ALL.Lead.x;
-        var dy=this.node.position.y-ALL.Lead.y;
+		var LeadPos=ALL.Lead.position;
+        var dx=this.node.position.x-LeadPos.x;
+        var dy=this.node.position.y-LeadPos.y;
         var nx=this.node.position.x;
         var ny=this.node.position.y;
-        if(Math.abs(dx)>this.fixSz.x&&Math.abs(targetPos.x-this.canvas.x)<this.canvas.width/2){
-            nx=ALL.Lead.x+Math.sign(dx)*this.fixSz.x;
+        if(Math.abs(dx)>this.fixSz.x&&Math.abs(LeadPos.x)<(this.canvas.width+this.fixSz.x*2-this.winSize.x)/2){
+            nx=LeadPos.x+Math.sign(dx)*this.fixSz.x;
         }
-        if(Math.abs(dy)> this.fixSz.y&&Math.abs(targetPos.y-this.canvas.y)<this.canvas.height/2){
-            ny=ALL.Lead.y+Math.sign(dy)*this.fixSz.y;
+        if(Math.abs(dy)> this.fixSz.y&&Math.abs(LeadPos.y)<(this.canvas.height+this.fixSz.y*2-this.winSize.y)/2){
+            ny=LeadPos.y+Math.sign(dy)*this.fixSz.y;
         }
         this.node.position =cc.v2(nx,ny);
     },
