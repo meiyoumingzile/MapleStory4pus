@@ -7,10 +7,6 @@ cc.Class({
             default:null,
             type:cc.Node,
         }, 
-        Lead:{
-            default:null,
-            type:cc.Node,
-        },
 		list:{
 			default:null,
             type:cc.List,
@@ -31,7 +27,9 @@ cc.Class({
 		cc.director.getPhysicsManager().enabledDebugDraw = true;//显示碰撞框
 		cc.director.getCollisionManager().enabled = true;//初始化启用碰撞系统
 		cc.director.getCollisionManager().enabledDebugDraw = true;//显示碰撞框
-		ALL.jumpScenesList=this.findChildren(this.node,"JUMPSCENES").getChildren(); //
+		var node=this.findChildren(this.node,"JUMPSCENES"); //
+		ALL.scDoor=this.findChildren(node,"DOOR").getChildren(); //
+		ALL.comScDoor=this.findChildren(node,"COMPELDOOR").getChildren(); //
 		this.initGalobalVar();
         // 独立的形状，打开一个调试区域,游戏图像的，逻辑区域;
         // 开始调试模式:
@@ -50,8 +48,6 @@ cc.Class({
     },
 	initGalobalVar:function(){
         ALL.MainCanSc=this.node.getComponent("SumCanvas");
-        ALL.Lead=this.Lead;//主角节点
-		MainLead=this.Lead.getComponent("Lead_control");//主角节点的脚本
 		//cc.log(this.Lead);
         ALL.MainCanvas=this.node;
 		this.lifeGroup=this.findChildren(this.bottomBar,"lifeGroup");
@@ -185,6 +181,23 @@ cc.Class({
 		let tmp = JSON.stringify(obj); 
 		let result = JSON.parse(tmp); 
 		a=obj;
+	},
+	deepClone1(obj) {
+		//判断拷贝的要进行深拷贝的是数组还是对象，是数组的话进行数组拷贝，对象的话进行对象拷贝
+		var objClone = Array.isArray(obj) ? [] : {};
+		//进行深拷贝的不能为空，并且是对象或者是
+		if (obj&&typeof obj === "object") {
+		  for (var key in obj) {
+			if (obj.hasOwnProperty(key)) {
+			  if (obj[key] && typeof obj[key] === "object") {
+				objClone[key] = this.deepClone1(obj[key]);
+			  } else {
+				objClone[key] = obj[key];
+			  }
+			}
+		  }
+		}
+		return objClone;
 	},
 	addEbulletA:function(kind,X,Y,dir){
         var newEbullet=cc.instantiate(ALL.FAB["Enemy_Ebullet_A"]);

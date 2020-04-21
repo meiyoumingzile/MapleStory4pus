@@ -36,10 +36,13 @@
       },
       {
         "__id__": 7
+      },
+      {
+        "__id__": 8
       }
     ],
     "_prefab": {
-      "__id__": 8
+      "__id__": 9
     },
     "_opacity": 255,
     "_color": {
@@ -197,8 +200,6 @@
       "__id__": 1
     },
     "_enabled": true,
-    "damage": 2,
-    "category": "bomb",
     "isDam": false,
     "_id": ""
   },
@@ -226,6 +227,18 @@
       "width": 180,
       "height": 150
     },
+    "_id": ""
+  },
+  {
+    "__type__": "d3fa6gU179MjZO/3T/4WAOD",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "category": "",
+    "damage": 1,
     "_id": ""
   },
   {

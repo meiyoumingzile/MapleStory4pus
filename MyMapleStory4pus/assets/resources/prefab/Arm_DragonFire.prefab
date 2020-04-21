@@ -33,10 +33,13 @@
       },
       {
         "__id__": 6
+      },
+      {
+        "__id__": 7
       }
     ],
     "_prefab": {
-      "__id__": 7
+      "__id__": 8
     },
     "_opacity": 255,
     "_color": {
@@ -100,9 +103,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "2833ed34-d79a-4799-b8ce-997258be6e35"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 2,
     "_fillType": 0,
@@ -195,13 +196,23 @@
       "__id__": 1
     },
     "_enabled": true,
-    "damage": 2,
     "beginPos": {
       "__type__": "cc.Vec2",
       "x": 0,
       "y": 0
     },
-    "category": "DragonFire",
+    "_id": ""
+  },
+  {
+    "__type__": "d3fa6gU179MjZO/3T/4WAOD",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "category": "",
+    "damage": 1,
     "_id": ""
   },
   {

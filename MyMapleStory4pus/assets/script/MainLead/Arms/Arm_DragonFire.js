@@ -1,15 +1,16 @@
 cc.Class({
     extends: cc.Component,
     properties: {
-        damage:2,
 		beginPos:cc.v2(0,0),
-		category:"DragonFire",
     },
 
     start:function(){
+		this.ap=this.node.getComponent("ArmPublic");
     },
 	init: function(beginSpeed,beginPos){
-        MainLead.data.nowArmsCnt[this.category]++;
+        this.ap=this.node.getComponent("ArmPublic");
+        this.ap.category="DragonFire";
+        MainLead.data.nowArmsCnt[this.ap.category]++;
 		this.node.scale=ALL.scaleLead;
         this.body = this.getComponent(cc.RigidBody);
 		this.body.linearVelocity=beginSpeed;
@@ -27,18 +28,18 @@ cc.Class({
     update :function(dt){
 		let dis=this.beginPos.sub(cc.v2(this.node.x,this.node.y)).mag();
 		if(dis>700){
-			this.die();
+			this.ap.die();
 		}
     },
     onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
         if(other.node.name.indexOf("Object0")!=-1){//碰撞的了第一类物体，就消失
-            this.die();
+            this.ap.die();
         }else if(other.node.name.indexOf("Enemy")==0){
             var js=other.node.getComponent("EnemyPublic");
             if(js&&js.specialEffect=="null"){
-                var d=js.changeLife(-this.damage,this.category);
+                var d=js.changeLife(-this.ap.damage,this.ap.category);
 				if(d==1){
-					this.die();
+					this.ap.die();
 				}
             }
         }else if(other.node.name.indexOf("Stone1")!=-1){
@@ -46,9 +47,4 @@ cc.Class({
             
         }
     },
-    die(){
-		MainLead.data.nowArmsCnt[this.category]--;
-		this.node.destroy();
-    },
-    
 });

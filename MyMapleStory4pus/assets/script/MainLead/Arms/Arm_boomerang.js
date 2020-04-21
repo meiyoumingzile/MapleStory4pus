@@ -1,14 +1,15 @@
 cc.Class({
     extends: cc.Component,
     properties: {
-        damage:1,
-		category:"boomerang",
     },
 
-    start:function(){
+	start:function(){
+		this.ap=this.node.getComponent("ArmPublic");
     },
 	init: function(beginSpeed,rotFp,beginAngle){//rotFp==1代表逆时针
-		MainLead.data.nowArmsCnt[this.category]++;
+		this.ap=this.node.getComponent("ArmPublic");
+		this.ap.category="boomerang";
+		MainLead.data.nowArmsCnt[this.ap.category]++;
 		this.node.scale=ALL.scaleLead;
         this.body = this.getComponent(cc.RigidBody);
 		this.body.linearVelocity=beginSpeed;
@@ -24,7 +25,7 @@ cc.Class({
 
     update :function(dt){
 		if(Math.abs(this.node.x-ALL.Lead.x)<this.node.width/2&&Math.abs(this.node.y-ALL.Lead.y)<this.node.height/2){
-			this.die();
+			this.ap.die();
 			return;
 		}
 		var speed=this.body.linearVelocity;
@@ -53,13 +54,8 @@ cc.Class({
        if(other.node.name.indexOf("Enemy")==0){
 			var js=other.node.getComponent("EnemyPublic");
             if(js&&js.specialEffect=="null"){
-				js.changeLife(-this.damage,this.category);
+				js.changeLife(-this.damage,this.ap.category);
             }
         }
     },
-	
-	die(){
-		MainLead.data.nowArmsCnt[this.category]--;
-		this.node.destroy();
-	},
 });

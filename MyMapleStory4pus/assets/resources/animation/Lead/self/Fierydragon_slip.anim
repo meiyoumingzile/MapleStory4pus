@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Fierydragon_run",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.5166666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "1859f0ba-4381-49d8-b157-c093c7cf5d3f"
+            }
+          },
+          {
+            "frame": 0.11666666666666667,
+            "value": {
+              "__uuid__": "32e2f62d-07a3-4bd4-821b-f41f98e222b1"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "1859f0ba-4381-49d8-b157-c093c7cf5d3f"
+            }
+          },
+          {
+            "frame": 0.38333333333333336,
+            "value": {
+              "__uuid__": "56d9beb6-a467-4dbc-9252-d245ef9a1f52"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "1859f0ba-4381-49d8-b157-c093c7cf5d3f"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

@@ -16,16 +16,6 @@ window.ALL = {
         type:cc.Node,
     },
 	CamNode:null,
-    Doors:{
-    	next:cc.v2(0,0),
-    	Volcano1:{
-    		door1:cc.v2(-2290,-160),
-    		door2:cc.v2(2250,-250),
-    	},
-    	Volcano2:{
-    		door1:cc.v2(4770,-220),
-    	},
-    },
     
     SaveLead:null,
     NextSence:"",
@@ -36,7 +26,8 @@ window.ALL = {
 	GamePropFrame:{},//道具图标资源
     INF:1000000000,
     inf:0.1,
-    jumpScenesList:[],
+    scDoor:[],//
+    comScDoor:[],//compel强制跳转厂家
     EnemyScript:[],
 	enemyUpdateSize:cc.v2(1000,1000),//怪物刷新范围
 	scaleLead:cc.v2(1,1),
@@ -45,7 +36,21 @@ window.ALL = {
     menu:null,
 };
 
-
+window.DOOR ={
+    test1:{
+        home:cc.v2(-4271.367,-162),//传送到哪里
+    },
+    home:{
+        test1:cc.v2(-400,80),//传送到哪里
+    },
+    Volcano1:{
+        door1:cc.v2(-2290,-160),
+        door2:cc.v2(2250,-250),
+    },
+    Volcano2:{
+        door1:cc.v2(4770,-220),
+    },
+},
 
 
 window.KEY={
@@ -59,6 +64,8 @@ window.KEY={
     pause:cc.macro.KEY.space,
 };
 
-window.SchedulerList={
-   
+window.SchedulerDir={
+   arm:{
+
+   },
 };

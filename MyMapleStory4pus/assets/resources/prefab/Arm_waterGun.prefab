@@ -30,10 +30,13 @@
       },
       {
         "__id__": 5
+      },
+      {
+        "__id__": 6
       }
     ],
     "_prefab": {
-      "__id__": 6
+      "__id__": 7
     },
     "_opacity": 255,
     "_color": {
@@ -175,6 +178,18 @@
     "_enabled": true,
     "damage": 0.5,
     "category": "waterGun",
+    "_id": ""
+  },
+  {
+    "__type__": "d3fa6gU179MjZO/3T/4WAOD",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "category": "",
+    "damage": 1,
     "_id": ""
   },
   {

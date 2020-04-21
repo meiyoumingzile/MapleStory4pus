@@ -1,13 +1,16 @@
 cc.Class({
     extends: cc.Component,
     properties: {
-        damage:2,
-		category:"axe",
 		isDam:false,
     },
-
+	start:function(){
+		this.ap=this.node.getComponent("ArmPublic");
+		this.ap.damage=3;
+    },
 	init: function(beginSpeed,time1=3,time2=1){//time1是多久爆炸，time2是爆炸持续时间
-		MainLead.data.nowArmsCnt[this.category]++;
+		this.ap=this.node.getComponent("ArmPublic");
+		this.ap.category="bomb";
+		MainLead.data.nowArmsCnt[this.ap.category]++;
 		this.node.scale=ALL.scaleLead;
 		this.body = this.node.getComponent(cc.RigidBody);
 		this.phyCir=this.node.getComponent(cc.PhysicsCircleCollider);//获得碰撞体
@@ -27,13 +30,13 @@ cc.Class({
 				this.node.removeComponent(cc.PhysicsCircleCollider);
 				this.body.linearVelocity=cc.v2(0,0);
 				this.body.type="Static";
-				if(MainLead.data.collFloorDir[this.phyCir._id]){
-					delete MainLead.data.collFloorDir[this.phyCir._id];
-					MainLead.data.collFloorCnt--;
+				if(MainLead.coll.collFloorDir[this.phyCir._id]){
+					delete MainLead.coll.collFloorDir[this.phyCir._id];
+					MainLead.coll.collFloorCnt--;
 				}
 				this.phyBox.apply();
 			}else if(cnt==sumCnt){
-				this.die();
+				this.ap.die();
 				this.unschedule(this.callbackBlast);
 			}
 			cnt++;
@@ -47,7 +50,7 @@ cc.Class({
     
     update :function(dt){
 		if(Math.abs(this.node.x-ALL.Lead.x)>1000||Math.abs(this.node.y-ALL.Lead.y)>1000){
-			this.die();
+			this.ap.die();
 		}
     },
 	onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
@@ -61,13 +64,9 @@ cc.Class({
 		if(other.node.name.indexOf("Enemy")==0){
 			var js=other.node.getComponent("EnemyPublic");
             if(js&&js.specialEffect=="null"){
-				var d=js.changeLife(-this.damage,this.category);
+				var d=js.changeLife(-this.ap.damage,this.ap.category);
             }
 		}
     },
 	
-	die(){
-		MainLead.data.nowArmsCnt[this.category]--;
-		this.node.destroy();
-	},
 });

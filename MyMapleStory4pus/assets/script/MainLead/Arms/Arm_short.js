@@ -3,16 +3,16 @@ cc.Class({
 
     properties: {
         beginOffset:cc.v2(0,0),
-        damage:1,
-        category:"",
     },
-
+    start:function(){
+		this.ap=this.node.getComponent("ArmPublic");
+    },
     init:function(category,offset,phySize){//偏离人物的距离，和碰撞体大小
        // cc.log(category,offset,phySize);
-        this.category=category;
+       this.ap=this.node.getComponent("ArmPublic");
+        this.ap.category=category;
         this.node.category=category;
-        MainLead.data.nowArmsCnt[this.category]++;
-        this.node.die=this.die;
+        MainLead.data.nowArmsCnt[this.ap.category]++;
 		
         this.node.name="Arm_"+category;
         this.beginOffset=offset;
@@ -32,23 +32,14 @@ cc.Class({
         this.node.y=ALL.Lead.y+this.beginOffset.y;
     },
     onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
-        if(other.node.name.indexOf("Enemy")==0&&this.category!="umbrella"){
+        if(other.node.name.indexOf("Enemy")==0&&this.ap.category!="umbrella"){
 			var js=other.node.getComponent("EnemyPublic");
             if(js&&js.specialEffect=="null"){
-                var d=js.changeLife(-this.damage,this.category);
-                if(this.category=="scooter"){
+                var d=js.changeLife(-this.ap.damage,this.ap.category);
+                if(this.ap.category=="scooter"){
 					MainLead.body.linearVelocity=cc.v2(MainLead.body.linearVelocity.x,300);
                 }
             }
         }
     },
-	
-    die(){
-        MainLead.data.nowArmsCnt[this.category]--;//this.category和this.node.category都有
-		if(this.node){
-			this.node.destroy();
-		}else if(this.destroy){
-			this.destroy();
-		}
-	},
 });

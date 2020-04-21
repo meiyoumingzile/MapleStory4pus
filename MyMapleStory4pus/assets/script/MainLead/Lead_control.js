@@ -9,14 +9,9 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
 		this.pets=["Fierydragon","Brontosaurus","Pterosaur","Stegosaurus","Seadragon"];
-    	this.preArms="axe";
-		this.data={
-
-	        state:["air","walk","Lead"],
-			specialEffect:"null",
-/*状态，三个代表：第1个代表周围环境，第2个代表人的运动状态：walk,run ;
-第3个代表碰撞体状态有："Lead","lieLead","Fierydragon","Brontosaurus","Pterosaur","Stegosaurus","Seadragon"。
-*/			
+		this.preArms="axe";
+		this.scheduleDir={},
+		this.coll={
 			collFloorCnt:0,
 			collFloorDir:{},
 			collCeilCnt:0,
@@ -25,14 +20,30 @@ cc.Class({
 			collSideDir:[{},{}],
 			collWaterCnt:0,
 			collWaterDir:{},
+			climbOb:[null,null],//0是梯子，1是梯子头
+		},
+		this.key={
+			left:false,
+	        right:false,
+	        down:false,
+	        up:false,
+	        attack:false,
+	        acc:false,
+	        jump:false,
+			pause:false,
+		},
+		this.data={
+			savePos:cc.v2(0,0),
+	        state:["air","walk","Lead"],
+			specialEffect:"null",
+/*状态，三个代表：第1个代表周围环境，第2个代表人的运动状态：walk,run ;
+第3个代表碰撞体状态有："Lead","lieLead","Fierydragon","Brontosaurus","Pterosaur","Stegosaurus","Seadragon"。
+*/			
 			isChangingPhy:0,
 			isLie:false,
 			isFall:false,
 			isClimb:false,
-			climbOb:[null,null],//0是梯子，1是梯子头
-
 	        act:"walk", //state[2]+"_"+act+"_"+左右是状态。
-			preActList:["walk","walk"],
 	        
 			canAttack:true,
 			isAttackAct:false,//是否处于攻击状态
@@ -43,48 +54,26 @@ cc.Class({
 	        maxSpeedx:0,        //限制的最大速度
 			maxSpeedup:0, 		//限制的最大速度
 			maxSpeeddown:0,     //限制的最大速度
-			
 			selfacc: cc.v2(0,0),//自己的加速度
-			
-			
-	        key_left:false,
-	        key_right:false,
-	        key_down:false,
-	        key_up:false,
-	        key_attack:false,
-	        key_acc:false,
-	        key_jump:false,
-			key_pause:false,
 	        
 			nowArmsCnt:{},
 			nowArms:"axe",
 			gotProp:{goods_axe:true},
 			armColl:{},
-			player:null,
 			life:cc.v2(0,0),
 			time:cc.v2(0,8),
 			pause:false,
     	};
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
-		this.data.player = this.node.getComponent(cc.Animation);//初始化动画
+		this.player = this.node.getComponent(cc.Animation);//初始化动画
         this.body = this.node.getComponent(cc.RigidBody);
-		this.coll=this.node.getComponent(cc.BoxCollider);//获得碰撞体
+		
 		this.phyColl=this.node.getComponents(cc.PhysicsBoxCollider)[0];//获得碰撞体
 		this.head = this.node.getComponents(cc.PhysicsBoxCollider)[1];
-		
-		//var g=this.node.getComponents(cc.script);
-		/*if(ALL.SaveLead!=null){
-			var root=this.node.parent;
-			this.node=ALL.SaveLead;
-			//this.node.parent=root;
-			ALL.SaveLead=null;
-		}*/
-		/*if(ALL.SaveLead!=null){
-			this.node.destroy();
-			this.node=ALL.SaveLead;
-			cc.log(this.node.data);
-		}*/
+		ALL.Lead=this.node;//主角节点
+		MainLead=this;//主角节点的脚本
+		//this.dataBegin()在其他脚本调用了。
     },
 
     onKeyDown (event) {
@@ -92,28 +81,28 @@ cc.Class({
 			return ;
         switch(event.keyCode) {
             case KEY.jump: //1是跳
-				this.data.key_jump=true;
+				this.key.jump=true;
 				break;
 			case KEY.attack: //2是攻击
-				this.data.key_attack=true;
+				this.key.attack=true;
 				break;
 			case KEY.acc: //3是加速
-				this.data.key_acc=true;
+				this.key.acc=true;
 				break;
             case KEY.left:
-				this.data.key_left=true;
+				this.key.left=true;
                 break;
             case KEY.right:
-				this.data.key_right=true;
+				this.key.right=true;
                 break;
             case KEY.up:
-                this.data.key_up=true;
+                this.key.up=true;
                 break;
 			case KEY.down:
-				this.data.key_down=true;
+				this.key.down=true;
 				break;
 			case KEY.pause:
-				this.data.key_pause=true;
+				this.key.pause=true;
 				break;
         }
     },
@@ -123,42 +112,43 @@ cc.Class({
 			return ;
         switch(event.keyCode) {
             case KEY.jump: //1是跳
-				this.data.key_jump=false;
+				this.key.jump=false;
 				break;
 			case KEY.attack: //1是攻击
-				this.data.key_attack=false;
+				this.key.attack=false;
 				break;
 			case KEY.acc: //3是加速
-				this.data.key_acc=false;
+				this.key.acc=false;
 				break;
             case KEY.left:
-				this.data.key_left=false;
+				this.key.left=false;
                 break;
             case KEY.right:
-				this.data.key_right=false;
+				this.key.right=false;
                 break;
             case KEY.up:
-				this.data.key_up=false;
+				this.key.up=false;
                 break;
 			case KEY.down:
-				this.data.key_down=false;
+				this.key.down=false;
 				break;
 			case KEY.pause:
-				this.data.key_pause=false;
+				this.key.pause=false;
 				break;
         }
     },
 
 
 	update: function (dt) {//dt是距离上一帧的时间间隔
-		if(this.data.pause||this.data.key_pause){
+		if(this.data.pause||this.key.pause){
 			this.pause(true);
 			return ;
 		}
+		
 		this.data.preScaleX=this.node.scaleX;
 		this.data.preAct=this.data.act;
 		var speed = this.body.linearVelocity;
-	
+		//cc.log(speed);
 		this.updatePhyColl(dt,speed);//判断按键状态
 		this.dealKey(dt,speed);//判断按键状态
 		this.dealState(dt,speed);//处理人物状态和动画切换
@@ -175,9 +165,9 @@ cc.Class({
 		var sc=Math.abs(this.data.preScaleX-this.node.scaleX);
 		if(self.tag==1){
 			if(other.node.name.indexOf("Object")!=-1){
-				if(!this.data.collCeilDir[other._id]){
-					this.data.collCeilDir[other._id]=other;
-					this.data.collCeilCnt++;
+				if(!this.coll.collCeilDir[other._id]){
+					this.coll.collCeilDir[other._id]=other;
+					this.coll.collCeilCnt++;
 				}
 			}
 			if(other.name.indexOf("WATER")!=-1){
@@ -185,28 +175,28 @@ cc.Class({
 			}
 		}else{//self.tag==0
 			if(other.name.indexOf("WATER")!=-1){
-				if(sc<ALL.inf&&!this.data.collWaterDir[other._id]){
-					this.data.collWaterCnt++;
-					this.data.collWaterDir[other._id]=true;
+				if(sc<ALL.inf&&!this.coll.collWaterDir[other._id]){
+					this.coll.collWaterCnt++;
+					this.coll.collWaterDir[other._id]=true;
 				}
 			}
 			if(other.node.name=="Object_Ladder"){//爬梯子
-				this.data.climbOb[1]=other.node;
+				this.coll.climbOb[1]=other.node;
 			}
 			if(other.node.name.indexOf("Enemy")!=-1){
 				this.collEnemy(contact, other,cf);
 			}else if(other.node.name.indexOf("Object")!=-1){
-				if(cf.y==-1&&!this.data.collFloorDir[other._id]){
-					this.data.collFloorDir[other._id]=other;
-					this.data.collFloorCnt++;
+				if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
+					this.coll.collFloorDir[other._id]=other;
+					this.coll.collFloorCnt++;
 				}
-				if(cf.x==-1&&!this.data.collSideDir[0][other._id]){
-					this.data.collSideDir[0][other._id]=other;
-					this.data.collSideCnt[0]++;
+				if(cf.x==-1&&!this.coll.collSideDir[0][other._id]){
+					this.coll.collSideDir[0][other._id]=other;
+					this.coll.collSideCnt[0]++;
 				}
-				if(cf.x==1&&!this.data.collSideDir[1][other._id]){
-					this.data.collSideDir[1][other._id]=other;
-					this.data.collSideCnt[1]++;
+				if(cf.x==1&&!this.coll.collSideDir[1][other._id]){
+					this.coll.collSideDir[1][other._id]=other;
+					this.coll.collSideCnt[1]++;
 				}
 				this.data.isFall=false;//
 			}
@@ -220,9 +210,9 @@ cc.Class({
 		var sc=Math.abs(this.data.preScaleX-this.node.scaleX);
 		if(self.tag==1){
 			if(other.node.name.indexOf("Object")!=-1){
-				if(this.data.collCeilDir[other._id]){
-					delete this.data.collCeilDir[other._id];
-					this.data.collCeilCnt--;
+				if(this.coll.collCeilDir[other._id]){
+					delete this.coll.collCeilDir[other._id];
+					this.coll.collCeilCnt--;
 				}
 			}
 			if(other.name.indexOf("WATER")!=-1){
@@ -230,26 +220,26 @@ cc.Class({
 			}
 		}else{//self.tag==0
 			if(other.name.indexOf("WATER")!=-1){
-				if(this.data.collWaterDir[other._id]&&sc<ALL.inf){
-					delete this.data.collWaterDir[other._id];
-					this.data.collWaterCnt--;
+				if(this.coll.collWaterDir[other._id]&&sc<ALL.inf){
+					delete this.coll.collWaterDir[other._id];
+					this.coll.collWaterCnt--;
 				}
 			}
 			if(other.node.name=="Object_Ladder"){//爬梯子
-				this.data.climbOb[1]=null;
+				this.coll.climbOb[1]=null;
 			}
 			if(other.node.name.indexOf("Object")!=-1){
-				if(this.data.collFloorDir[other._id]){
-					delete this.data.collFloorDir[other._id];
-					this.data.collFloorCnt--;
+				if(this.coll.collFloorDir[other._id]){
+					delete this.coll.collFloorDir[other._id];
+					this.coll.collFloorCnt--;
 				}
-				if(this.data.collSideDir[0][other._id]){
-					delete this.data.collSideDir[0][other._id];
-					this.data.collSideCnt[0]--;
+				if(this.coll.collSideDir[0][other._id]){
+					delete this.coll.collSideDir[0][other._id];
+					this.coll.collSideCnt[0]--;
 				}
-				if(this.data.collSideDir[1][other._id]){
-					delete this.data.collSideDir[1][other._id];
-					this.data.collSideCnt[1]--;
+				if(this.coll.collSideDir[1][other._id]){
+					delete this.coll.collSideDir[1][other._id];
+					this.coll.collSideCnt[1]--;
 				}
 				this.data.isFall=false;//
 			}
@@ -263,8 +253,9 @@ cc.Class({
 		if(self.tag==1){
 		}else{//self.tag==0
 			var cf=this.collFp(contact);
-			if(other.node.name=="Object_Ladder"){//爬梯子
-				if(this.data.key_down||this.data.isClimb){
+			if(other.node.name=="Object_Ladder"&&!contact.disabled){//爬梯子
+				this.data.isClimb=this.judgeIsClimb();
+				if(this.data.isClimb){
 					contact.disabled=true;
 					this.data.isClimb=true;
 				}
@@ -272,17 +263,17 @@ cc.Class({
 			if(other.node.name.indexOf("Enemy")!=-1){
 				this.collEnemy(contact, other,cf);
 			}else if(other.node.name.indexOf("Object")!=-1){
-				if(cf.y!=-1&&this.data.collFloorDir[other._id]){
-					delete this.data.collFloorDir[other._id];
-					this.data.collFloorCnt--;
+				if(cf.y!=-1&&this.coll.collFloorDir[other._id]){
+					delete this.coll.collFloorDir[other._id];
+					this.coll.collFloorCnt--;
 				}
-				if(cf.x!=-1&&this.data.collSideDir[0][other._id]){
-					delete this.data.collSideDir[0][other._id];
-					this.data.collSideCnt[0]--;
+				if(cf.x!=-1&&this.coll.collSideDir[0][other._id]){
+					delete this.coll.collSideDir[0][other._id];
+					this.coll.collSideCnt[0]--;
 				}
-				if(cf.x!=1&&this.data.collSideDir[1][other._id]){
-					delete this.data.collSideDir[1][other._id];
-					this.data.collSideCnt[1]--;
+				if(cf.x!=1&&this.coll.collSideDir[1][other._id]){
+					delete this.coll.collSideDir[1][other._id];
+					this.coll.collSideCnt[1]--;
 				}
 			}
 		}
@@ -291,7 +282,7 @@ cc.Class({
 		if(this.data.pause)
 			return ;
 		if(other.node.name.indexOf("Ladder")!=-1){
-			this.data.climbOb[0]=other.node;
+			this.coll.climbOb[0]=other.node;
 		}else if(other.node.name.indexOf("goods")!=-1){
 			this.getGoods(other.node.name.replace("goods_",""));
 		}
@@ -300,26 +291,32 @@ cc.Class({
 		if(this.data.pause)
 			return ;
 		if(other.node.name.indexOf("Ladder")!=-1){
-			this.data.climbOb[0]=null;
+			this.coll.climbOb[0]=null;
 		}
 	},
 	dataBegin:function(){
-		
-		this.changeLife(8,8);
-		this.changeTime(5);
-		
-		this.data.maxSpeedx=LEADDATA.MaxSpeedKind[this.data.state[0]][this.data.state[1]][this.data.state[2]];
-		this.data.maxSpeedup=LEADDATA.MaxSpeedKind[this.data.state[0]]["up"];
-		this.data.maxSpeeddown=LEADDATA.MaxSpeedKind[this.data.state[0]]["down"];
-		this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
-		this.setPhy();
+		//var g=this.node.getComponents(cc.script);
+		if(ALL.SaveLead!=null){
+			this.changeLife(ALL.SaveLead.life.x,ALL.SaveLead.life.y);
+			this.changeTime(ALL.SaveLead.time.x);
+			this.data=ALL.SaveLead;
+			this.node.setPosition(this.data.savePos);
+			ALL.SaveLead=null;
+			this.setPhy(this.data.state[2],true);
+		}else{
+			this.changeLife(8,8);
+			this.changeTime(5);
+			
+			this.data.maxSpeedx=LEADDATA.MaxSpeedKind[this.data.state[0]][this.data.state[1]][this.data.state[2]];
+			this.data.maxSpeedup=LEADDATA.MaxSpeedKind[this.data.state[0]]["up"];
+			this.data.maxSpeeddown=LEADDATA.MaxSpeedKind[this.data.state[0]]["down"];
+			this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
+			this.setPhy();
+		}
 		var nowDraw=this.data.state[2]+"_"+this.data.act;
-		
 		this.node.scale=ALL.scaleLead; //人物大小适配场景
-		//this.node.scaleX=用来调整开场方向
-		this.data.player.play(nowDraw);
+		this.player.play(nowDraw);
 		this.data.preDraw=nowDraw;
-		
 
 	},
 	updatePhyColl:function(dt,speed){
@@ -330,10 +327,10 @@ cc.Class({
 		//this.data.maxSpeedup=MaxSpeedKind[this.data.state[0]]["up"];
 		//this.data.maxSpeeddown=MaxSpeedKind[this.data.state[0]]["down"];
 		//this.data.jumpSpeedy=BeginSpeedKind[this.data.state[0]]["jump"];
-		this.judgeClimb(speed);
+		this.calcClimb(speed);
 		this.data.preisLie=this.data.isLie;
-		this.data.isLie=this.setIsLie();
-		//cc.log(this.data.climbOb==null);
+		this.data.isLie=this.judgeIsLie();
+		//cc.log(this.coll.climbOb==null);
 		if(this.data.isLie){//判断碰撞体形状
 			this.setPhy("lieLead");
 		}else if(this.data.preisLie!=this.data.isLie){//上一帧和当前帧的isLie不同
@@ -341,19 +338,19 @@ cc.Class({
 		}
 		if(this.data.state[0].indexOf("air")!=-1){
 			var maxJumptime=8;
-			if(this.data.key_attack&&this.data.collWaterCnt>0&&this.data.state[2]=="umbrellaLead"){
+			if(this.key.attack&&this.coll.collWaterCnt>0&&this.data.state[2]=="umbrellaLead"){
 				speed.y=0;
-			}else if(this.data.key_jump&&!this.data.isLie){//按了跳跃还没有趴着
-				if(this.data.act=="climb"&&this.data.climbOb[1]&&this.data.climbOb[0]){
-					this.node.y=this.data.climbOb[0].y+this.data.climbOb[1].y+(this.data.climbOb[1].height+this.node.height)/2;
+			}else if(this.key.jump&&!this.data.isLie){//按了跳跃还没有趴着
+				if(this.data.act=="climb"&&this.coll.climbOb[1]&&this.coll.climbOb[0]){
+					speed.y=this.data.jumpSpeedy;
 				}else if(this.data.state[2].indexOf("Pterosaur")!=-1){
-					//cc.log(this.data.collCeilCnt,speed.y);
-					if(this.data.collCeilCnt==0){
+					//cc.log(this.coll.collCeilCnt,speed.y);
+					if(this.coll.collCeilCnt==0){
 						speed.y=this.data.jumpSpeedy/2;
 					}else{
 						speed.y=0;
 					}
-				}else if(this.data.collFloorCnt>0){//如果在地面上，且 按了跳跃，则就挑起
+				}else if(this.coll.collFloorCnt>0){//如果在地面上，且 按了跳跃，则就挑起
 			
 					speed.y=this.data.jumpSpeedy;
 					this.data.jumptime=1;
@@ -361,7 +358,7 @@ cc.Class({
 					this.data.jumptime++;
 					if(this.data.jumptime<maxJumptime/2){
 						speed.y=this.data.jumpSpeedy;
-					}else{
+					}else if(this.data.jumptime<maxJumptime){
 						speed.y=this.data.jumpSpeedy*(1+this.data.jumptime/(maxJumptime*2));//期初几秒加速
 					}
 				}else if(this.data.preDraw.indexOf("swim")!=-1){//从水里跳出来，且 按了跳跃，则就挑起，但高度低
@@ -372,19 +369,19 @@ cc.Class({
 				this.data.jumptime=0;
 			}
 			
-			if(this.data.state[2]=="Pterosaur"&&this.data.collFloorCnt>0){//是飞龙且在地面上不可以加速
+			if(this.data.state[2]=="Pterosaur"&&this.coll.collFloorCnt>0){//是飞龙且在地面上不可以加速
 				this.data.state[1]="walk";
-			}else if(this.data.key_acc){//按了加速
+			}else if(this.key.acc){//按了加速
 				this.data.state[1]="run";
-			}else if(!this.data.key_acc){
+			}else if(!this.key.acc){
 				this.data.state[1]="walk";
 			}
 		}else if(this.data.state[0].indexOf("water")!=-1){
 			this.data.jumptime=0;
-			if(this.data.key_jump&&!this.data.isLie){//按了跳跃还没有趴着
+			if(this.key.jump&&!this.data.isLie){//按了跳跃还没有趴着
 				speed.y=this.data.jumpSpeedy;
 			}
-			if(this.data.key_acc){//按了加速
+			if(this.key.acc){//按了加速
 				this.data.state[1]="run";
 			}else{
 				this.data.state[1]="walk";
@@ -393,9 +390,9 @@ cc.Class({
 		
 		
 		var keyFp=0;
-		if(this.data.key_left&&this.data.key_right==false){//左边
+		if(this.key.left&&this.key.right==false){//左边
 			keyFp=-1;
-		}else if(this.data.key_left==false&&this.data.key_right){//右边
+		}else if(this.key.left==false&&this.key.right){//右边
 			keyFp=1;
 		}
 		var leadAcc=LEADDATA.BeginAccKind[this.data.state[0]][this.data.state[1]][this.data.state[2]];
@@ -419,18 +416,18 @@ cc.Class({
 		}
 
 		this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
-		if(this.data.collFloorCnt==0&&(this.data.collSideCnt[0]>0||this.data.collSideCnt[1]>0||this.data.act=="climb")){
+		if(this.coll.collFloorCnt==0&&(this.coll.collSideCnt[0]>0||this.coll.collSideCnt[1]>0||this.data.act=="climb")){
 			this.data.selfacc.x=0;
 		}else if(keyFp!=0){//左右运动
 			this.setScaleX(ALL.scaleLead.x,keyFp);
-			this.data.selfacc.x=keyFp*leadAcc;//加速度方向和脸的方向一样。
+			this.data.selfacc.x=keyFp*leadAcc*(keyFp==Math.sign(speed.x)?1:0.8);//加速度方向和脸的方向一样。
 		}else{
 			this.data.selfacc.x=0;
 		}
 	},
 	dealState: function (dt,speed){//改变人物状态:act
 
-	/*	if((this.data.act!="walk"||this.data.act!="run")&&this.data.collFloorCnt>0){
+	/*	if((this.data.act!="walk"||this.data.act!="run")&&this.coll.collFloorCnt>0){
 			this.data.
 		}*/
 		if(this.data.scaleReverse){
@@ -441,13 +438,13 @@ cc.Class({
 			return;
 		}else if(this.judgeAttack()){//返回是否处在攻击动作
 		}else if(this.data.state[0].indexOf("air")!=-1){
-			if(this.data.collWaterCnt>0&&this.data.key_attack&&this.data.state[0]=="air"){//举着伞按了攻击
+			if(this.coll.collWaterCnt>0&&this.key.attack&&this.data.state[0]=="air"){//举着伞按了攻击
 				this.data.act="float";
 			}else if(this.data.isClimb){
 				//cc.log(this.node.scaleX);
 				this.setPhy();
 				var x=Math.abs(Math.ceil(this.node.x/20))%2;
-				var y=Math.abs(Math.ceil(this.node.y/60))%2;
+				var y=Math.abs(Math.ceil(this.node.y/30))%2;
 				this.setScaleX(ALL.scaleLead.x,(x+y==1?1:-1));
 				this.data.act="climb";
 			}else if(this.data.isLie){
@@ -457,7 +454,7 @@ cc.Class({
 				}else{
 					this.data.act="run";
 				}
-			}else if(this.data.collFloorCnt<=0){//没在地板上就跳
+			}else if(this.coll.collFloorCnt<=0){//没在地板上就跳
 				this.data.act=this.data.isFall?"fall":"jump";
 			}else{
 				
@@ -477,10 +474,10 @@ cc.Class({
 			if(this.data.isClimb){
 				this.setPhy();
 				var x=Math.abs(Math.ceil(this.node.x/20))%2;
-				var y=Math.abs(Math.ceil(this.node.y/60))%2;
+				var y=Math.abs(Math.ceil(this.node.y/30))%2;
 				this.setScaleX(ALL.scaleLead.x,(x+y==1?1:-1));
 				this.data.act="climb";
-			}else if(this.data.collFloorCnt<=0){//没在地板上就跳
+			}else if(this.coll.collFloorCnt<=0){//没在地板上就跳
 				this.data.act="swim";
 			}else if(Math.abs(speed.x)<100){//在地板上,判断速度
 				this.data.act="walk";
@@ -495,15 +492,15 @@ cc.Class({
 		var nowDraw=this.data.state[2]+"_"+this.data.act;
         if(this.data.preDraw!=nowDraw){
             this.data.preDraw=nowDraw;
-            this.data.player.play(nowDraw);
+            this.player.play(nowDraw);
         }
 	},
 	
 	updateParameter:function(dt,speed){
-		if(this.data.isClimb||(this.data.state[2]=="umbrellaLead"&&this.data.key_attack&&this.data.collWaterCnt>0)){//举着伞按了攻击
+		if(this.data.isClimb||(this.data.state[2]=="umbrellaLead"&&this.key.attack&&this.coll.collWaterCnt>0)){//举着伞按了攻击
 			this.body.gravityScale=0;
 		}else if(this.data.state[2].indexOf("Pterosaur")!=-1){//是飞龙
-			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"]/2;
+			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"]/4;
 		}else if(this.data.state[2]=="umbrellaLead"&&speed.y<-1){//向下运动且举着雨伞，则中立减半
 			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"]/8;
 		}else{
@@ -517,16 +514,14 @@ cc.Class({
 		if(Math.abs(nextx) < this.data.maxSpeedx||Math.abs(nextx) < Math.abs(speed.x)){
 			speed.x=nextx;
 		}
-		var nexty=speed.y+this.data.selfacc.y* dt;
-		if((-nexty < this.data.maxSpeeddown&&nexty<0)||(nexty < this.data.maxSpeeddown&&nexty>0)||Math.abs(nexty) < Math.abs(speed.y)){
-			speed.y=nexty;
+		speed.y+=this.data.selfacc.y* dt;
+		if(speed.y<0&&-speed.y> this.data.maxSpeeddown){
+			speed.y=-this.data.maxSpeeddown;
 		}
 		if(Math.abs(speed.x)<1&&this.data.selfacc.x<5){//控制精度
 			speed.x=0;
 		}
-		if(Math.abs(speed.y)<1&&this.data.selfacc.y<5){//控制精度
-			speed.y=0;
-		}
+		
 	},
 
 	collEnemy:function(contact,other,cf){
@@ -610,7 +605,7 @@ cc.Class({
 			newLife.getComponent(cc.Sprite).spriteFrame =  ALL.GamePropFrame["life_flase"];
             ALL.MainCanSc.lifeGroup.addChild(newLife);
 			chLifeUp--;this.data.life.y++;
-        }
+		}
 		if(chLife>0){
 			var cnt=Math.min(chLife,this.data.life.y-this.data.life.x);//要回复几滴血
 			var X=this.data.life.x;//初始血量位置
@@ -643,6 +638,7 @@ cc.Class({
 			}
 		}
 	},
+
 	changeTime:function(chTime){//改变时间
 		var child = ALL.MainCanSc.timeGroup.getChildren();
 		if(chTime>0){
@@ -666,94 +662,104 @@ cc.Class({
 		}
 	},
 	newArm:function(){//用来加载一个新武器
+		var newarm=null;
         if(this.data.nowArms=="axe"){
-				var newarm=cc.instantiate(ALL.FAB["Arm_axe"]);
-				newarm.getComponent("Arm_axe").init(cc.v2(800*(this.node.scaleX>0?1:-1),150));
-				//cc.log(newarm);
-				var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
-				var armY=this.node.y+newarm.height/2;
-				newarm.setPosition(armX,armY);
-				this.node.parent.addChild(newarm);
-        }else if(this.data.nowArms=="DragonFire"){
-				var newarm=cc.instantiate(ALL.FAB["Arm_DragonFire"]);
-				var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
-				var armY=this.node.y+this.phyColl.offset.y+10;
-				newarm.getComponent("Arm_DragonFire").init(cc.v2(800*(this.node.scaleX>0?1:-1),0),cc.v2(armX,armY));
-				newarm.setPosition(armX,armY); 
-				this.node.parent.addChild(newarm);
-		}else if(this.data.nowArms=="DragonBattery"){
-				var newarm=cc.instantiate(ALL.FAB["Arm_DragonBattery"]);
-				var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
-				var armY=this.node.y+this.phyColl.offset.y+(newarm.height-this.phyColl.size.height)/2;
-				newarm.getComponent("Arm_DragonBattery").init(cc.v2(800*(this.node.scaleX>0?1:-1),0),cc.v2(armX,armY));
-				newarm.setPosition(armX,armY);
-				this.node.parent.addChild(newarm);
-		}else if(this.data.nowArms=="DragonSto"){
-				var newarm=cc.instantiate(ALL.FAB["Arm_DragonSto"]);
-				var armX=this.node.x+this.phyColl.size.width/2*(this.node.scaleX>0?1:-1);
-				var armY=this.node.y-this.phyColl.size.height/2;
-				newarm.getComponent("Arm_DragonSto").init(cc.v2(100*(this.node.scaleX>0?1:-1),Math.min(this.body.linearVelocity.y-100,0)),cc.v2(armX,armY));
-				newarm.setPosition(armX,armY);
-				this.node.parent.addChild(newarm);
+			newarm=cc.instantiate(ALL.FAB["Arm_axe"]);
+			this.data.armColl[this.data.nowArms]=newarm;
+			newarm.getComponent("Arm_axe").init(cc.v2(800*(this.node.scaleX>0?1:-1),150));
 			
+			var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
+			var armY=this.node.y+newarm.height/2;
+			newarm.setPosition(armX,armY);
+			this.node.parent.addChild(newarm);
+        }else if(this.data.nowArms=="DragonFire"){
+			newarm=cc.instantiate(ALL.FAB["Arm_DragonFire"]);
+			this.data.armColl[this.data.nowArms]=newarm;
+			var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
+			var armY=this.node.y+this.phyColl.offset.y+10;
+			newarm.getComponent("Arm_DragonFire").init(cc.v2(800*(this.node.scaleX>0?1:-1),0),cc.v2(armX,armY));
+			newarm.setPosition(armX,armY); 
+			this.node.parent.addChild(newarm);
+		}else if(this.data.nowArms=="DragonBattery"){
+			newarm=cc.instantiate(ALL.FAB["Arm_DragonBattery"]);
+			this.data.armColl[this.data.nowArms]=newarm;
+			var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
+			var armY=this.node.y+this.phyColl.offset.y+(newarm.height-this.phyColl.size.height)/2;
+			newarm.getComponent("Arm_DragonBattery").init(cc.v2(800*(this.node.scaleX>0?1:-1),0),cc.v2(armX,armY));
+			newarm.setPosition(armX,armY);
+			this.node.parent.addChild(newarm);
+		}else if(this.data.nowArms=="DragonSto"){
+			newarm=cc.instantiate(ALL.FAB["Arm_DragonSto"]);
+			this.data.armColl[this.data.nowArms]=newarm;
+			var armX=this.node.x+this.phyColl.size.width/2*(this.node.scaleX>0?1:-1);
+			var armY=this.node.y-this.phyColl.size.height/2;
+			newarm.getComponent("Arm_DragonSto").init(cc.v2(100*(this.node.scaleX>0?1:-1),Math.min(this.body.linearVelocity.y-100,0)),cc.v2(armX,armY));
+			newarm.setPosition(armX,armY);
+			this.node.parent.addChild(newarm);
 		}else if(this.data.nowArms=="Stegosaurus"){
-				this.data.nowArmsCnt[this.data.nowArms]=0;
+			this.data.nowArmsCnt[this.data.nowArms]=0;
 		}else if(this.data.nowArms=="waterGun"){
-			this.callbackwaterGun = function(){//前摇时间0.2
+			this.scheduleDir[this.data.nowArms] = function(){//前摇时间0.2
 				var newarm=cc.instantiate(ALL.FAB["Arm_waterGun"]);
+				this.data.armColl[this.data.nowArms]=newarm;
 				newarm.getComponent("Arm_waterGun").init(cc.v2(500*(this.node.scaleX>0?1:-1),50));
-				//cc.log(newarm);
 				var armX=this.node.x+this.node.width/2*(this.node.scaleX>0?1:-1);
 				var armY=this.node.y;
 				newarm.setPosition(armX,armY);
 				this.node.parent.addChild(newarm);
-				this.unschedule(this.callbackwaterGun);
+				this.data.armColl[this.data.nowArms]=newarm;
+				this.unschedule(this.scheduleDir[this.data.nowArms]);
 			}
-			this.schedule(this.callbackwaterGun,0.2,0,0);
+			this.schedule(this.scheduleDir[this.data.nowArms],0.2,0,0);
 		}else if(this.data.nowArms=="ham"){
 			var attackActCnt=LEADDATA.AttackTime["yes"][this.data.nowArms]*10;
 			var cnt=0;
-			var newarm=cc.instantiate(ALL.FAB["Arm_short"]);
-			this.callbackHam = function(){//前摇时间0.2
+			newarm=cc.instantiate(ALL.FAB["Arm_short"]);
+			this.scheduleDir[this.data.nowArms] = function(){//前摇时间0.2
 				if(cnt==2){
 					var width=this.data.isLie?94:60;
-					
 					var off=cc.v2((width+this.phyColl.size.width)/2*ALL.scaleLead.x,LEADDATA.PhysicalPara.offset[this.data.state[2]].y*ALL.scaleLead.y);
 					newarm.getComponent("Arm_short").init("ham",off,cc.v2(width,this.phyColl.size.height));
 					newarm.setPosition(this.node.x+off.x*(this.node.scaleX>0?1:-1),this.node.y+off.y);
 					this.node.parent.addChild(newarm);
+					this.data.armColl[this.data.nowArms]=newarm;
 				}else if(cnt==attackActCnt){
-					newarm.die();
-					this.unschedule(this.callbackHam);
+					this.data.armColl["ham"]&&newarm.die();
+					this.unschedule(this.scheduleDir[this.data.nowArms]);
 				}
 				cnt++;
 			}
-			this.schedule(this.callbackHam,0.1,attackActCnt,0);
+			this.schedule(this.scheduleDir[this.data.nowArms],0.1,attackActCnt,0);
 		}else if(this.data.nowArms=="fire"){
 			var attackActCnt=LEADDATA.AttackTime["yes"][this.data.nowArms]*10;
 			var cnt=0;
-			var newarm=cc.instantiate(ALL.FAB["Arm_short"]);
-			this.callbackHam = function(){//前摇时间0.1
+			newarm=cc.instantiate(ALL.FAB["Arm_short"]);
+			this.scheduleDir[this.data.nowArms] = function(){//前摇时间0.1
 				if(cnt==1){
 					var fireWidth=this.data.isLie?100:70;
 					var off=cc.v2((fireWidth+this.phyColl.size.width)/2*ALL.scaleLead.x,LEADDATA.PhysicalPara.offset[this.data.state[2]].y*ALL.scaleLead.y);
 					newarm.getComponent("Arm_short").init("fire",off,cc.v2(fireWidth,this.phyColl.size.height));
 					newarm.setPosition(this.node.x+off.x*(this.node.scaleX>0?1:-1),this.node.y+off.y);
 					this.node.parent.addChild(newarm);
+					this.data.armColl[this.data.nowArms]=newarm;
 				}else if(cnt==attackActCnt){
-					newarm.die();
-					this.unschedule(this.callbackHam);
+					this.data.armColl["fire"]&&newarm.die();
+					this.unschedule(this.scheduleDir[this.data.nowArms]);
 				}
 				cnt++;
 			}
-			this.schedule(this.callbackHam,0.1,attackActCnt,0);
+			this.schedule(this.scheduleDir[this.data.nowArms],0.1,attackActCnt,0);
 		}else if(this.data.nowArms=="spear"){
 			var attackActCnt=LEADDATA.AttackTime["yes"][this.data.nowArms]*10;
 			var cnt=0;
-			var newarm=cc.instantiate(ALL.FAB["Arm_short"]);
-			this.callbackHam = function(){//无前摇
+			newarm=cc.instantiate(ALL.FAB["Arm_short"]);
+			this.scheduleDir[this.data.nowArms] = function(){//无前摇
+				if(!newarm){
+					this.unschedule(this.scheduleDir[this.data.nowArms]);
+					return;
+				}
 				if(cnt==0){
-					if(this.data.key_up&&!this.data.isLie){
+					if(this.key.up&&!this.data.isLie){
 						var width=30;
 						var off=cc.v2(0,66*ALL.scaleLead.y);
 						newarm.getComponent("Arm_short").init("spear",off,cc.v2(width,this.phyColl.size.height));
@@ -764,14 +770,15 @@ cc.Class({
 					}
 					newarm.setPosition(this.node.x+off.x*(this.node.scaleX>0?1:-1),this.node.y+off.y);
 					this.node.parent.addChild(newarm);
+					this.data.armColl[this.data.nowArms]=newarm;
 
 				}else if(cnt==attackActCnt){
-					newarm.die();
-					this.unschedule(this.callbackHam);
+					this.data.armColl[this.data.nowArms]&&newarm.die();
+					this.unschedule(this.scheduleDir[this.data.nowArms]);
 				}
 				cnt++;
 			}
-			this.schedule(this.callbackHam,0.1,attackActCnt,0);
+			this.schedule(this.scheduleDir[this.data.nowArms],0.1,attackActCnt,0);
 		}else if(this.data.nowArms=="scooter"){
 		
 			this.data.armColl.scooter=cc.instantiate(ALL.FAB["Arm_short"]);
@@ -781,11 +788,12 @@ cc.Class({
 			this.data.armColl.scooter.setPosition(this.node.x+off.x*(this.node.scaleX>0?1:-1),this.node.y+off.y);
 			this.node.parent.addChild(this.data.armColl.scooter);
 		}else if(this.data.nowArms=="bomb"){
-			var newarm=cc.instantiate(ALL.FAB["Object_bomb"]);
+			newarm=cc.instantiate(ALL.FAB["Object_bomb"]);
+			this.data.armColl[this.data.nowArms]=newarm;
 			var sx=0;
-			if(this.data.key_left){
+			if(this.key.left){
 				sx=-Math.abs(this.body.linearVelocity.x)-100;
-			}else if(this.data.key_right){
+			}else if(this.key.right){
 				sx=Math.abs(this.body.linearVelocity.x)+100;
 			}
 			newarm.getComponent("Arm_bomb").init(cc.v2(sx,0));//设置速度
@@ -795,10 +803,11 @@ cc.Class({
 			newarm.setPosition(armX,armY);
 			this.node.parent.addChild(newarm);
 		}else if(this.data.nowArms=="boomerang"){
-			var newarm=cc.instantiate(ALL.FAB["Arm_boomerang"]);
+			newarm=cc.instantiate(ALL.FAB["Arm_boomerang"]);
+			this.data.armColl[this.data.nowArms]=newarm;
 			var fp=(this.node.scaleX>0?1:-1);
 			var sx=fp*933;
-			if(this.data.key_up&&!this.data.isLie){//向上打
+			if(this.key.up&&!this.data.isLie){//向上打
 				newarm.getComponent("Arm_boomerang").init(cc.v2(0,Math.abs(sx)),fp,Math.PI/2+(fp==1?0:Math.PI));//设置速度
 			}else{
 				newarm.getComponent("Arm_boomerang").init(cc.v2(sx,0),fp,0);//设置速度
@@ -852,7 +861,7 @@ cc.Class({
 		var cnt=[0,0,0,0];
 		for(var i=0;i<points.length;i++){
 			if(is)
-				cc.log("i:"+i,this.borderY(-1)+2-points[i].y,this.data.collFloorCnt);
+				cc.log("i:"+i,this.borderY(-1)+2-points[i].y,this.coll.collFloorCnt);
 			if(points[i].x<this.borderX(-1)+2){
 				cnt[0]++;
 			}else if(points[i].x>this.borderX(1)-2){
@@ -878,11 +887,12 @@ cc.Class({
 		return fp;
 	},
 	judgeAttack:function(){//返回是否处理后面动作。false代表继续处理
+		//cc.log(this.data.nowArmsCnt[this.data.nowArms]);
 		if(this.data.nowArms=="umbrella"){
-			if(this.data.state[2]!="umbrellaLead"&&this.data.key_attack//没举着雨伞 且按了攻击
+			if(this.data.state[2]!="umbrellaLead"&&this.key.attack//没举着雨伞 且按了攻击
 				&&!this.data.isLie&&!this.data.isClimb&&!this.data.isFall&&this.data.state[0]!="water"){
 				this.setPhy("umbrellaLead");
-			}else if(this.data.state[2]=="umbrellaLead"&&!this.data.key_attack){//举着雨伞 且没按攻击
+			}else if(this.data.state[2]=="umbrellaLead"&&!this.key.attack){//举着雨伞 且没按攻击
 				this.setPhy("Lead");
 				this.delArm();
 			}
@@ -894,7 +904,8 @@ cc.Class({
 		if(this.data.nowArmsCnt[this.data.nowArms]==undefined){
 			this.data.nowArmsCnt[this.data.nowArms]=0;
 		}
-		if(this.data.key_attack&&this.data.canAttack&&this.data.nowArmsCnt[this.data.nowArms]<LEADDATA.ARMS.maxCnt[this.data.nowArms]){//按了攻击有没处于攻击动作,还没有处于非攻击实践
+	
+		if(this.key.attack&&this.data.canAttack&&this.data.nowArmsCnt[this.data.nowArms]<LEADDATA.ARMS.maxCnt[this.data.nowArms]){//按了攻击有没处于攻击动作,还没有处于非攻击实践
 			this.newArm();
 			this.data.act="attack"+"_"+this.data.nowArms+this.getAttackFp();
 			this.data.canAttack=false;
@@ -902,17 +913,17 @@ cc.Class({
 			var attackActCnt=LEADDATA.AttackTime["yes"][this.data.nowArms]*10;
 			var sumCnt=LEADDATA.AttackTime["no"][this.data.nowArms]*10+attackActCnt;
 			var count=0;
-			this.callbackAttackFun = function(){
+			this.scheduleDir["attackStop"] = function(){
 				if(count==attackActCnt){
 					this.data.isAttackAct=false;
 				}
 				if(count==sumCnt){
 					this.data.canAttack=true;
-					this.unschedule(this.callbackAttackFun);
+					this.unschedule(this.scheduleDir["attackStop"]);
 				}
 				count++;
 			}
-			this.schedule(this.callbackAttackFun,0.1,sumCnt,0);
+			this.schedule(this.scheduleDir["attackStop"],0.1,sumCnt,0);
 		}
 		return this.data.isAttackAct;
 	},
@@ -926,7 +937,7 @@ cc.Class({
 			if(this.data.state[2].indexOf("Lead")==-1){
 				this.setPhy();
 			}else if(name=="scooter"){
-				if(this.data.collFloorCnt>0){
+				if(this.coll.collFloorCnt>0){
 					
 				}
 				this.setPhy("scooterLead");
@@ -950,25 +961,26 @@ cc.Class({
 			node.SpriteFrame=ALL.GamePropFrame[is?name:"withoutIco"];
     },
 	getAttackFp:function(){
-		if(this.data.key_up&&!this.data.isLie&&!this.data.isFall&&
+		if(this.key.up&&!this.data.isLie&&!this.data.isFall&&
 			LEADDATA["ARMS"]["attackUp"].indexOf(this.data.nowArms)!=-1){//可以向上发射的武器包含了当前武器
 			return "Up";
 		}
 		return "";
 	},
-	setPhy:function(man="Lead"){
-		if(this.data.state[2]!=man){
+	setPhy:function(man="Lead",compel=false){//compel代表是否强制执行
+		if(this.data.state[2]!=man||compel){
 			this.data.state[2]=man;
 			var arm=LEADDATA.ARMS.changePhyArm[man];
 			if(arm&&this.data.armColl[arm]){
 				this.data.armColl[arm].die();
 				delete this.data.armColl[arm];
 			}
-			if(LEADDATA.ARMS.indList[man].indexOf(this.data.nowArms)==-1){
-				this.setArm(LEADDATA.ARMS.indList[man][0]);
+			var lead=LEADDATA.ARMS.indList[man];
+			if(lead.indexOf(this.data.nowArms)==-1){
+				this.setArm(lead[0]);
 			}
 			if(this.data.state[2]=="umbrellaLead"){
-				if(this.data.collWaterCnt<=0)
+				if(this.coll.collWaterCnt<=0)
 					this.newArm();
 			}else{
 				if(this.data.state[2]=="scooterLead"){
@@ -1015,57 +1027,74 @@ cc.Class({
 		}
 		return false;
 	},
-	setIsLie:function(){
-		if((this.data.key_down ||this.data.collCeilCnt>0)&&this.data.collFloorCnt>0&&this.data.state[2].indexOf("Lead")!=-1){
-			if(this.data.climbOb[1]==null&&this.data.nowArms!="scooter"){
+	judgeIsLie:function(){
+		if((this.key.down ||this.coll.collCeilCnt>0)&&this.coll.collFloorCnt>0&&this.data.state[2].indexOf("Lead")!=-1){
+			if(this.coll.climbOb[1]==null&&this.data.nowArms!="scooter"){
 				return true;
-			}else if(this.data.climbOb[1]&&this.data.collFloorCnt>1){
+			}else if(this.coll.climbOb[1]&&(this.coll.climbOb[0]==null||Math.abs(this.node.x-this.coll.climbOb[0].x)>=4)){
 				return true;
 			}
 		}
 		return false;
 	},
 	judgeJumpScene:function(){
-		if(this.data.key_up){
-			var ch=ALL.jumpScenesList;
+		if(this.key.up){
+			var ch=ALL.scDoor;
 			for(var i=0;i<ch.length;i++){
 				if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
 					//携带信息
-					ALL.SaveLead=cc.instantiate(this.node);
+					this.clearSelf();
+					this.data.savePos=(DOOR[cc.director.getScene().name][ch[i].name]);
+					this.memsetKey(false);
+					ALL.SaveLead=cc.instantiate(this.data);
 					cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
 					return true;
 				}
 			}
 		}
+		var ch=ALL.comScDoor;
+		for(var i=0;i<ch.length;i++){
+			if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
+				//携带信息
+				ALL.SaveLead=cc.instantiate(this.node);
+				cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
+				return true;
+			}
+		}
 		return false;
 	},
-	judgeClimb:function(speed){
-		var clob=this.data.climbOb[0];
+	calcClimb:function(speed){
+		var clob=this.coll.climbOb[0];
 		if(this.data.isClimb){
-			if(this.data.state[2].indexOf("Lead")==-1||clob==null||this.data.key_jump||(this.data.collFloorCnt>0&&this.data.key_down)){
+			if(this.data.state[2].indexOf("Lead")==-1||clob==null||this.key.jump){
 				this.data.isClimb=false;
 			}else{
 				speed.x=0;
 				this.node.x=clob.x;
-				if(this.data.key_up){
+				if(this.key.up){
 					speed.y=140;
-				}else if(this.data.key_down){
+				}else if(this.key.down){
 					speed.y=-140;
 				}else{
 					speed.y=0;
 				}
 			}
-		}else if(this.data.state[2].indexOf("Lead")!=-1&&clob&&Math.abs(this.node.x-clob.x)<5
-			&&(clob.y+clob.height/2>this.node.y&&this.data.key_up
-				||clob.y-clob.height/2<this.node.y&&this.data.key_down)){
-			this.data.isClimb=true;
-			/*if(Math.abs(this.node.x-clob.x)<5&&(clob.y>this.node.y&&this.data.key_up||clob.y<this.node.y&&this.data.key_down)){
-				this.data.isClimb=true;
-			}
-			if(Math.abs(this.node.x-clob.x)>=5&&clob.y<this.node.y&&this.data.key_down){
-				this.data.isLie=true;
-			}*/
+		}else{
+			this.data.isClimb=this.judgeIsClimb();
 		}
+	},
+	judgeIsClimb:function(){
+		var clob=this.coll.climbOb[0];
+		if(this.data.state[2]=="Lead"&&clob&&Math.abs(this.node.x-clob.x)<4){
+			if((clob.y+clob.height/2>this.borderY(-1)&&this.key.up
+				||clob.y-clob.height/2<this.borderY(1)&&this.key.down)){
+					return true;
+			}else if(this.coll.climbOb[1]!=null&&this.key.down){
+				this.node.y-=10;
+				return true;
+			}
+		}
+		return false;
 	},
 	intoWater: function(){
 		this.data.state[0]="water";
@@ -1083,13 +1112,13 @@ cc.Class({
 	pause:function(is=true){
 		if(is){
 			this.data.pause=true;
-			this.data.player.pause();
+			this.player.pause();
 			ALL.menu.active=true;
 			cc.director.pause();
-			this.resetKey(false);
+			this.clearSelf();
 		}else{
 			this.data.pause=false;
-			this.data.player.resume();
+			this.player.resume();
 			ALL.menu.active=false;
 			cc.director.resume();
 		}
@@ -1101,15 +1130,34 @@ cc.Class({
 		}
 		this.node.scaleX=sc;
 	},
-	resetKey:function(is){
-		this.data.key_left=is;
-		this.data.key_right=is;
-	    this.data.key_down=is;
-		this.data.key_up=is;
-		this.data.key_attack=is;
-		this.data.key_acc=is;
-		this.data.key_jump=is;
-		this.data.key_pause=is;
+	memsetKey:function(is){
+		this.key.left=is;
+		this.key.right=is;
+	    this.key.down=is;
+		this.key.up=is;
+		this.key.attack=is;
+		this.key.acc=is;
+		this.key.jump=is;
+		this.key.pause=is;
 	},
+	clearSelf:function(){
+		for(var a in this.scheduleDir){
+			this.unschedule(this.scheduleDir[a]);
+		}
+		for(var a in this.data.armColl){
+			this.data.armColl[a].die();
+			delete this.data.armColl[a];
+		}
+		this.memsetKey(false);
+		this.data.canAttack=true;
+		this.data.isAttackAct=false;
+	},
+	saveData(){
+		//携带信息
+		this.clearSelf();
+		this.data.savePos=(DOOR[cc.director.getScene().name][ch[i].name]);
+		this.memsetKey(false);
+		ALL.SaveLead=cc.instantiate(this.data);
+	}
 });
 
