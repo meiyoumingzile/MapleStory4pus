@@ -34,6 +34,7 @@ cc.Class({
 		},
 		this.data={
 			savePos:cc.v2(0,0),
+			saveLen:cc.v2(0,0),
 	        state:["air","walk","Lead"],
 			specialEffect:"null",
 /*状态，三个代表：第1个代表周围环境，第2个代表人的运动状态：walk,run ;
@@ -165,7 +166,9 @@ cc.Class({
 		var sc=Math.abs(this.data.preScaleX-this.node.scaleX);
 		if(self.tag==1){
 			if(other.node.name.indexOf("Object")!=-1){
-				if(!this.coll.collCeilDir[other._id]){
+				if(other.node.name.indexOf("Object2")!=-1&&cf.y!=-1||this.data.isClimb){
+					contact.disabled=true;
+				}else if(!this.coll.collCeilDir[other._id]){
 					this.coll.collCeilDir[other._id]=other;
 					this.coll.collCeilCnt++;
 				}
@@ -180,25 +183,29 @@ cc.Class({
 					this.coll.collWaterDir[other._id]=true;
 				}
 			}
-			if(other.node.name=="Object_Ladder"){//爬梯子
+			if(other.node.name=="Object2_Ladder"){//爬梯子
 				this.coll.climbOb[1]=other.node;
 			}
 			if(other.node.name.indexOf("Enemy")!=-1){
 				this.collEnemy(contact, other,cf);
 			}else if(other.node.name.indexOf("Object")!=-1){
-				if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
-					this.coll.collFloorDir[other._id]=other;
-					this.coll.collFloorCnt++;
+				if(other.node.name.indexOf("Object2")!=-1&&(cf.y!=-1||this.data.isClimb)){
+					contact.disabled=true;
+				}else{
+					if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
+						this.coll.collFloorDir[other._id]=other;
+						this.coll.collFloorCnt++;
+					}
+					if(cf.x==-1&&!this.coll.collSideDir[0][other._id]){
+						this.coll.collSideDir[0][other._id]=other;
+						this.coll.collSideCnt[0]++;
+					}
+					if(cf.x==1&&!this.coll.collSideDir[1][other._id]){
+						this.coll.collSideDir[1][other._id]=other;
+						this.coll.collSideCnt[1]++;
+					}
+					this.data.isFall=false;//
 				}
-				if(cf.x==-1&&!this.coll.collSideDir[0][other._id]){
-					this.coll.collSideDir[0][other._id]=other;
-					this.coll.collSideCnt[0]++;
-				}
-				if(cf.x==1&&!this.coll.collSideDir[1][other._id]){
-					this.coll.collSideDir[1][other._id]=other;
-					this.coll.collSideCnt[1]++;
-				}
-				this.data.isFall=false;//
 			}
 		}
 		
@@ -263,17 +270,22 @@ cc.Class({
 			if(other.node.name.indexOf("Enemy")!=-1){
 				this.collEnemy(contact, other,cf);
 			}else if(other.node.name.indexOf("Object")!=-1){
-				if(cf.y!=-1&&this.coll.collFloorDir[other._id]){
-					delete this.coll.collFloorDir[other._id];
-					this.coll.collFloorCnt--;
-				}
-				if(cf.x!=-1&&this.coll.collSideDir[0][other._id]){
-					delete this.coll.collSideDir[0][other._id];
-					this.coll.collSideCnt[0]--;
-				}
-				if(cf.x!=1&&this.coll.collSideDir[1][other._id]){
-					delete this.coll.collSideDir[1][other._id];
-					this.coll.collSideCnt[1]--;
+				if(other.node.name.indexOf("Object2")!=-1&&(cf.y!=-1||this.data.isClimb)){
+					contact.disabled=true;
+				}else{
+					if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
+						this.coll.collFloorDir[other._id]=other;
+						this.coll.collFloorCnt++;
+					}
+					if(cf.x==-1&&!this.coll.collSideDir[0][other._id]){
+						this.coll.collSideDir[0][other._id]=other;
+						this.coll.collSideCnt[0]++;
+					}
+					if(cf.x==1&&!this.coll.collSideDir[1][other._id]){
+						this.coll.collSideDir[1][other._id]=other;
+						this.coll.collSideCnt[1]++;
+					}
+					this.data.isFall=false;//
 				}
 			}
 		}
@@ -300,7 +312,7 @@ cc.Class({
 			this.changeLife(ALL.SaveLead.life.x,ALL.SaveLead.life.y);
 			this.changeTime(ALL.SaveLead.time.x);
 			this.data=ALL.SaveLead;
-			this.node.setPosition(this.data.savePos);
+			this.node.setPosition(cc.v2(this.data.savePos.x+this.data.saveLen.x,this.data.savePos.y+this.data.saveLen.y));
 			ALL.SaveLead=null;
 			this.setPhy(this.data.state[2],true);
 		}else{
@@ -1042,11 +1054,8 @@ cc.Class({
 			var ch=ALL.scDoor;
 			for(var i=0;i<ch.length;i++){
 				if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
-					//携带信息
-					this.clearSelf();
-					this.data.savePos=(DOOR[cc.director.getScene().name][ch[i].name]);
-					this.memsetKey(false);
-					ALL.SaveLead=cc.instantiate(this.data);
+					if(DOOR[cc.director.getScene().name]&&DOOR[cc.director.getScene().name][ch[i].name])
+						this.saveData(DOOR[cc.director.getScene().name][ch[i].name],cc.v2(0,0));
 					cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
 					return true;
 				}
@@ -1055,8 +1064,15 @@ cc.Class({
 		var ch=ALL.comScDoor;
 		for(var i=0;i<ch.length;i++){
 			if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
-				//携带信息
-				ALL.SaveLead=cc.instantiate(this.node);
+				if(DOOR[cc.director.getScene().name]&&DOOR[cc.director.getScene().name][ch[i].name]){
+					var len=cc.v2(this.node.x-ch[i].x,this.node.y-ch[i].y);
+					if(Math.abs(ch[i].x)>ALL.MainCanvas.width/2){
+						len.x*=-1;
+					}else if(Math.abs(ch[i].y)>ALL.MainCanvas.height/2){
+						len.y*=-1;
+					}
+					this.saveData(DOOR[cc.director.getScene().name][ch[i].name],len);
+				}
 				cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
 				return true;
 			}
@@ -1152,12 +1168,12 @@ cc.Class({
 		this.data.canAttack=true;
 		this.data.isAttackAct=false;
 	},
-	saveData(){
-		//携带信息
+	saveData(pos,len){//pos代表要到达的位置
 		this.clearSelf();
-		this.data.savePos=(DOOR[cc.director.getScene().name][ch[i].name]);
+		this.data.savePos=pos;
+		this.data.saveLen=len;
 		this.memsetKey(false);
 		ALL.SaveLead=cc.instantiate(this.data);
-	}
+	},
 });
 

@@ -226,4 +226,12 @@ cc.Class({
 	isBaseVar(a){
 		return a instanceof String||a instanceof Boolean||a instanceof Number; 
 	},
+	inRange(a,min,max){
+		if(a<min){
+			return -1;
+		}else if(a>max){
+			return 1;
+		}
+		return 0; 
+	},
 });

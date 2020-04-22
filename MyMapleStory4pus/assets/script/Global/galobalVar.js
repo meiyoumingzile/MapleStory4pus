@@ -42,10 +42,12 @@ window.DOOR ={
     },
     home:{
         test1:cc.v2(-400,80),//传送到哪里
+        homeDown1:cc.v2(0,400),//传送到哪里
     },
-    Volcano1:{
-        door1:cc.v2(-2290,-160),
-        door2:cc.v2(2250,-250),
+    homeDown1:{
+        test1:cc.v2(-400,80),//传送到哪里
+        home:cc.v2(0,400),//传送到哪里
+        cave1_1:cc.v2(0,0),
     },
     Volcano2:{
         door1:cc.v2(4770,-220),
