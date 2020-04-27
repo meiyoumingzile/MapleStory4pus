@@ -18,16 +18,21 @@ window.ALL = {
 	CamNode:null,
     
     SaveLead:null,
-    NextSence:"",
-    nowSence:"",
-    lastSence:"",
+    preSence:"",
+    preDoor:{
+        kind:"",
+        tag:"",
+        name:"",
+    },
+    jumpSenceDoor:null,
+    scDoor:null,//
+    comScDoor:null,//compel强制跳转厂家
 
 	FAB:{},//预制体资源
 	GamePropFrame:{},//道具图标资源
     INF:1000000000,
     inf:0.1,
-    scDoor:[],//
-    comScDoor:[],//compel强制跳转厂家
+    
     EnemyScript:[],
 	enemyUpdateSize:cc.v2(1000,1000),//怪物刷新范围
 	scaleLead:cc.v2(1,1),
@@ -35,24 +40,6 @@ window.ALL = {
     scaleOb:cc.v2(1,1),
     menu:null,
 };
-
-window.DOOR ={
-    test1:{
-        home:cc.v2(-4271.367,-162),//传送到哪里
-    },
-    home:{
-        test1:cc.v2(-400,80),//传送到哪里
-        homeDown1:cc.v2(0,400),//传送到哪里
-    },
-    homeDown1:{
-        test1:cc.v2(-400,80),//传送到哪里
-        home:cc.v2(0,400),//传送到哪里
-        cave1_1:cc.v2(0,0),
-    },
-    Volcano2:{
-        door1:cc.v2(4770,-220),
-    },
-},
 
 
 window.KEY={

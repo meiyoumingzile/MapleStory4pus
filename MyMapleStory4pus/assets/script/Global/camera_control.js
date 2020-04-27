@@ -13,9 +13,10 @@ cc.Class({
         this.camera = this.getComponent(cc.Camera);
 		ALL.CamNode=this.node;
         this.canvas = this.target.parent;//得到父节点是Canvas
-        this.node.position =ALL.Lead.position;
         this.winSize=ALL.MainCanSc.getWindows();
         this.fixSz=cc.v2(this.winSize.x/16,this.winSize.y/16);
+        this.setCameraPos(ALL.Lead.position);
+        
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -33,5 +34,9 @@ cc.Class({
         }
         this.node.position =cc.v2(nx,ny);
     },
-
+    setCameraPos(pos){
+        pos.x=pos.x>0?Math.min(pos.x,this.canvas.width/2-this.winSize.x/2):Math.max(pos.x,this.winSize.x/2-this.canvas.width/2);
+        pos.y=pos.y>0?Math.min(pos.y,this.canvas.height/2-this.winSize.y/2):Math.max(pos.y,this.winSize.y/2-this.canvas.height/2);
+        this.node.position= pos;
+    },
 });

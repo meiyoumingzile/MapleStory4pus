@@ -16,7 +16,7 @@ cc.Class({
 			collFloorDir:{},
 			collCeilCnt:0,
 			collCeilDir:{},
-			collSideCnt:[0,0],
+			collSideCnt:[0,0],//collSideCnt[0]是左
 			collSideDir:[{},{}],
 			collWaterCnt:0,
 			collWaterDir:{},
@@ -33,8 +33,7 @@ cc.Class({
 			pause:false,
 		},
 		this.data={
-			savePos:cc.v2(0,0),
-			saveLen:cc.v2(0,0),
+			saveDeviation:cc.v2(0,0),
 	        state:["air","walk","Lead"],
 			specialEffect:"null",
 /*状态，三个代表：第1个代表周围环境，第2个代表人的运动状态：walk,run ;
@@ -56,7 +55,7 @@ cc.Class({
 			maxSpeedup:0, 		//限制的最大速度
 			maxSpeeddown:0,     //限制的最大速度
 			selfacc: cc.v2(0,0),//自己的加速度
-	        
+	        speed: cc.v2(0,0),//自己的速度
 			nowArmsCnt:{},
 			nowArms:"axe",
 			gotProp:{goods_axe:true},
@@ -145,17 +144,16 @@ cc.Class({
 			this.pause(true);
 			return ;
 		}
-		
 		this.data.preScaleX=this.node.scaleX;
 		this.data.preAct=this.data.act;
-		var speed = this.body.linearVelocity;
+		this.data.speed = this.body.linearVelocity;
 		//cc.log(speed);
-		this.updatePhyColl(dt,speed);//判断按键状态
-		this.dealKey(dt,speed);//判断按键状态
-		this.dealState(dt,speed);//处理人物状态和动画切换
-		this.updateParameter(dt,speed);
-		this.calSpeed(dt,speed);
-		this.body.linearVelocity = speed;
+		this.updatePhyColl(dt,this.data.speed);//判断按键状态
+		this.dealKey(dt,this.data.speed);//判断按键状态
+		this.dealState(dt,this.data.speed);//处理人物状态和动画切换
+		this.updateParameter(dt,this.data.speed);
+		this.calSpeed(dt,this.data.speed);
+		this.body.linearVelocity = this.data.speed;
     }, 
 	    
 	onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
@@ -312,9 +310,18 @@ cc.Class({
 			this.changeLife(ALL.SaveLead.life.x,ALL.SaveLead.life.y);
 			this.changeTime(ALL.SaveLead.time.x);
 			this.data=ALL.SaveLead;
-			this.node.setPosition(cc.v2(this.data.savePos.x+this.data.saveLen.x,this.data.savePos.y+this.data.saveLen.y));
+			var find=ALL.MainCanSc.findChildren;
+			var p=cc.v2(0,0);
+			try{
+				p=find(find(find(ALL.jumpSenceDoor,ALL.preDoor.kind),ALL.preDoor.tag),ALL.preSence);
+			}catch(ex){
+				cc.log(ex);
+			}
+			this.node.setPosition(cc.v2(p.x+this.data.saveDeviation.x,p.y+this.data.saveDeviation.y));
+			ALL.CamNode.getComponent("camera_control").setCameraPos(this.node.position);
 			ALL.SaveLead=null;
 			this.setPhy(this.data.state[2],true);
+			this.body.linearVelocity = this.data.speed;
 		}else{
 			this.changeLife(8,8);
 			this.changeTime(5);
@@ -428,7 +435,7 @@ cc.Class({
 		}
 
 		this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
-		if(this.coll.collFloorCnt==0&&(this.coll.collSideCnt[0]>0||this.coll.collSideCnt[1]>0||this.data.act=="climb")){
+		if(this.coll.collFloorCnt==0&&(this.coll.collSideCnt[0]>0&&keyFp==-1||this.coll.collSideCnt[1]>0&&keyFp==1||this.data.act=="climb")){
 			this.data.selfacc.x=0;
 		}else if(keyFp!=0){//左右运动
 			this.setScaleX(ALL.scaleLead.x,keyFp);
@@ -1051,30 +1058,39 @@ cc.Class({
 	},
 	judgeJumpScene:function(){
 		if(this.key.up){
-			var ch=ALL.scDoor;
-			for(var i=0;i<ch.length;i++){
-				if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
-					if(DOOR[cc.director.getScene().name]&&DOOR[cc.director.getScene().name][ch[i].name])
-						this.saveData(DOOR[cc.director.getScene().name][ch[i].name],cc.v2(0,0));
-					cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
-					return true;
+			var sc=ALL.scDoor.getChildren();
+			for(var j=0;j<sc.length;j++){
+				var ch=sc[j].getChildren();
+				for(var i=0;i< ch.length;i++){
+					if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
+						this.saveData(cc.v2(0,0));
+						ALL.preDoor.kind=ALL.scDoor.name;
+						ALL.preDoor.tag=sc[j].name;
+						ALL.preDoor.name=ch[i].name;
+						cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
+						return true;
+					}
 				}
 			}
 		}
-		var ch=ALL.comScDoor;
-		for(var i=0;i<ch.length;i++){
-			if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
-				if(DOOR[cc.director.getScene().name]&&DOOR[cc.director.getScene().name][ch[i].name]){
+		var sc=ALL.comScDoor.getChildren();
+		for(var j=0;j<sc.length;j++){//preDoorTag
+			var ch=sc[j].getChildren();
+			for(var i=0;i< ch.length;i++){
+				if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
 					var len=cc.v2(this.node.x-ch[i].x,this.node.y-ch[i].y);
 					if(Math.abs(ch[i].x)>ALL.MainCanvas.width/2){
-						len.x*=-1;
+						len.x=(ch[i].width/2+10)*(ch[i].x>0?1:-1);
 					}else if(Math.abs(ch[i].y)>ALL.MainCanvas.height/2){
-						len.y*=-1;
+						len.y=(ch[i].height/2+10)*(ch[i].y>0?1:-1);
 					}
-					this.saveData(DOOR[cc.director.getScene().name][ch[i].name],len);
+					this.saveData(len,sc[j].name);
+					ALL.preDoor.kind=ALL.comScDoor.name;
+					ALL.preDoor.tag=sc[j].name;
+					ALL.preDoor.name=ch[i].name;
+					cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
+					return true;
 				}
-				cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
-				return true;
 			}
 		}
 		return false;
@@ -1168,10 +1184,10 @@ cc.Class({
 		this.data.canAttack=true;
 		this.data.isAttackAct=false;
 	},
-	saveData(pos,len){//pos代表要到达的位置
+	saveData(deviation){//deviation代表偏移距离
+		ALL.preSence=cc.director.getScene().name;
 		this.clearSelf();
-		this.data.savePos=pos;
-		this.data.saveLen=len;
+		this.data.saveDeviation=deviation;
 		this.memsetKey(false);
 		ALL.SaveLead=cc.instantiate(this.data);
 	},

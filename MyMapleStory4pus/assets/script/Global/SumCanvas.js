@@ -27,9 +27,9 @@ cc.Class({
 		cc.director.getPhysicsManager().enabledDebugDraw = true;//显示碰撞框
 		cc.director.getCollisionManager().enabled = true;//初始化启用碰撞系统
 		cc.director.getCollisionManager().enabledDebugDraw = true;//显示碰撞框
-		var node=this.findChildren(this.node,"JUMPSCENES"); //
-		ALL.scDoor=this.findChildren(node,"DOOR").getChildren(); //
-		ALL.comScDoor=this.findChildren(node,"COMPELDOOR").getChildren(); //
+		ALL.jumpSenceDoor=this.findChildren(this.node,"JUMPSCENES"); //
+		ALL.scDoor=this.findChildren(ALL.jumpSenceDoor,"DOOR"); //
+		ALL.comScDoor=this.findChildren(ALL.jumpSenceDoor,"COMPELDOOR"); //
 		this.initGalobalVar();
         // 独立的形状，打开一个调试区域,游戏图像的，逻辑区域;
         // 开始调试模式:
