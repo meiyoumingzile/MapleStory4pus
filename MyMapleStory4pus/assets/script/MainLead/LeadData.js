@@ -81,7 +81,7 @@ window.LEADDATA={
 			jump:100,
 		},
 		air:{
-			jump:460,
+			jump:520,
 		},
 	},
 	BeginAccKind:{//各种动作获得的加速度

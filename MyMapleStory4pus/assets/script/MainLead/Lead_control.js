@@ -51,6 +51,8 @@ cc.Class({
 	        //speed: cc.v2(0, 0),
 			jumpSpeedy: 0,      //跳跃初始速度
 			jumptime:0,
+			jumoAidTime:0,
+
 	        maxSpeedx:0,        //限制的最大速度
 			maxSpeedup:0, 		//限制的最大速度
 			maxSpeeddown:0,     //限制的最大速度
@@ -144,13 +146,19 @@ cc.Class({
 			this.pause(true);
 			return ;
 		}
+		
 		this.data.preScaleX=this.node.scaleX;
 		this.data.preAct=this.data.act;
 		this.data.speed = this.body.linearVelocity;
+		var otherSpeed=cc.v2(0,0);
+		for(var a in this.coll.collFloorDir){
+			otherSpeed=this.coll.collFloorDir[a].getComponent(cc.RigidBody).linearVelocity;
+		}
+		this.data.relSpeed = cc.v2(this.data.speed.x-otherSpeed.x,this.data.speed.y-otherSpeed.y);
 		//cc.log(speed);
 		this.updatePhyColl(dt,this.data.speed);//判断按键状态
 		this.dealKey(dt,this.data.speed);//判断按键状态
-		this.dealState(dt,this.data.speed);//处理人物状态和动画切换
+		this.dealState(dt,this.data.relSpeed);//处理人物状态和动画切换
 		this.updateParameter(dt,this.data.speed);
 		this.calSpeed(dt,this.data.speed);
 		this.body.linearVelocity = this.data.speed;
@@ -183,6 +191,11 @@ cc.Class({
 			}
 			if(other.node.name=="Object2_Ladder"){//爬梯子
 				this.coll.climbOb[1]=other.node;
+			}
+			if(other.name.indexOf("jumpAid")!=-1&&other.node.getComponent("jumpAid")){//碰到弹跳器
+				if(this.body.linearVelocity.y<0&&this.node.y>other.node.y){
+					other.node.getComponent("jumpAid").jumpState();//在里面实现人物速度，this.data.jumoAidTime=20;
+				}
 			}
 			if(other.node.name.indexOf("Enemy")!=-1){
 				this.collEnemy(contact, other,cf);
@@ -265,11 +278,16 @@ cc.Class({
 					this.data.isClimb=true;
 				}
 			}
+			
 			if(other.node.name.indexOf("Enemy")!=-1){
 				this.collEnemy(contact, other,cf);
 			}else if(other.node.name.indexOf("Object")!=-1){
-				if(other.node.name.indexOf("Object2")!=-1&&(cf.y!=-1||this.data.isClimb)){
+				if(other.node.name.indexOf("Object2")!=-1&&(cf.y!=-1||this.data.isClimb||this.key.down&&this.key.jump)){
 					contact.disabled=true;
+					if(this.coll.collFloorDir[other._id]){
+						delete this.coll.collFloorDir[other._id];
+						this.coll.collFloorCnt--;
+					}
 				}else{
 					if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
 						this.coll.collFloorDir[other._id]=other;
@@ -357,9 +375,12 @@ cc.Class({
 		}
 		if(this.data.state[0].indexOf("air")!=-1){
 			var maxJumptime=8;
-			if(this.key.attack&&this.coll.collWaterCnt>0&&this.data.state[2]=="umbrellaLead"){
+			if(this.data.jumoAidTime>0){
+				this.data.jumoAidTime--;
+				speed.y=this.data.jumpSpeedy*2;
+			}else if(this.key.attack&&this.coll.collWaterCnt>0&&this.data.state[2]=="umbrellaLead"){
 				speed.y=0;
-			}else if(this.key.jump&&!this.data.isLie){//按了跳跃还没有趴着
+			}else if(this.key.jump&&!this.data.isLie&&!this.key.down){//按了跳跃还没有趴着
 				if(this.data.act=="climb"&&this.coll.climbOb[1]&&this.coll.climbOb[0]){
 					speed.y=this.data.jumpSpeedy;
 				}else if(this.data.state[2].indexOf("Pterosaur")!=-1){
@@ -397,7 +418,7 @@ cc.Class({
 			}
 		}else if(this.data.state[0].indexOf("water")!=-1){
 			this.data.jumptime=0;
-			if(this.key.jump&&!this.data.isLie){//按了跳跃还没有趴着
+			if(this.key.jump&&!this.data.isLie&&!this.key.down){//按了跳跃还没有趴着
 				speed.y=this.data.jumpSpeedy;
 			}
 			if(this.key.acc){//按了加速
@@ -449,7 +470,7 @@ cc.Class({
 	/*	if((this.data.act!="walk"||this.data.act!="run")&&this.coll.collFloorCnt>0){
 			this.data.
 		}*/
-		if(this.data.scaleReverse){
+		if(this.data.scaleReverse){//特判人物方向改变的时点，避免转身时候闪一帧跳跃动画
 			this.data.scaleReverse=false;
 			return;
 		}
@@ -1047,7 +1068,7 @@ cc.Class({
 		return false;
 	},
 	judgeIsLie:function(){
-		if((this.key.down ||this.coll.collCeilCnt>0)&&this.coll.collFloorCnt>0&&this.data.state[2].indexOf("Lead")!=-1){
+		if((this.key.down ||this.coll.collCeilCnt>0)&&this.coll.collFloorCnt>0&&this.data.state[2].indexOf("Lead")!=-1&&Math.abs(this.data.relSpeed.y)<1){
 			if(this.coll.climbOb[1]==null&&this.data.nowArms!="scooter"){
 				return true;
 			}else if(this.coll.climbOb[1]&&(this.coll.climbOb[0]==null||Math.abs(this.node.x-this.coll.climbOb[0].x)>=4)){

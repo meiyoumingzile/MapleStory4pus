@@ -14,7 +14,7 @@ cc.Class({
 		ALL.CamNode=this.node;
         this.canvas = this.target.parent;//得到父节点是Canvas
         this.winSize=ALL.MainCanSc.getWindows();
-        this.fixSz=cc.v2(this.winSize.x/16,this.winSize.y/16);
+        this.fixSz=cc.v2(this.winSize.x/16,0);
         this.setCameraPos(ALL.Lead.position);
         
     },
