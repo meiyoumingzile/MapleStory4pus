@@ -10,9 +10,14 @@ cc.Class({
     onLoad: function () {
         this.body = this.node.getComponent(cc.RigidBody);
         this.body.linearVelocity=this.speed;
-        var sc=cc.v2(ALL.MainCanvas.width/2,ALL.MainCanvas.height/2);
-        this.rangeX=[Math.max(-sc.x,this.node.x-this.rangeSize.x/2),Math.min(sc.x,this.node.x+this.rangeSize.x/2)];
-        this.rangeY=[Math.max(-sc.y,this.node.y-this.rangeSize.y/2),Math.min(sc.y,this.node.y+this.rangeSize.y/2)];
+        if(this.rangeSize.x==0&&this.rangeSize.y==0){
+            this.rangeX=[-this.node.parent.width/2,this.node.parent.width/2];
+            this.rangeY=[-this.node.parent.height/2,this.node.parent.height/2];
+        }else{
+            var sc=cc.v2(ALL.MainCanvas.width/2,ALL.MainCanvas.height/2);
+            this.rangeX=[Math.max(-sc.x,this.node.x-this.rangeSize.x/2),Math.min(sc.x,this.node.x+this.rangeSize.x/2)];
+            this.rangeY=[Math.max(-sc.y,this.node.y-this.rangeSize.y/2),Math.min(sc.y,this.node.y+this.rangeSize.y/2)];
+        }
     },
 
     
