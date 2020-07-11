@@ -65,6 +65,7 @@ cc.Class({
 			life:cc.v2(0,0),
 			time:cc.v2(0,8),
 			pause:false,
+			halfHeart:false,
     	};
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
