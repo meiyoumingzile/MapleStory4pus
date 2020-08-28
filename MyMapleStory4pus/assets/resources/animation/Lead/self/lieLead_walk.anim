@@ -1,9 +1,9 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "Lead_lie",
+  "_name": "lieLead_walk",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.85,
+  "_duration": 0.7666666666666667,
   "sample": 60,
   "speed": 1,
   "wrapMode": 2,
@@ -18,13 +18,13 @@
             }
           },
           {
-            "frame": 0.4166666666666667,
+            "frame": 0.36666666666666664,
             "value": {
               "__uuid__": "6c53ec68-1c60-417e-acf0-6b368696ed53"
             }
           },
           {
-            "frame": 0.8333333333333334,
+            "frame": 0.75,
             "value": {
               "__uuid__": "e650aee0-1f1a-4179-8b3c-01347429cf45"
             }

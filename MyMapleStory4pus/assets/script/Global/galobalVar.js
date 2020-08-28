@@ -3,6 +3,14 @@
 *///////////////////
 window.MainLead=cc.node;
 window.ALL = {
+    FAB:{},//预制体资源
+    RES:{
+        is:false,
+        GamePropFrame:{},//道具图标资源
+        FAB:{},//预制体资源
+        LeadAnim:[],
+    },
+	GamePropFrame:{},//道具图标资源
     MainCanSc:{//公用脚本,也就是sumcanvas
         default:null,
         type:cc.script,
@@ -28,8 +36,7 @@ window.ALL = {
     scDoor:null,//
     comScDoor:null,//compel强制跳转厂家
 
-	FAB:{},//预制体资源
-	GamePropFrame:{},//道具图标资源
+   
     INF:1000000000,
     inf:0.1,
     

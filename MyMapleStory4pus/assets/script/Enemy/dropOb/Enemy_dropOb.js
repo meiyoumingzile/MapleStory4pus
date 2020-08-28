@@ -77,7 +77,7 @@ cc.Class({
 					if(sc.x==1&&sc.y==1){
 						for(var i=-2;i<3;i++){
 							if(i!=0){
-								var newDropOb=cc.instantiate(ALL.FAB["Enemy_dropOb"]);
+								var newDropOb=cc.instantiate(ALL.RES.FAB["Enemy_dropOb"]);
 								newDropOb.getComponent("Enemy_dropOb").init(5,cc.v2(i*160,-Y/2.4),cc.v2(0.4,0.4));
 								newDropOb.setPosition(p.x,p.y+10);
 								newDropOb.getComponent(cc.RigidBody).gravityScale=1;

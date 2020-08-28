@@ -298,6 +298,10 @@ window.ENDATA={
 		phySize:[cc.v2(70,50),cc.v2(60,38),cc.v2(120,80),cc.v2(50,35)],
 		life:[1,1,1,2],
 	},
+	stabBoard:{
+		specialEffect:["invincible"],
+		life:[1],
+	},
 	ghost:{
 		safeDis:[cc.v2(300,300),cc.v2(600,600),cc.v2(800,300)],
 		specialEffect:["invincible","invincible","null"],
@@ -321,12 +325,12 @@ window.ENDATA={
 		beginSpeed:[cc.v2(160,0),cc.v2(200,100),cc.v2(200,100)],
 		phySize:[cc.v2(120,78),cc.v2(110,70),cc.v2(110,70)],
 		life:[1,1,1],
-		damArm:["DragonFire","DragonBattery","Stegosaurus","ham","boomerang","bomb"],
+		damArm:["DragonFire","DragonBattery","Stegosaurus","ham","boomerang","bomb","fireDarts"],
 	},
 	specialStone:{
 		beginSpeed:[cc.v2(0,0),cc.v2(0,0)],
 		life:[1,1],
-		damArm:["DragonFire","DragonBattery","Stegosaurus","ham","boomerang","bomb"],
+		damArm:["DragonFire","DragonBattery","Stegosaurus","ham","boomerang","bomb","fireDarts"],
 	},
 };
 //以上是敌人的基本数据

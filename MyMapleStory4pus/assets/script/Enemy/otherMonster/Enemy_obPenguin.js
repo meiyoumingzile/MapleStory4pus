@@ -73,13 +73,13 @@ cc.Class({
 				this.body.linearVelocity=cc.v2(this.beginSpeed.x*this.fp,0);
 				this.makeOb();
 			}
-        }else if(other.node.name.indexOf("Arms_")!=-1){//碰到了人物武器,在人物武器类里实现
+        }else if(other.node.name.indexOf("Arm_")!=-1){//碰到了人物武器,在人物武器类里实现
 			
 		}
     },
     
 	makeOb: function(){
-		var newDropOb=cc.instantiate(ALL.FAB["Enemy_dropOb"]);
+		var newDropOb=cc.instantiate(ALL.RES.FAB["Enemy_dropOb"]);
         newDropOb.getComponent("Enemy_dropOb").init(5,cc.v2(0,-1000));
         newDropOb.setPosition(this.node.x,this.node.y+(this.obPos?this.obPos.y:1000));
 		newDropOb.getComponent(cc.RigidBody).gravityScale=1;

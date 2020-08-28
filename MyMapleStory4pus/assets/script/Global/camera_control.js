@@ -11,7 +11,7 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         this.camera = this.getComponent(cc.Camera);
-		ALL.CamNode=this.node;
+		ALL.CamNode=this.node;//给全局变量赋值
         this.canvas = this.target.parent;//得到父节点是Canvas
         this.winSize=ALL.MainCanSc.getWindows();
         this.fixSz=cc.v2(this.winSize.x/16,0);

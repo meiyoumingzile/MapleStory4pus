@@ -25,7 +25,7 @@ cc.Class({
         if(other.node.name.indexOf("Arms_FireDarts")!=-1||
            other.node.name.indexOf("Brontosaurus_Arms")!=-1||
            other.node.name.indexOf("Fierydragon_Arms")!=-1||
-           (other.node.name=="Lead"&&other.node.getComponent("Lead_control").Data.state.indexOf("Stegosaurus_attack")!=-1)
+           (other.node.name=="Lead"&&other.tag==0&&other.node.getComponent("Lead_control").Data.state.indexOf("Stegosaurus_attack")!=-1)
             ){
             return true;
         }else{

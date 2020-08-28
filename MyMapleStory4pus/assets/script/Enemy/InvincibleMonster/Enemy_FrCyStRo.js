@@ -23,6 +23,7 @@ cc.Class({
 			this.playState="Enemy_specialStone"+this.ep.kind;
 			this.ep.damage=0;
 			this.node.removeComponent(cc.PhysicsBoxCollider);//移除矩形碰撞；
+			this.body.type=1;
 		}else{
 			this.playState="Enemy_"+this.ep.category+this.ep.kind;
 			this.node.removeComponent(cc.PhysicsPolygonCollider);//移除多边形碰撞；

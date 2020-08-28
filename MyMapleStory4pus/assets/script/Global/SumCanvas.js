@@ -3,10 +3,6 @@ cc.Class({
     extends: cc.Component,
  
     properties: {
-		bottomBar:{
-            default:null,
-            type:cc.Node,
-        }, 
 		list:{
 			default:null,
             type:cc.List,
@@ -15,11 +11,13 @@ cc.Class({
         gravity: cc.v2(0, -800), // 系统默认的
 		lifeGroup:[],
 		timeGroup:[],
+		halfHeart:cc.Node,
+		usingArm:cc.Node,
 		fruitFrameList:[],
     },
  
-    // use this for initialization
-    onLoad: function () {
+	// use this for initialization
+	onLoad: function () {
 		        // 游戏引擎的总控制
         // cc.Director, cc.director 区别呢？ 
         // 大写的cc.Director是一个类, 小写cc.direcotr全局的实例
@@ -27,10 +25,7 @@ cc.Class({
 		cc.director.getPhysicsManager().enabledDebugDraw = true;//显示碰撞框
 		cc.director.getCollisionManager().enabled = true;//初始化启用碰撞系统
 		cc.director.getCollisionManager().enabledDebugDraw = true;//显示碰撞框
-		ALL.jumpSenceDoor=this.findChildren(this.node,"JUMPSCENES"); //
-		ALL.scDoor=this.findChildren(ALL.jumpSenceDoor,"DOOR"); //
-		ALL.comScDoor=this.findChildren(ALL.jumpSenceDoor,"COMPELDOOR"); //
-		this.initGalobalVar();
+		
         // 独立的形状，打开一个调试区域,游戏图像的，逻辑区域;
         // 开始调试模式:
         if (this.is_debug) { // 开启调试信息
@@ -38,31 +33,40 @@ cc.Class({
             cc.director.getPhysicsManager().debugDrawFlags = Bits.e_jointBit | Bits.e_shapeBit;
         } else { // 关闭调试信息
             cc.director.getPhysicsManager().debugDrawFlags = 0;
-        }
+		}
+		
 		cc.director.getPhysicsManager().gravity = this.gravity;// 重力加速度的配置
-    },
+	},
 	__preload: function () {//3种样式，5种类型
-		cc.director.pause();
+		this.__preInit();
 		this.onLoadResources();
 		
+		cc.director.pause();
+	},
+	__preInit: function () {
+		ALL.MainCanSc=this.node.getComponent("SumCanvas");
+        ALL.MainCanvas=this.node;
+		ALL.jumpSenceDoor=this.findChildren(this.node,"JUMPSCENES"); //
+		ALL.scDoor=this.findChildren(ALL.jumpSenceDoor,"DOOR"); //
+		ALL.comScDoor=this.findChildren(ALL.jumpSenceDoor,"COMPELDOOR"); //
     },
 	initGalobalVar:function(){
-        ALL.MainCanSc=this.node.getComponent("SumCanvas");
-		//cc.log(this.Lead);
-        ALL.MainCanvas=this.node;
+		this.bottomBar=cc.instantiate(ALL.RES.FAB["bottomBar"]);//添加血框
+		ALL.CamNode.addChild(this.bottomBar);
+		ALL.menu=cc.instantiate(ALL.RES.FAB["MENU"]);//添加菜单
+		ALL.CamNode.addChild(ALL.menu);
 		this.lifeGroup=this.findChildren(this.bottomBar,"lifeGroup");
 		this.timeGroup=this.findChildren(this.bottomBar,"timeGroup");
-		
+		this.halfHeart=this.findChildren(this.bottomBar,"halfHeart");
+		this.usingArm=this.findChildren(this.bottomBar,"usingArm");
+
 		//以下是屏幕适配
 		let sz=cc.view.getVisibleSize();
 		var scale=sz.width/this.bottomBar.width;
 		this.bottomBar.scaleX=scale;//屏幕适配
 		this.bottomBar.scaleY=scale;//屏幕适配
-		ALL.menu=this.findChildren(this.bottomBar.parent,"MENU");
 	},
-    // update: function (dt) {
- 
-    // },
+   // update: function (dt) { },
 	onDestroy:function(){
         ALL.lastSence=this.node.parent.name;
     },
@@ -83,7 +87,7 @@ cc.Class({
     },
 
     addEffect:function(X,Y,self,effect){//添加效果
-        var neweffect=cc.instantiate(ALL.FAB["effects"]);
+        var neweffect=cc.instantiate(ALL.RES.FAB["effects"]);
         neweffect.setPosition(X,Y);
         neweffect.getComponent("effect").kind=effect;
         self.node.parent.addChild(neweffect);
@@ -122,54 +126,48 @@ cc.Class({
         self.Data.specialEffect=REM.Data.specialEffect;
         self.Data.nowArms=REM.Data.nowArms;
     },
-	onLoadResources:function(){
+	onLoadResources:function(){//加载资源
 		var self=this;
-		var fruitUrl="picture/Goods/Fruit";
-		var oll=[false,false,false,false];
+		var oll=[false,false,false];
 		var resSuccess=function(){//临时函数，判断异步加载完毕
 			var i=0;
 			for(i=0;i<oll.length&&oll[i];i++);
 			if(i==oll.length){
+				ALL.RES.is=true;
+				self.initGalobalVar();
 				MainLead.dataBegin();
 				return true;
 			}else{
 				return false;
 			}
 		};
-		cc.loader.loadResDir(fruitUrl,cc.SpriteFrame,function (err, assets) {
-			self.fruitFrameList=assets;
+		
+		cc.loader.loadResDir("prefab",cc.Prefab,function (err, assets) {
+			for(var i=0;i<assets.length;i++){
+				ALL.RES.FAB[assets[i].name]=assets[i];
+			}
+			for(var k in ENDATA.IND){//索引怪物小类别和大类别
+				ALL.RES.FAB[k]=ALL.RES.FAB[ENDATA.IND[k]];
+			}
 			oll[0]=true;
 			if(resSuccess()){
 				cc.director.resume();
 			}
 		});
-		cc.loader.loadResDir("prefab",cc.Prefab,function (err, assets) {
+		cc.loader.loadResDir("animation/Lead",function (err, assets) {
 			for(var i=0;i<assets.length;i++){
-				ALL.FAB[assets[i].name]=assets[i];
-			}
-			for(var k in ENDATA.IND){//索引怪物小类别和大类别
-				ALL.FAB[k]=ALL.FAB[ENDATA.IND[k]];
+				ALL.RES.LeadAnim[i]=assets[i];
 			}
 			oll[1]=true;
 			if(resSuccess()){
 				cc.director.resume();
 			}
 		});
-		cc.loader.loadResDir("animation/Lead",function (err, assets) {
-			var an=ALL.Lead.getComponent(cc.Animation);
-			for(var i=0;i<assets.length;i++){
-				an.addClip(assets[i]);
-			}
-			oll[2]=true;
-			if(resSuccess()){
-				cc.director.resume();
-			}
-		});
 		cc.loader.loadResDir("picture/Goods",cc.SpriteFrame,function (err, assets) {
 			for(var i=0;i<assets.length;i++){
-				ALL.GamePropFrame[assets[i].name]=assets[i];
+				ALL.RES.GamePropFrame[assets[i].name]=assets[i];
 			}
-			oll[3]=true;
+			oll[2]=true;
 			if(resSuccess()){
 				cc.director.resume();
 			}
@@ -200,7 +198,7 @@ cc.Class({
 		return objClone;
 	},
 	addEbulletA:function(kind,X,Y,dir){
-        var newEbullet=cc.instantiate(ALL.FAB["Enemy_Ebullet_A"]);
+        var newEbullet=cc.instantiate(ALL.RES.FAB["Enemy_Ebullet_A"]);
         newEbullet.getComponent("Enemy_Ebullet_A").init(kind,dir);
         newEbullet.setPosition(X,Y);
         ALL.MainCanvas.addChild(newEbullet);

@@ -54,7 +54,7 @@ cc.Class({
        if(other.node.name.indexOf("Enemy")==0){
 			var js=other.node.getComponent("EnemyPublic");
             if(js&&js.specialEffect=="null"){
-				js.changeLife(-this.damage,this.ap.category);
+				js.changeLife(-this.ap.damage,this.ap.category);
             }
         }
     },

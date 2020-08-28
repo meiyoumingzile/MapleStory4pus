@@ -5,7 +5,7 @@ cc.Class({
     },
 	start:function(){
 		this.ap=this.node.getComponent("ArmPublic");
-		this.ap.damage=3;
+		this.ap.damage=4;
     },
 	init: function(beginSpeed,time1=3,time2=1){//time1是多久爆炸，time2是爆炸持续时间
 		this.ap=this.node.getComponent("ArmPublic");
@@ -26,6 +26,7 @@ cc.Class({
 				this.isDam=true;
 				this.node.name="Arm_bomb";
 				this.player.play("blast2");
+				this.node.group="Arm";
 				this.phyBox.enabled=true;
 				this.node.removeComponent(cc.PhysicsCircleCollider);
 				this.body.linearVelocity=cc.v2(0,0);

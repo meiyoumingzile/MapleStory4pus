@@ -1,10 +1,15 @@
 window.LEADDATA={
+	LIFE:{
+		up:8,
+	},
 	ARMS:{
 		changePhyArm:{"umbrellaLead":"umbrella","scooterLead":"scooter"},
 		attackUp:["spear","boomerang"],
 		attackWater:["spear","ham","axe","boomerang","bomb"],
+		disappearEGG:["axe","boomerang","waterGun","DragonBattery","DragonFire","DragonSto","fireDarts"],//碰到蛋消失
 		maxCnt:{
 			axe:2,
+			fireDarts:2,
 			waterGun:1,
 			ham:1,
 			fire:1,
@@ -31,8 +36,8 @@ window.LEADDATA={
 		*/
 
 		indList:{//
-			Lead:["axe","waterGun","boomerang","fire","ham","spear","bomb","umbrella"],
-			lieLead:["axe","waterGun","boomerang","fire","ham","spear","bomb","umbrella"],
+			Lead:["axe","waterGun","boomerang","fire","ham","spear","bomb","umbrella","fireDarts"],
+			lieLead:["axe","waterGun","boomerang","fire","ham","spear","bomb","umbrella","fireDarts"],
 			umbrellaLead:["umbrella"],
 			scooterLead:["scooter"],
 			Fierydragon:["DragonFire"],
@@ -48,6 +53,7 @@ window.LEADDATA={
 	AttackTime:{
 		yes:{//攻击动画长度
 			axe:0.1,
+			fireDarts:0.1,
 			waterGun:0.4,
 			ham:1,
 			fire:0.8,
@@ -62,6 +68,7 @@ window.LEADDATA={
 		},
 		no:{//间隔攻击动画长度
 			axe:0.2,
+			fireDarts:0.2,
 			waterGun:0.5,
 			ham:0.1,
 			fire:0.1,

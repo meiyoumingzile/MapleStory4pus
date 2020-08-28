@@ -25,10 +25,10 @@ cc.Class({
     update: function (dt) {
         if(this.visCanvas()==true&&!this.isLoad){//判断是否在屏幕中
             this.isLoad=true;
-			//cc.log(ALL.FAB["Enemy_"+this.category]);
+			//cc.log(ALL.RES.FAB["Enemy_"+this.category]);
 			var str=ENDATA.IND[this.category]?ENDATA.IND[this.category]:this.category;
-			if(ALL.FAB["Enemy_"+str]&&this.__cnt<this.maxCnt){
-				var newpre=cc.instantiate(ALL.FAB["Enemy_"+str]);
+			if(ALL.RES.FAB["Enemy_"+str]&&this.__cnt<this.maxCnt){
+				var newpre=cc.instantiate(ALL.RES.FAB["Enemy_"+str]);
 				newpre.setPosition(this.mainPos.x,this.mainPos.y);
 				if(newpre.getComponent("EnemyPublic"))
 					newpre.getComponent("EnemyPublic").mkScript=this;

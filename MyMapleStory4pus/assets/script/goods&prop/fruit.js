@@ -23,7 +23,7 @@ cc.Class({
 	onCollisionEnter: function (other, self){
 		var sp=this.node.getComponent(cc.Sprite);
 		
-		if(other.node.name=="Lead"&&sp.spriteFrame!=null){
+		if(other.node.name=="Lead"&&other.tag==0&&sp.spriteFrame!=null){
 			sp.spriteFrame=null;
 			MainLead.changeTime(1);
 			ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"note");

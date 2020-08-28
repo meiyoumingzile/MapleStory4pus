@@ -23,7 +23,7 @@ cc.Class({
 
     onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
         cc.log(MainLead.coll,MainLead.coll.collFloorDir[self._id]);
-		if(other.node.name=="Lead"&&MainLead.coll.collFloorDir[self._id]){
+		if(other.node.name=="Lead"&&other.tag==0&&MainLead.coll.collFloorDir[self._id]){
             this.visDrop();
             var fun = function(){
                 if(MainLead.coll.collFloorDir[self._id]){//还被踩着

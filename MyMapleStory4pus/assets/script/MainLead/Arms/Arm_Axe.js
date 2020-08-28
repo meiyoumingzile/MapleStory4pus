@@ -42,17 +42,22 @@ cc.Class({
 				}else if(d==0){
 					//cc.log(other.node);
 					if(other.node.name.indexOf("specialStone")!=-1){
-						if(this.reboundCnt==0){
-							this.reboundCnt++;
-							this.body.linearVelocity=cc.v2(-this.body.linearVelocity.x,-this.body.linearVelocity.y/2);
-						}else{
-							this.ap.die();
-						}
+						this.rebound();
 					}
 				}
             }
         }else if(other.node.name.indexOf("Stone1")!=-1){
            this.body.linearVelocity.x=-this.body.linearVelocity.x;
-        }
-    },
+        }else if(other.node.name=="EGG"){
+			this.rebound();
+		}
+	},
+	rebound:function(){
+		if(this.reboundCnt==0){
+			this.reboundCnt++;
+			this.body.linearVelocity=cc.v2(-this.body.linearVelocity.x,-this.body.linearVelocity.y/2);
+		}else{
+			this.ap.die();
+		}
+	},
 });

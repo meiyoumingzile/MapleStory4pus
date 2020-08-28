@@ -43,7 +43,7 @@ cc.Class({
 
 
     onCollisionEnter: function (other, self){
-        if(other.node.name=="Lead"){
+        if(other.node.name=="Lead"&&other.tag==0){
             var otherAabb = other.world.aabb;
             var otherPreAabb = other.world.preAabb.clone();
             var selfAabb = self.world.aabb;
@@ -89,7 +89,7 @@ cc.Class({
     },
 
     onCollisionExit: function (other, self){
-        if(other.node.name=="Lead"){
+        if(other.node.name=="Lead"&&other.tag==0){
             if((ALL.Lead.y+other._size.height/2)-(this.node.y-self._size.height/2)<1){//人物在物体下面
                 this.collisionY=0;
             }else if((ALL.Lead.y-other._size.height/2)-(this.node.y+self._size.height/2)>-1){//人物在物体上面

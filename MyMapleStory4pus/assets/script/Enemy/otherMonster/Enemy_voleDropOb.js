@@ -103,7 +103,7 @@ cc.Class({
     
     
 	makeOb: function(){
-		this.newDropOb=cc.instantiate(ALL.FAB["Enemy_dropOb"]);
+		this.newDropOb=cc.instantiate(ALL.RES.FAB["Enemy_dropOb"]);
         this.newDropOb.getComponent("Enemy_dropOb").init(4,cc.v2(0,0));
         this.newDropOb.setPosition(this.node.x,this.node.y+this.phyColl.size.height/2+15);
 		this.newDropOb.getComponent(cc.RigidBody).gravityScale=0;
