@@ -8,7 +8,6 @@ cc.Class({
 	
     // use this for initialization
     onLoad: function () {
-		this.pets=["Fierydragon","Brontosaurus","Pterosaur","Stegosaurus","Seadragon"];
 		this.preArms="axe";
 		this.scheduleDir={},
 		this.coll={
@@ -61,7 +60,6 @@ cc.Class({
 	        speed: cc.v2(0,0),//自己的速度
 			nowArmsCnt:{},
 			nowArms:"fireDarts",
-			gotProp:{goods_axe:true},
 			hiddenProp:{},
 			armColl:{},
 			life:cc.v2(0,0),
@@ -69,7 +67,12 @@ cc.Class({
 			pause:false,
 			halfHeart:true,
 
-
+			//以下是宝物和武器是否拥有
+			goods:{goods_axe:true},
+			potCnt:0,
+			potBit:[false,false,false,false,false,false,false,false,false],//哪个瓶子有没有
+			chooseDragon:"",//选择的龙
+			__chooseDragon:false,//有没有存包里
     	};
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
@@ -317,7 +320,7 @@ cc.Class({
 		if(other.node.name.indexOf("Ladder")!=-1){
 			this.coll.climbOb[0]=other.node;
 		}else if(other.node.name.indexOf("goods")!=-1){
-			this.getGoods(other.node.name.replace("goods_",""));
+			this.useGoods(other.node.name.replace("goods_",""));
 		}
 	},
 	onCollisionExit: function (other, self){
@@ -332,25 +335,27 @@ cc.Class({
 		for(var i=0;i<ALL.RES.LeadAnim.length;i++){
 			an.addClip(ALL.RES.LeadAnim[i]);
 		}
-		if(ALL.SaveLead!=null){
-			this.changeLife(ALL.SaveLead.life.x,ALL.SaveLead.life.y);
-			this.changeTime(ALL.SaveLead.time.x);
+		if(SAVE.SaveLead!=null){
+			this.changeLife(SAVE.SaveLead.life.x,SAVE.SaveLead.life.y);
+			this.changeTime(SAVE.SaveLead.time.x);
 			this.setHalfHeart();
 			ALL.MainCanSc.usingArm.getComponent(cc.Sprite).spriteFrame=ALL.RES.GamePropFrame["goods_"+this.data.nowArms];
 			//以上是初始化人物界面
 
-			this.data=ALL.SaveLead;
+			this.data=SAVE.SaveLead;
 			var find=ALL.MainCanSc.findChildren;
-			var p=cc.v2(0,0);
+			var p=SAVE.targetPos;
 			try{
-				p=find(find(find(ALL.jumpSenceDoor,ALL.preDoor.kind),ALL.preDoor.tag),ALL.preSence);
+				if(SAVE.targetPos==null){
+					p=find(find(find(ALL.jumpSenceDoor,SAVE.preDoor.kind),SAVE.preDoor.tag),SAVE.preSence);
+				}
 			}catch(ex){
 				cc.log(ex);
 			}
 			//cc.log(p);
 			this.node.setPosition(cc.v2(p.x+this.data.saveDeviation.x,p.y+this.data.saveDeviation.y));
 			ALL.CamNode.getComponent("camera_control").setCameraPos(this.node.position);
-			ALL.SaveLead=null;
+			SAVE.SaveLead=null;
 			this.setPhy(this.data.state[2],true);
 			this.body.linearVelocity = this.data.speed;
 		}else{
@@ -367,6 +372,7 @@ cc.Class({
 			this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
 			this.setPhy();
 		}
+		ALL.menuSc.init();
 		var nowDraw=this.data.state[2]+"_"+this.data.act;
 		this.node.scale=ALL.scaleLead; //人物大小适配场景
 		this.player.play(nowDraw);
@@ -665,7 +671,6 @@ cc.Class({
 	changeLife: function(chLife,chLifeUp=0){//改变体力和体力上限
 		var child = ALL.MainCanSc.lifeGroup.getChildren();
 		var i=child.length;
-		cc.log(chLife,chLifeUp);
 		while(chLifeUp>0&&this.data.life.y<LEADDATA.LIFE.up){//加一个上限
 			let newLife = new cc.Node();
 			newLife.addComponent(cc.Sprite);
@@ -888,8 +893,8 @@ cc.Class({
 			}else{
 				newarm.getComponent("Arm_boomerang").init(cc.v2(sx,0),fp,0);//设置速度
 			}
-			var armY=this.borderY(1);
-			var armX=this.node.x+(this.phyColl.size.width+newarm.width)/2*fp;
+			var armY=this.borderY(-1)+(this.data.isLie?newarm.height/2:newarm.height*2);
+			var armX=this.node.x+(this.phyColl.size.width+newarm.width)/3*fp;
 			
 			newarm.setPosition(armX,armY);
 			this.node.parent.addChild(newarm);
@@ -1003,11 +1008,14 @@ cc.Class({
 		}
 		return this.data.isAttackAct;
 	},
-	getGoods:function(name){
+	useGoods:function(name){
 		var i=0;
-		for(i=0;i<this.pets.length&&name.indexOf(this.pets[i])==-1;i++);
-		if(i<this.pets.length){//判断是不是骑着龙
-			this.setPhy(this.pets[i]);
+		for(i=0;i<LEADDATA.Pets.length&&name.indexOf(LEADDATA.Pets[i])==-1;i++);
+		if(i<LEADDATA.Pets.length){//判断是不是骑着龙
+			this.data.chooseDragon=LEADDATA.Pets[i];
+			this.data.__chooseDragon=false;
+			ALL.menuSc.displayDragon();
+			this.setPhy(LEADDATA.Pets[i]);
 		}else{
 			this.setArm(name);
 			if(this.data.state[2].indexOf("Lead")==-1){
@@ -1027,15 +1035,19 @@ cc.Class({
 		}
 		
 	},
-	displayProp(name,is){//道具名称
-		var menu=ALL.menu.getComponent("menu_control");
-		var i=0;
-		for(i=0;i<menu.itemList.length&&menu.itemList[i].name==name;i++);
-		var node=i<menu.itemList.length?menu.itemList[i]:null;
-		this.data.gotProp[name]=is;
-		if(node)
-			node.SpriteFrame=ALL.RES.GamePropFrame[is?name:"withoutIco"];
-    },
+	getGoods:function(name,potId=0){//如果是瓶子，要传入id
+		if(name=="pot"){
+			var have=this.data.potBit[potId];
+            if(have==false){
+				this.data.potBit[potId]=true;
+				this.data.potCnt++;
+				ALL.menuSc.displayPot(this.data.potCnt);
+            }
+		}else if(this.data.goods[name]!=null){
+			this.data.goods[name]=true;
+			ALL.menuSc.displayProp(name);
+		}
+	},
 	getAttackFp:function(){
 		if(this.key.up&&!this.data.isLie&&!this.data.isFall&&
 			LEADDATA["ARMS"]["attackUp"].indexOf(this.data.nowArms)!=-1){//可以向上发射的武器包含了当前武器
@@ -1124,9 +1136,9 @@ cc.Class({
 				for(var i=0;i< ch.length;i++){
 					if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
 						this.saveData(cc.v2(0,0));
-						ALL.preDoor.kind=ALL.scDoor.name;
-						ALL.preDoor.tag=sc[j].name;
-						ALL.preDoor.name=ch[i].name;
+						SAVE.preDoor.kind=ALL.scDoor.name;
+						SAVE.preDoor.tag=sc[j].name;
+						SAVE.preDoor.name=ch[i].name;
 						cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
 						return true;
 					}
@@ -1144,16 +1156,20 @@ cc.Class({
 					}else if(Math.abs(ch[i].y)>ALL.MainCanvas.height/2){
 						len.y=(ch[i].height/2+10)*(ch[i].y>0?1:-1);
 					}
-					this.saveData(len,sc[j].name);
-					ALL.preDoor.kind=ALL.comScDoor.name;
-					ALL.preDoor.tag=sc[j].name;
-					ALL.preDoor.name=ch[i].name;
+					this.saveData(len);
+					SAVE.preDoor.kind=ALL.comScDoor.name;
+					SAVE.preDoor.tag=sc[j].name;
+					SAVE.preDoor.name=ch[i].name;
 					cc.director.loadScene(ch[i].name)//ch[i].name是要切换场景的名称
 					return true;
 				}
 			}
 		}
 		return false;
+	},
+	jumpSence:function(name,pos){//无条件跳转场景
+		this.saveData(cc.v2(0,0),pos);
+		cc.director.loadScene(name)//ch[i].name是要切换场景的名称
 	},
 	calcClimb:function(speed){
 		var clob=this.coll.climbOb[0];
@@ -1190,9 +1206,22 @@ cc.Class({
 	},
 	intoWater: function(){
 		this.data.state[0]="water";
-		if(this.data.state[2]!="Lead"&&this.data.state[2]!="Seadragon"){
+		if(this.data.state[2]=="Lead"){
+			if(LEADDATA.Pets.indexOf(this.data.chooseDragon)!=-1&&this.data.chooseDragon!="Seadragon"){
+				ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
+				this.data.__chooseDragon=false;
+				ALL.menuSc.displayDragon();
+			}
+		}else if(this.data.state[2]=="Seadragon"){
+
+		}else{
 			this.delArm();
-			this.setPhy("Lead");
+			if(LEADDATA.Pets.indexOf(this.data.chooseDragon)!=-1){
+				ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
+			}
+			this.data.__chooseDragon=false;
+			ALL.menuSc.displayDragon();
+			this.setPhy();
 		}
 	},
 	delArm:function(){
@@ -1244,12 +1273,26 @@ cc.Class({
 		this.data.canAttack=true;
 		this.data.isAttackAct=false;
 	},
-	saveData(deviation){//deviation代表偏移距离
-		ALL.preSence=cc.director.getScene().name;
+	saveData:function(deviation,targetPos=null){//deviation代表偏移距离
+		SAVE.preSence=cc.director.getScene().name;
 		this.clearSelf();
 		this.data.saveDeviation=deviation;
 		this.memsetKey(false);
-		ALL.SaveLead=cc.instantiate(this.data);
+		SAVE.SaveLead=cc.instantiate(this.data);
+		SAVE.targetPos=targetPos;
+	},
+	saveDragon(){
+		if(LEADDATA.Pets.indexOf(this.data.chooseDragon)!=-1&&this.data.state[2]!="lieLead"){
+			if(this.data.state[2]==this.data.chooseDragon&&this.data.__chooseDragon==false){//把有的龙存起来
+				this.data.__chooseDragon=true;
+				ALL.menuSc.displayDragon();
+				this.setPhy();
+			}else if(this.data.state[2]!=this.data.chooseDragon&&this.data.__chooseDragon==true){//召唤龙
+				this.data.__chooseDragon=false;
+				ALL.menuSc.displayDragon();
+				this.setPhy(this.data.chooseDragon);
+			}
+		}
 	},
 });
 

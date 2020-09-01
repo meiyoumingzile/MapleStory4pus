@@ -55,11 +55,12 @@ cc.Class({
 		ALL.CamNode.addChild(this.bottomBar);
 		ALL.menu=cc.instantiate(ALL.RES.FAB["MENU"]);//添加菜单
 		ALL.CamNode.addChild(ALL.menu);
+		ALL.menuSc=ALL.menu.getComponent("menu_control");//添加菜单
 		this.lifeGroup=this.findChildren(this.bottomBar,"lifeGroup");
 		this.timeGroup=this.findChildren(this.bottomBar,"timeGroup");
 		this.halfHeart=this.findChildren(this.bottomBar,"halfHeart");
 		this.usingArm=this.findChildren(this.bottomBar,"usingArm");
-
+		
 		//以下是屏幕适配
 		let sz=cc.view.getVisibleSize();
 		var scale=sz.width/this.bottomBar.width;

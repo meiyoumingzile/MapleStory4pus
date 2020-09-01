@@ -23,20 +23,12 @@ window.ALL = {
     	default:null,
         type:cc.Node,
     },
-	CamNode:null,
+    CamNode:null,
     
-    SaveLead:null,
-    preSence:"",
-    preDoor:{
-        kind:"",
-        tag:"",
-        name:"",
-    },
     jumpSenceDoor:null,
     scDoor:null,//
-    comScDoor:null,//compel强制跳转厂家
+    comScDoor:null,//compel强制跳转场景
 
-   
     INF:1000000000,
     inf:0.1,
     
@@ -46,9 +38,20 @@ window.ALL = {
 	scaleEnemy:cc.v2(1,1),
     scaleOb:cc.v2(1,1),
     menu:null,
+    menuSc:null,
 };
 
+window.SAVE={
+    SaveLead:null,
+    targetPos:null,//不设置则调到门附近
+    preSence:"",
+    preDoor:{
+        kind:"",
+        tag:"",
+        name:"",
+    },
 
+};
 window.KEY={
     up:cc.macro.KEY.w,
     down:cc.macro.KEY.s,

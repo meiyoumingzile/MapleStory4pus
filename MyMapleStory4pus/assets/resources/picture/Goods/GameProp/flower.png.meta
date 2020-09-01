@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "33ae035b-b808-41f3-b511-b9497339cd79",
+  "uuid": "00143ccb-024b-4677-9a91-44005b95d270",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "feedingBottle": {
+    "flower": {
       "ver": "1.0.4",
-      "uuid": "ff8b86a8-a6a6-424b-8224-6bd1cd3892f7",
-      "rawTextureUuid": "33ae035b-b808-41f3-b511-b9497339cd79",
+      "uuid": "19b754e2-704f-455c-bfd7-fc6ec09e0a2b",
+      "rawTextureUuid": "00143ccb-024b-4677-9a91-44005b95d270",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 54,
-      "height": 57,
-      "rawWidth": 54,
-      "rawHeight": 57,
+      "width": 79,
+      "height": 56,
+      "rawWidth": 79,
+      "rawHeight": 56,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

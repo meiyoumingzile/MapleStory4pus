@@ -43,6 +43,8 @@ cc.Class({
 					//cc.log(other.node);
 				}
             }
+        }else if(other.node.name.indexOf("WATER")==0){
+            this.ap.die();
         }
 	},
 });

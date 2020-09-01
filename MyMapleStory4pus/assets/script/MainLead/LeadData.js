@@ -1,4 +1,5 @@
 window.LEADDATA={
+	Pets:["Fierydragon","Brontosaurus","Pterosaur","Stegosaurus","Seadragon"],
 	LIFE:{
 		up:8,
 	},
