@@ -6,7 +6,7 @@ cc.Class({
 
     
     onLoad: function () {
-        var have=MainLead.data.goods[this.node.name];
+        var have=SAVE.SaveLead&&SAVE.SaveLead.goods[this.node.name];
         if(have&&have==true){
             this.node.destroy();
         }

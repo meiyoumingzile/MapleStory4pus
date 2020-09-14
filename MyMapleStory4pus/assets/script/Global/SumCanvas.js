@@ -37,7 +37,7 @@ cc.Class({
 		
 		cc.director.getPhysicsManager().gravity = this.gravity;// 重力加速度的配置
 	},
-	__preload: function () {//3种样式，5种类型
+	__preload: function () {
 		this.__preInit();
 		this.onLoadResources();
 		
@@ -60,7 +60,7 @@ cc.Class({
 		this.timeGroup=this.findChildren(this.bottomBar,"timeGroup");
 		this.halfHeart=this.findChildren(this.bottomBar,"halfHeart");
 		this.usingArm=this.findChildren(this.bottomBar,"usingArm");
-		
+		MainLead.dataBegin();
 		//以下是屏幕适配
 		let sz=cc.view.getVisibleSize();
 		var scale=sz.width/this.bottomBar.width;
@@ -136,7 +136,6 @@ cc.Class({
 			if(i==oll.length){
 				ALL.RES.is=true;
 				self.initGalobalVar();
-				MainLead.dataBegin();
 				return true;
 			}else{
 				return false;

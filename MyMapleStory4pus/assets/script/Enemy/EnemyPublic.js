@@ -92,7 +92,7 @@ cc.Class({
 				this.specialEffect="twinkle";
 				var count = 0;
 				this.callback = function(){
-					if(count == 11) {
+					if(count == 5) {
 						this.node.opacity=255;
 						if(this.specialEffect=="twinkle"){
 							this.specialEffect="null";

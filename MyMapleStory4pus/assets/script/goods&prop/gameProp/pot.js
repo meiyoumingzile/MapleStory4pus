@@ -7,7 +7,8 @@ cc.Class({
 
     
     onLoad: function () {
-        var have=MainLead.data.potBit[this.potId];
+        var have=SAVE.SaveLead&&SAVE.SaveLead.potBit[this.potId];
+        cc.log(have);
         if(have&&have==true){
             this.node.destroy();
         }

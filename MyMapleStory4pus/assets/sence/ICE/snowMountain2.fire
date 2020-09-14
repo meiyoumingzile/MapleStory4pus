@@ -1724,8 +1724,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        7636.923,
-        -220.002,
+        -7761.977,
+        -359.485,
         0,
         0,
         0,
@@ -27888,7 +27888,7 @@
       "array": [
         323,
         -1025.284,
-        363.73066958946424,
+        370.65887281973977,
         0,
         0,
         0,
@@ -30177,6 +30177,10 @@
       "__id__": 624
     },
     "_enabled": true,
+    "goods": null,
+    "treasure_ultimate": null,
+    "otherGoods": null,
+    "gemstone": null,
     "itemList": [],
     "item_i": 0,
     "item_sz": {
@@ -30184,9 +30188,7 @@
       "x": 0,
       "y": 0
     },
-    "without": {
-      "__uuid__": "1e782065-9a0f-4a25-87ec-3c92f0312103"
-    },
+    "withoutIco": null,
     "_id": "7cvdcJwUBCG5rdIqgCUZ6/"
   },
   {
@@ -30340,9 +30342,6 @@
       "__id__": 2
     },
     "_enabled": true,
-    "bottomBar": {
-      "__id__": 602
-    },
     "list": null,
     "is_debug": false,
     "gravity": {
@@ -30352,6 +30351,8 @@
     },
     "lifeGroup": [],
     "timeGroup": [],
+    "halfHeart": null,
+    "usingArm": null,
     "fruitFrameList": [],
     "_id": "33e87EqvpMTISypHkYx1H4"
   }

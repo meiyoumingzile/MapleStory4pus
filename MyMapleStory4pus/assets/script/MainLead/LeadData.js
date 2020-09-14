@@ -38,6 +38,7 @@ window.LEADDATA={
 
 		indList:{//
 			Lead:["axe","waterGun","boomerang","fire","ham","spear","bomb","umbrella","fireDarts"],
+			liftLead:["axe","waterGun","boomerang","fire","ham","spear","bomb","umbrella","fireDarts"],
 			lieLead:["axe","waterGun","boomerang","fire","ham","spear","bomb","umbrella","fireDarts"],
 			umbrellaLead:["umbrella"],
 			scooterLead:["scooter"],
@@ -53,6 +54,7 @@ window.LEADDATA={
 	},
 	AttackTime:{
 		yes:{//攻击动画长度
+			
 			axe:0.1,
 			fireDarts:0.1,
 			waterGun:0.4,
@@ -66,6 +68,8 @@ window.LEADDATA={
 			DragonBattery:0.1,
 			DragonSto:0.1,
 			Stegosaurus:1,
+
+			hurl:0.2,//扔东西
 		},
 		no:{//间隔攻击动画长度
 			axe:0.2,
@@ -81,9 +85,35 @@ window.LEADDATA={
 			DragonBattery:0.1,
 			DragonSto:0.4,
 			Stegosaurus:0.4,
+
+			hurl:0.2,//扔东西
 		},
 	},
 
+	Act:{
+		water:{
+			Lead:["walk","run","jump","attack"],
+			liftLead:["walk","run","jump","attack"],
+			LeadLie:["walk","run","jump","attack"],
+			Fierydragon:["walk","run","jump","attack"],
+			Brontosaurus:["walk","run","jump","attack"],
+			Seadragon:["walk","run","jump","attack"],
+			Pterosaur:["walk","run","jump","attack"],
+			Stegosaurus:["walk","run","jump","attack"],
+		},
+		air:{
+			Lead:["walk","run","jump","attack","slip"],
+			liftLead:["walk","run","jump","attack"],
+			lieLead:["walk","run","attack","slip"],
+			scooterLead:["walk","run","attack","slip"],
+			umbrellaLead:["walk","run","jump","attack"],
+			Fierydragon:["walk","run","jump","attack"],
+			Brontosaurus:["walk","run","jump","attack"],
+			Seadragon:["walk","run","jump","attack"],
+			Pterosaur:["walk","run","jump","attack"],
+			Stegosaurus:["walk","run","jump","attack"],
+		},
+	},
 	BeginSpeedKind:{//各种动作获得的初速度
 		water:{
 			jump:100,
@@ -96,45 +126,51 @@ window.LEADDATA={
 		water:{
 			down:{
 				Lead:0,
+				liftLead:0,
 				Seadragon:0,
 				umbrellaLead:0,
 			},
 			up:{
 				Lead:0,
+				liftLead:0,
 				Seadragon:0,
 				umbrellaLead:0,
 			},
 			walk:{
 				Lead:100,
+				liftLead:100,
 				umbrellaLead:200,
 				lieLead:400,
-				Seadragon:300,
+				Seadragon:500,
 			},
 			run:{
 				Lead:200,
+				liftLead:200,
 				umbrellaLead:200,
 				lieLead:400,
-				Seadragon:600,
+				Seadragon:700,
 			},
 		},
 		air:{
 			up:0,
 			dwon:0,
 			walk:{
-				Lead:400,
-				umbrellaLead:400,
+				Lead:500,
+				liftLead:500,
+				umbrellaLead:500,
 				lieLead:400,
-				scooterLead:500,
+				scooterLead:600,
 				
-				Fierydragon:500,
-				Brontosaurus:500,
-				Seadragon:400,
-				Pterosaur:500,
-				Stegosaurus:500,
+				Fierydragon:600,
+				Brontosaurus:600,
+				Seadragon:450,
+				Pterosaur:600,
+				Stegosaurus:600,
 			},
 			run:{
-				Lead:580,
-				umbrellaLead:580,
+				Lead:700,
+				liftLead:700,
+				umbrellaLead:700,
 				lieLead:580,
 				scooterLead:700,
 
@@ -152,12 +188,14 @@ window.LEADDATA={
 			up:200,//竖直上升最大速度
 			walk:{
 				Lead:120,
+				liftLead:120,
 				lieLead:120,
 				Seadragon:150,
 				umbrellaLead:200,
 			},
 			run:{
 				Lead:200,
+				liftLead:200,
 				lieLead:120,
 				Seadragon:300,
 				umbrellaLead:200,
@@ -168,6 +206,7 @@ window.LEADDATA={
 			up:400,//竖直上升最大速度
 			walk:{
 				Lead:240,
+				liftLead:240,
 				umbrellaLead:240,
 				lieLead:150,
 				scooterLead:440,
@@ -180,6 +219,7 @@ window.LEADDATA={
 			},
 			run:{
 				Lead:380,
+				liftLead:380,
 				umbrellaLead:380,
 				lieLead:150,
 				scooterLead:600,
@@ -203,6 +243,7 @@ window.LEADDATA={
 		},
 		size:{
 			Lead:cc.v2(70,86),
+			liftLead:cc.v2(70,86),
 			scooterLead:cc.v2(100,120),
 			lieLead:cc.v2(120,44),
 			umbrellaLead:cc.v2(70,86),
@@ -215,6 +256,7 @@ window.LEADDATA={
 		},
 		offset:{
 			Lead:cc.v2(0,0),
+			liftLead:cc.v2(0,0),
 			lieLead:cc.v2(0,-22),//
 			scooterLead:cc.v2(0,0),
 			umbrellaLead:cc.v2(0,0),

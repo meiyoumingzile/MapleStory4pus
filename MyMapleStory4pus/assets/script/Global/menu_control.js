@@ -104,7 +104,6 @@ cc.Class({
                 this.displayProp(name);
             }*/
         }
-       
         this.hand.x=this.itemList[this.item_i].x+ this.goods.x;
         this.hand.y=this.itemList[this.item_i].y+ this.goods.y;
 
@@ -152,7 +151,7 @@ cc.Class({
         }else if(name=="markEgg"){//如果是标记点
             cc.log("标记点");
         }else if(name=="dragon"){//如果是龙
-            if(MainLead.data.state[2]=="lieLead"){
+            if(MainLead.data.isLie||MainLead.data.isClimb||MainLead.data.state[2]!=MainLead.data.chooseDragon&&MainLead.data.isSaveDragon==false){
                 return false;
             }
             MainLead.saveDragon();
@@ -199,7 +198,7 @@ cc.Class({
         var node=this.goodsNodeDir["dragon"];
         if(LEADDATA.Pets.indexOf(MainLead.data.chooseDragon)!=-1){//存在龙
             node.getComponent(cc.Sprite).spriteFrame=ALL.RES.GamePropFrame[MainLead.data.chooseDragon+"_symbol"];
-            node.opacity=MainLead.data.__chooseDragon?255:100;
+            node.opacity=MainLead.data.isSaveDragon?255:100;
         }else{
             node.getComponent(cc.Sprite).spriteFrame=this.withoutIco;
         }
