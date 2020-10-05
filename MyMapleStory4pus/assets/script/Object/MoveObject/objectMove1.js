@@ -4,18 +4,24 @@ cc.Class({
     properties: {
         speed:cc.v2(0,0),
         rangeSize:cc.v2(0,0),
+        sleeping:false,//是否在初始化唤醒
     },
 
     
     onLoad: function () {
         this.body = this.node.getComponent(cc.RigidBody);
-        this.body.linearVelocity=this.speed;
+        this.body.linearVelocity=this.sleeping?cc.v2(0,0):this.speed;
         this.rangeX=[this.node.x-this.rangeSize.x/2,this.node.x+this.rangeSize.x/2];
         this.rangeY=[this.node.y-this.rangeSize.y/2,this.node.y+this.rangeSize.y/2];
+        this.node.beginSport=this.beginSport;
+        this.node.script=this;
     },
 
     
     update: function (dt) {
+        if(this.sleeping){
+            return;
+        }
         var speed=this.body.linearVelocity;
 		var a=false;
 		if(speed.x!=0&&(this.rangeX[0]>this.node.x||this.rangeX[1]<this.node.x)){
@@ -52,5 +58,9 @@ cc.Class({
             MainLead.body.linearVelocity=cc.v2(sp.x,this.body.linearVelocity.y);
         }
 		
+    },
+    beginSport:function(){
+        this.body.linearVelocity=this.speed;
+        this.sleeping=false;
     },
 });

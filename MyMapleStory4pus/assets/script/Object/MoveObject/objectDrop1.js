@@ -23,7 +23,8 @@ cc.Class({
 
     onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
         var sp=MainLead.body.linearVelocity;
-		if(other.node.name=="Lead"&&other.tag==0&&MainLead.coll.collFloorDir[self._id]){
+        var sc=Math.abs(MainLead.data.preScaleX-MainLead.node.scaleX);//特判人物转身的碰撞体改变
+		if(other.node.name=="Lead"&&other.tag==0&&MainLead.coll.collFloorDir[self._id]&&sc==0){
             var fun = function(){
                 this.drop();
 			}
@@ -36,6 +37,6 @@ cc.Class({
     drop:function(){
         this.isCollLead=true;
         this.body.linearVelocity=this.speed;
-        this.body.gravityScale=0.5;
+        this.body.gravityScale=1;
     },
 });

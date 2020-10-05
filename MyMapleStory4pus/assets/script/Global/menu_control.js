@@ -93,17 +93,6 @@ cc.Class({
                 MainLead.data.goods[ch[i].name]=false;
             this.displayProp(ch[i].name);
         }
-                   /* if(MainLead.data.gotProp[this.itemList[i].name]&&MainLead.data.gotProp[this.itemList[i].name]==true){
-                this.itemList[i].getComponent(cc.Sprite).spriteFrame=ALL.GamePropFrame[this.itemList[i].name];
-            }else{
-                this.itemList[i].getComponent(cc.Sprite).spriteFrame=this.withoutIco;
-            }*///武器加载，没有的武器显示问好
-        if(cc.director.getScene().name=="test1"){//测试用
-           /* for(var name in this.goodsNodeDir){
-                MainLead.data.goods[name]=true;//测试用的
-                this.displayProp(name);
-            }*/
-        }
         this.hand.x=this.itemList[this.item_i].x+ this.goods.x;
         this.hand.y=this.itemList[this.item_i].y+ this.goods.y;
 
@@ -203,4 +192,5 @@ cc.Class({
             node.getComponent(cc.Sprite).spriteFrame=this.withoutIco;
         }
     },
+
 });

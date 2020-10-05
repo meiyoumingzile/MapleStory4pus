@@ -5,6 +5,7 @@ cc.Class({
 
     onLoad () {
         this.sp=this.node.getComponent(cc.Sprite);
+        this.node.script=this;
     },
 
    
@@ -14,7 +15,7 @@ cc.Class({
             other.node.die();
         }
     },
-    jumpState(){
+    jumpState(){//人物脚本调用
         if(this.sp.spriteFrame!=ALL.RES.GamePropFrame["jumpAid1_0"]){
             MainLead.data.jumoAidTime=20;
             this.sp.spriteFrame=ALL.RES.GamePropFrame["jumpAid1_2"];

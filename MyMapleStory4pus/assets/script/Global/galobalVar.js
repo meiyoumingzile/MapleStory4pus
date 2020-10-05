@@ -62,6 +62,7 @@ window.KEY={
     acc:cc.macro.KEY.l,
     jump:cc.macro.KEY.k,
     pause:cc.macro.KEY.space,
+    c:cc.macro.KEY.c,
 };
 
 window.SchedulerDir={

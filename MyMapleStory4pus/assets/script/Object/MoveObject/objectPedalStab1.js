@@ -4,6 +4,7 @@ cc.Class({
     properties: {
         speedy:0,
         high:0,
+        sleeping:false,//是否在初始化唤醒
     },
 
     
@@ -15,12 +16,17 @@ cc.Class({
             if(stab[i].name.indexOf("Enemy_")!=-1)
                 this.stab=stab[i];
         }
-        this.body.linearVelocity=cc.v2(0,this.speedy);
+        this.body.linearVelocity=cc.v2(0,this.sleeping?0:this.speedy);
         this.rangeY=[this.node.y-0.01,this.node.y+this.high];
+        this.node.beginSport=this.beginSport;
+        this.node.script=this;
     },
 
     
     update: function (dt) {
+        if(this.sleeping){
+            return;
+        }
         var speed=this.body.linearVelocity;
 		if(speed.y!=0&&this.high>10&&(this.rangeY[0]>this.node.y||this.rangeY[1]<this.node.y)){
             this.node.y=speed.y>0?this.rangeY[1]-0.01:this.rangeY[0]+0.01;
@@ -47,5 +53,9 @@ cc.Class({
         }
     },
     onPreSolve:function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
+    },
+    beginSport:function(){
+        this.body.linearVelocity=cc.v2(0,this.speedy);
+        this.sleeping=false;
     },
 });

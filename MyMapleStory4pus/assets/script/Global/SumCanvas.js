@@ -94,7 +94,7 @@ cc.Class({
         self.node.parent.addChild(neweffect);
     },
 
-    setSenceData:function(self){
+    /*setSenceData:function(self){
         REM.time=ALL.time;
         REM.life=ALL.life;
         REM.LeadPos=self.node.position;
@@ -126,7 +126,7 @@ cc.Class({
         self.Data.state_pos=REM.Data.state_pos;
         self.Data.specialEffect=REM.Data.specialEffect;
         self.Data.nowArms=REM.Data.nowArms;
-    },
+    },*/
 	onLoadResources:function(){//加载资源
 		var self=this;
 		var oll=[false,false,false];

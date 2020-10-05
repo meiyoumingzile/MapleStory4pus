@@ -9,6 +9,8 @@ cc.Class({
     onLoad: function () {
         this.mainPos=cc.v2(0,0);
         this.isLoad=false;
+        if(this.node.getComponent(cc.Sprite))
+            this.node.getComponent(cc.Sprite).spriteFrame=null;
         for(var i=this.node;i.name!="MainCanvas";i=i.parent){//在主场景的位置
             this.mainPos.x+=i.x;
             this.mainPos.y+=i.y;

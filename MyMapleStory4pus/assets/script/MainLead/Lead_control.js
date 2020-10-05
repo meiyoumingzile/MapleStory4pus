@@ -19,7 +19,7 @@ cc.Class({
 			collSideDir:[{},{}],
 			collWaterCnt:0,
 			collWaterDir:{},
-			climbOb:[null,null],//0是梯子，1是梯子头
+			Laddder:[null,null],//0是梯子，1是梯子头
 			liftingOb:[null,null],//0举着的物体,1时前面的物体
 			willLiftingOb:false,
 		},
@@ -71,7 +71,7 @@ cc.Class({
 			halfHeart:false,
 
 			//以下是宝物和武器是否拥有
-			lifeUpJudge:[false,false,false,false,false,false,false,false,false],
+			lifeUpJudge:[false,false,false,false,false,false,false,false,false],//体力上限是否吃到
 			goods:{goods_axe:true},
 			potCnt:0,
 			potBit:[false,false,false,false,false,false,false,false,false],//哪个瓶子有没有
@@ -120,6 +120,9 @@ cc.Class({
 			case KEY.pause:
 				this.key.pause=true;
 				break;
+			case KEY.c:
+				this.cheat();
+			break;
         }
     },
 
@@ -203,6 +206,7 @@ cc.Class({
 				this.intoWater();
 			}
 		}else{//self.tag==0
+			
 			if(other.name.indexOf("WATER")!=-1){
 				if(sc<ALL.inf&&!this.coll.collWaterDir[other._id]){
 					this.coll.collWaterCnt++;
@@ -210,11 +214,11 @@ cc.Class({
 				}
 			}
 			if(other.node.name=="Object2_Ladder"){//爬梯子
-				this.coll.climbOb[1]=other.node;
+				this.coll.Laddder[1]=other.node;
 			}
-			if(other.name.indexOf("jumpAid")!=-1&&other.node.getComponent("jumpAid")){//碰到弹跳器
-				if(this.body.linearVelocity.y<0&&this.node.y>other.node.y){
-					other.node.getComponent("jumpAid").jumpState();//在里面实现人物速度，this.data.jumoAidTime=20;
+			if(other.name.indexOf("jumpAid")!=-1&&other.node.script){//碰到弹跳器
+				if(this.body.linearVelocity.y<0&cf.y==-1&&other.node.script.jumpState){
+					other.node.script.jumpState();//在里面实现人物速度，this.data.jumoAidTime=20;
 				}
 			}
 			if(other.node.name.indexOf("Enemy")!=-1){
@@ -275,7 +279,7 @@ cc.Class({
 				}
 			}
 			if(other.node.name=="Object_Ladder"){//爬梯子
-				this.coll.climbOb[1]=null;
+				this.coll.Laddder[1]=null;
 			}
 			if(other.node.name.indexOf("Object")!=-1){
 				if(this.coll.collFloorDir[other._id]){
@@ -344,7 +348,7 @@ cc.Class({
 		if(this.data.pause)
 			return ;
 		if(other.node.name.indexOf("Ladder")!=-1){
-			this.coll.climbOb[0]=other.node;
+			this.coll.Laddder[0]=other.node;
 		}else if(other.node.name.indexOf("goods")!=-1){
 			this.useGoods(other.node.name.replace("goods_",""));
 		}
@@ -353,7 +357,7 @@ cc.Class({
 		if(this.data.pause)
 			return ;
 		if(other.node.name.indexOf("Ladder")!=-1){
-			this.coll.climbOb[0]=null;
+			this.coll.Laddder[0]=null;
 		}
 	},
 	dataBegin:function(){//初始化人物信息
@@ -384,7 +388,7 @@ cc.Class({
 			this.setPhy(this.data.state[2],true);
 			this.body.linearVelocity = this.data.speed;
 		}else{
-			this.changeLife(2,2);
+			this.changeLife(2,8);
 			this.changeTime(5);
 			this.setHalfHeart();
 			ALL.MainCanSc.usingArm.getComponent(cc.Sprite).spriteFrame=ALL.RES.GamePropFrame["goods_"+this.data.nowArms];
@@ -405,6 +409,7 @@ cc.Class({
 
 	},
 	updatePhyColl:function(dt,speed){
+		//cc.log(this.phyColl);
 		if(this.coll.liftingOb[0]){//有物体
 			this.setLiftOb();
 			if(this.data.state[2]=="Lead"){//是自身就变成“举”的动作
@@ -431,6 +436,7 @@ cc.Class({
 		this.calcClimb(speed);
 		this.data.preisLie=this.data.isLie;
 		this.data.isLie=this.judgeIsLie();
+		//cc.log(this.data.isLie);
 		if(this.data.state[0].indexOf("air")!=-1){
 			var maxJumptime=8;
 			if(this.data.jumoAidTime>0){
@@ -439,7 +445,7 @@ cc.Class({
 			}else if(this.key.attack&&this.coll.collWaterCnt>0&&this.data.state[2]=="umbrellaLead"){
 				speed.y=0;
 			}else if(this.key.jump&&!this.data.isLie&&!this.key.down){//按了跳跃还没有趴着
-				if(this.data.act=="climb"&&this.coll.climbOb[1]&&this.coll.climbOb[0]){
+				if(this.data.act=="climb"&&this.coll.Laddder[1]&&this.coll.Laddder[0]){
 					speed.y=this.data.jumpSpeedy;
 				}else if(this.data.state[2].indexOf("Pterosaur")!=-1){
 					//cc.log(this.coll.collCeilCnt,speed.y);
@@ -545,7 +551,6 @@ cc.Class({
 				this.setScaleX(ALL.scaleLead.x,(x+y==1?1:-1));
 				this.data.act="climb";
 			}else if(this.data.isLie){
-				this.data.state[2]="lieLead";
 				if(Math.abs(speed.x)<10){//在地板上,判断速度
 					this.data.act="walk";
 				}else{
@@ -964,7 +969,7 @@ cc.Class({
 		}
 		return null;
 	},
-	borderX:function(fp=1){//判断是不是站在地面上
+	borderX:function(fp=1){//
 		return this.node.x+this.phyColl.offset.x+this.phyColl.size.width/2*fp;
 	},
 	borderY:function(fp=1){//判断是不是站在地面上
@@ -1130,7 +1135,7 @@ cc.Class({
 	},
 	setPhy:function(man="Lead",compel=false){//compel代表是否强制执行
 		if(this.data.state[2]!=man||compel){
-			this.data.state[2]=man;
+			this.data.state[2]=man;//唯一设置this.data.state[2]的地方
 			var arm=LEADDATA.ARMS.changePhyArm[man];
 			if(arm&&this.data.armColl[arm]){
 				this.data.armColl[arm].die();
@@ -1158,6 +1163,7 @@ cc.Class({
 				var h=man.indexOf("lie")==-1?sz.y:LEADDATA.PhysicalPara.size["Lead"].y;
 				this.head.offset.y=(h-this.head.size.height)/2+1;
 				//要根据下边界调整y的位置，否则改变碰撞盒子的offset会导致碰撞体下移。
+				//cc.log();
 				this.phyColl.apply();
 			}
 		}
@@ -1192,12 +1198,16 @@ cc.Class({
 		return false;
 	},
 	judgeIsLie:function(){
+		//cc.log(this.coll.collFloorCnt>0)
 		if(this.coll.collCeilCnt==1&&this.coll.liftingOb[0]){
 			return false;
-		}else if((this.key.down ||this.coll.collCeilCnt>0&&this.data.isLie)&&this.coll.collFloorCnt>0&&!this.data.isFall&&this.data.state[2].indexOf("Lead")!=-1&&Math.abs(this.data.relSpeed.y)<1){
-			if(this.coll.climbOb[1]==null&&this.data.nowArms!="scooter"){
+		}else if((this.key.down ||this.coll.collCeilCnt>0&&this.data.isLie)&&this.coll.collFloorCnt>0&&!this.data.isFall
+			&&this.data.state[2].indexOf("Lead")!=-1&&Math.abs(this.data.relSpeed.y)<1){
+			if(this.coll.Laddder[1]==null&&this.data.nowArms!="scooter"){
+				this.setPhy("lieLead");
 				return true;
-			}else if(this.coll.climbOb[1]&&(this.coll.climbOb[0]==null||Math.abs(this.node.x-this.coll.climbOb[0].x)>=4)){
+			}else if(this.coll.Laddder[1]&&(this.coll.Laddder[0]==null||Math.abs(this.node.x-this.coll.Laddder[0].x)>=4)){
+				this.setPhy("lieLead");
 				return true;
 			}
 		}
@@ -1247,7 +1257,7 @@ cc.Class({
 		cc.director.loadScene(name)//ch[i].name是要切换场景的名称
 	},
 	calcClimb:function(speed){
-		var clob=this.coll.climbOb[0];
+		var clob=this.coll.Laddder[0];
 		if(this.data.isClimb){
 			if(this.data.state[2].indexOf("Lead")==-1||clob==null||this.key.jump){
 				this.data.isClimb=false;
@@ -1267,12 +1277,12 @@ cc.Class({
 		}
 	},
 	judgeIsClimb:function(){
-		var clob=this.coll.climbOb[0];
+		var clob=this.coll.Laddder[0];
 		if(this.data.state[2]=="Lead"&&clob&&Math.abs(this.node.x-clob.x)<4){
 			if((clob.y+clob.height/2>this.borderY(-1)&&this.key.up
 				||clob.y-clob.height/2<this.borderY(1)&&this.key.down)){
 					return true;
-			}else if(this.coll.climbOb[1]!=null&&this.key.down){
+			}else if(this.coll.Laddder[1]!=null&&this.key.down){
 				this.node.y-=10;
 				return true;
 			}
@@ -1376,5 +1386,15 @@ cc.Class({
 			}
 		}
 	},
+	cheat(){
+        for(var name in ALL.menuSc.goodsNodeDir){
+            this.data.goods[name]=true;//测试用的
+			ALL.menuSc.displayProp(name);
+			this.data.isSaveDragon=false;
+			ALL.menuSc.displayDragon();
+			this.useGoods("Pterosaur");
+        }
+        
+    }
 });
 
