@@ -1,7 +1,7 @@
 {
   "title": "MyMapleStory20200126",
   "packageName": "",
-  "startScene": "9d38d0f8-0718-4926-b138-f80f03a0d34f",
+  "startScene": "a904caaa-ea21-42e3-bb78-1cdc21a2996a",
   "excludeScenes": [],
   "includeSDKBox": false,
   "orientation": {
@@ -21,7 +21,7 @@
   "zipCompressJs": true,
   "fb-instant-games": {},
   "android": {
-    "packageName": ""
+    "packageName": "aabb"
   },
   "ios": {
     "packageName": ""
@@ -40,5 +40,5 @@
     "skipRecord": false
   },
   "appBundle": false,
-  "includeAnySDK": false
+  "includeAnySDK": null
 }

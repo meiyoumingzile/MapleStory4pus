@@ -217,7 +217,7 @@ cc.Class({
 				this.coll.Laddder[1]=other.node;
 			}
 			if(other.name.indexOf("jumpAid")!=-1&&other.node.script){//碰到弹跳器
-				if(this.body.linearVelocity.y<0&cf.y==-1&&other.node.script.jumpState){
+				if(this.body.linearVelocity.y<0&&other.node.script.jumpState){
 					other.node.script.jumpState();//在里面实现人物速度，this.data.jumoAidTime=20;
 				}
 			}
