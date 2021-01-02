@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_voleDropOb1_walk",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.7666666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "55fdd849-6ed8-47b3-84a8-7f2b086ee03b"
+            }
+          },
+          {
+            "frame": 0.31666666666666665,
+            "value": {
+              "__uuid__": "9433aa28-9dbd-478a-b1df-0bba77b480f8"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "55fdd849-6ed8-47b3-84a8-7f2b086ee03b"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_scorpion3_stop",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.0166666666666666,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "ecbe13a7-8340-41b9-883a-671080b690fa"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "7532fd00-ef4b-4180-90cd-787afbb4e496"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "ecbe13a7-8340-41b9-883a-671080b690fa"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

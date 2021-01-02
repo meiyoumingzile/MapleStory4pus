@@ -1,0 +1,181 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_frog6_stop",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.3333333333333333,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "5b11f4d0-5622-4d85-89d8-e3ea89779196"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": [
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.3333333333333333,
+      "func": "",
+      "params": []
+    }
+  ]
+}

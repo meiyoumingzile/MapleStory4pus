@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "2d9b10d7-854d-4976-bfcd-5062a44b9e40",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "ornament_stone2_1": {
+      "ver": "1.0.4",
+      "uuid": "bac59af1-12ec-4488-94c3-ea7fd9385589",
+      "rawTextureUuid": "2d9b10d7-854d-4976-bfcd-5062a44b9e40",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 178,
+      "height": 118,
+      "rawWidth": 178,
+      "rawHeight": 118,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

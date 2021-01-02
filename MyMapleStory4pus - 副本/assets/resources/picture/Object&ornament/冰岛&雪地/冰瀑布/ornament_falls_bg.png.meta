@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "d2f89e50-0f59-493d-93e8-6239758932f5",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "ornament_falls_bg": {
+      "ver": "1.0.4",
+      "uuid": "493e2e33-d1c5-4147-a96d-0b8ba57adb04",
+      "rawTextureUuid": "d2f89e50-0f59-493d-93e8-6239758932f5",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 180,
+      "height": 132,
+      "rawWidth": 180,
+      "rawHeight": 132,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

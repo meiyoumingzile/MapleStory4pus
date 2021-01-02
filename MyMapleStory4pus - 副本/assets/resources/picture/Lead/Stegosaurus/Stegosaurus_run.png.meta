@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "4eafdf3c-f1c3-4329-8801-4912616d68a4",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "Stegosaurus_run": {
+      "ver": "1.0.4",
+      "uuid": "7f713b17-2a34-40e0-bc19-4b584368b608",
+      "rawTextureUuid": "4eafdf3c-f1c3-4329-8801-4912616d68a4",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 168,
+      "height": 154,
+      "rawWidth": 168,
+      "rawHeight": 154,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

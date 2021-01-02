@@ -1,0 +1,43 @@
+{
+  "ver": "2.3.3",
+  "uuid": "21adb4ab-e607-4958-87b2-383193ff1d84",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {
+    "default": {
+      "formats": [
+        {
+          "name": "png",
+          "quality": 80
+        }
+      ]
+    }
+  },
+  "subMetas": {
+    "ornament_mountain2": {
+      "ver": "1.0.4",
+      "uuid": "7e67818c-5fa9-42db-a887-a278d0005ff2",
+      "rawTextureUuid": "21adb4ab-e607-4958-87b2-383193ff1d84",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": -208,
+      "trimX": 0,
+      "trimY": 416,
+      "width": 2780,
+      "height": 1584,
+      "rawWidth": 2780,
+      "rawHeight": 2000,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

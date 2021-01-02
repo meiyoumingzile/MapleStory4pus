@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_skull1",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.35,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "633215f5-7400-45b1-b323-0645dab21347"
+            }
+          },
+          {
+            "frame": 0.08333333333333333,
+            "value": {
+              "__uuid__": "476546ed-3473-4dd3-b40e-8c62c279d3f2"
+            }
+          },
+          {
+            "frame": 0.16666666666666666,
+            "value": {
+              "__uuid__": "a846b440-e985-4cc0-a258-b32c82d9b7b8"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "f6bce41f-9cc1-43b6-9806-b514c89de290"
+            }
+          },
+          {
+            "frame": 0.3333333333333333,
+            "value": {
+              "__uuid__": "633215f5-7400-45b1-b323-0645dab21347"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

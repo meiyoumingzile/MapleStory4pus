@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_crab2",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.6666666666666666,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "df3a1b14-7363-4d9b-84a6-45e14f9d153d"
+            }
+          },
+          {
+            "frame": 0.35,
+            "value": {
+              "__uuid__": "def4cf7c-c2bf-4aed-814a-30c1b285e694"
+            }
+          },
+          {
+            "frame": 0.65,
+            "value": {
+              "__uuid__": "df3a1b14-7363-4d9b-84a6-45e14f9d153d"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

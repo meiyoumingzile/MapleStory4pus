@@ -1,0 +1,43 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "falls",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.7666666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "e794386a-21fe-4593-b2ed-5086ea998965"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "25dda0ec-00b3-443f-84bb-0d567db4946f"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "285480b4-5bbe-44bb-9a08-a556ebf949aa"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "e794386a-21fe-4593-b2ed-5086ea998965"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

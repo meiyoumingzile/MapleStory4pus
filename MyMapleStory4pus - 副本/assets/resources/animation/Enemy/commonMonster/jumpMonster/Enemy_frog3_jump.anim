@@ -1,0 +1,71 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_frog3_jump",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.03333333333333333,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "245c2e03-be0f-43a8-b2b7-89bd4353c0fc"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": [
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.03333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.03333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.03333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.03333333333333333,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.03333333333333333,
+      "func": "",
+      "params": []
+    }
+  ]
+}

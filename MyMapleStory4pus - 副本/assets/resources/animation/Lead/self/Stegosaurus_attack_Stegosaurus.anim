@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Stegosaurus_attack",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.2833333333333333,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "69221b61-c984-46f3-a682-f38efda9b352"
+            }
+          },
+          {
+            "frame": 0.06666666666666667,
+            "value": {
+              "__uuid__": "b69a1c27-6234-4721-b409-9cf75292d646"
+            }
+          },
+          {
+            "frame": 0.13333333333333333,
+            "value": {
+              "__uuid__": "69221b61-c984-46f3-a682-f38efda9b352"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "b717220f-3c6d-4d2e-b76d-9defc77b767a"
+            }
+          },
+          {
+            "frame": 0.26666666666666666,
+            "value": {
+              "__uuid__": "69221b61-c984-46f3-a682-f38efda9b352"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "f14a67f3-b08b-463f-9127-dfca2339abeb",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "waterBullet1": {
+      "ver": "1.0.4",
+      "uuid": "b4512ab9-dbae-42c8-aa07-5f87b3f5fb43",
+      "rawTextureUuid": "f14a67f3-b08b-463f-9127-dfca2339abeb",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0.5,
+      "offsetY": 0,
+      "trimX": 1,
+      "trimY": 0,
+      "width": 43,
+      "height": 29,
+      "rawWidth": 44,
+      "rawHeight": 29,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

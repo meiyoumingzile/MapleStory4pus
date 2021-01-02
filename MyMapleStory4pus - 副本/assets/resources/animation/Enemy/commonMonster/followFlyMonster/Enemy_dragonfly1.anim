@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Enemy_dragonfly1",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.26666666666666666,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "8959cf38-3e7b-4895-8cec-77fb6db9cfc8"
+            }
+          },
+          {
+            "frame": 0.11666666666666667,
+            "value": {
+              "__uuid__": "ae0eaa7b-e58a-407b-bddd-b648b5c21484"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "8959cf38-3e7b-4895-8cec-77fb6db9cfc8"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
