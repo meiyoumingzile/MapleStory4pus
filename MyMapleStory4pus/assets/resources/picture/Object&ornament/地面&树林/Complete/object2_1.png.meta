@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "744acf5b-e1ea-4c1c-a302-6da8061e5ec3",
+  "uuid": "07895206-a874-49bb-ae25-b124ecadf062",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "door1_1": {
+    "object2_1": {
       "ver": "1.0.4",
-      "uuid": "29e4053e-52fb-4312-b7fd-a13ec9f41b5c",
-      "rawTextureUuid": "744acf5b-e1ea-4c1c-a302-6da8061e5ec3",
+      "uuid": "a94ba274-8bcf-4789-ba08-143d7e245ae9",
+      "rawTextureUuid": "07895206-a874-49bb-ae25-b124ecadf062",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 1024,
-      "height": 406,
-      "rawWidth": 1024,
-      "rawHeight": 406,
+      "width": 2713,
+      "height": 662,
+      "rawWidth": 2713,
+      "rawHeight": 662,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

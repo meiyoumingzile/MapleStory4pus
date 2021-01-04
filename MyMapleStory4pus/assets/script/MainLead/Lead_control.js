@@ -1213,7 +1213,7 @@ cc.Class({
 		}
 		return false;
 	},
-	judgeJumpScene:function(){
+	judgeJumpScene:function(){//跳转场景
 		if(this.key.up){
 			var sc=ALL.scDoor.getChildren();
 			for(var j=0;j<sc.length;j++){
@@ -1237,9 +1237,9 @@ cc.Class({
 				if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
 					var len=cc.v2(this.node.x-ch[i].x,this.node.y-ch[i].y);
 					if(Math.abs(ch[i].x)>ALL.MainCanvas.width/2){
-						len.x=(ch[i].width/2+10)*(ch[i].x>0?1:-1);
+						len.x=(ch[i].width+this.phyColl.size.width)/2*(ch[i].x>0?1:-1);
 					}else if(Math.abs(ch[i].y)>ALL.MainCanvas.height/2){
-						len.y=(ch[i].height/2+10)*(ch[i].y>0?1:-1);
+						len.y=(ch[i].height+this.phyColl.size.height)/2*(ch[i].y>0?1:-1);
 					}
 					this.saveData(len);
 					SAVE.preDoor.kind=ALL.comScDoor.name;
