@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Fierydragon_run_lava",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.5166666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "b3f04605-8970-4c8a-b415-0850b83b1bec"
+            }
+          },
+          {
+            "frame": 0.13333333333333333,
+            "value": {
+              "__uuid__": "9ebc3a94-f263-47be-a2f3-185ed2170f75"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "b3f04605-8970-4c8a-b415-0850b83b1bec"
+            }
+          },
+          {
+            "frame": 0.38333333333333336,
+            "value": {
+              "__uuid__": "fdcde878-a3d0-4437-97db-86a20a31a0cb"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "b3f04605-8970-4c8a-b415-0850b83b1bec"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

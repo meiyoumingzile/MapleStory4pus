@@ -3,7 +3,7 @@
   "_name": "Brontosaurus_walk",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.6833333333333333,
+  "_duration": 0.5166666666666667,
   "sample": 60,
   "speed": 1,
   "wrapMode": 2,
@@ -18,13 +18,13 @@
             }
           },
           {
-            "frame": 0.3333333333333333,
+            "frame": 0.25,
             "value": {
               "__uuid__": "d25953a7-e3b8-40dd-bc5b-ab56541fb1b2"
             }
           },
           {
-            "frame": 0.6666666666666666,
+            "frame": 0.5,
             "value": {
               "__uuid__": "6a15c754-9485-4c3d-90c8-d0f3a05d3e62"
             }

@@ -1,9 +1,9 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "Seadragon_walk",
+  "_name": "swamp_lava1",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.6833333333333333,
+  "_duration": 0.5166666666666667,
   "sample": 60,
   "speed": 1,
   "wrapMode": 2,
@@ -14,19 +14,25 @@
           {
             "frame": 0,
             "value": {
-              "__uuid__": "cc3056f1-7bf2-4f5c-b9b8-767831fa7b75"
+              "__uuid__": "191424d0-5b92-4f4e-9f0d-8d9cc231d8ad"
+            }
+          },
+          {
+            "frame": 0.16666666666666666,
+            "value": {
+              "__uuid__": "5f73dc10-0a89-4766-b769-06db4c89e2aa"
             }
           },
           {
             "frame": 0.3333333333333333,
             "value": {
-              "__uuid__": "aba02e0f-39cb-48dd-bf65-926d5880840a"
+              "__uuid__": "30676387-2232-4e73-a8f7-82e60d9f5bc3"
             }
           },
           {
-            "frame": 0.6666666666666666,
+            "frame": 0.5,
             "value": {
-              "__uuid__": "cc3056f1-7bf2-4f5c-b9b8-767831fa7b75"
+              "__uuid__": "191424d0-5b92-4f4e-9f0d-8d9cc231d8ad"
             }
           }
         ]

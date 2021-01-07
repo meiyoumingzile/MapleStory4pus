@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "5cadf81a-fb56-4fd7-ade7-64dee28a6189",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "BigDoor3": {
+      "ver": "1.0.4",
+      "uuid": "eea5b0f0-ce6e-4330-bc9f-5d2a7554bcb5",
+      "rawTextureUuid": "5cadf81a-fb56-4fd7-ade7-64dee28a6189",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 901,
+      "height": 454,
+      "rawWidth": 901,
+      "rawHeight": 454,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

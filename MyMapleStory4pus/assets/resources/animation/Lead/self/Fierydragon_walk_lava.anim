@@ -1,9 +1,9 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "Seadragon_walk",
+  "_name": "Fierydragon_walk_lava",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.6833333333333333,
+  "_duration": 0.5166666666666667,
   "sample": 60,
   "speed": 1,
   "wrapMode": 2,
@@ -12,21 +12,21 @@
       "cc.Sprite": {
         "spriteFrame": [
           {
-            "frame": 0,
+            "frame": 0.016666666666666666,
             "value": {
-              "__uuid__": "cc3056f1-7bf2-4f5c-b9b8-767831fa7b75"
+              "__uuid__": "b3f04605-8970-4c8a-b415-0850b83b1bec"
             }
           },
           {
-            "frame": 0.3333333333333333,
+            "frame": 0.25,
             "value": {
-              "__uuid__": "aba02e0f-39cb-48dd-bf65-926d5880840a"
+              "__uuid__": "9ebc3a94-f263-47be-a2f3-185ed2170f75"
             }
           },
           {
-            "frame": 0.6666666666666666,
+            "frame": 0.5,
             "value": {
-              "__uuid__": "cc3056f1-7bf2-4f5c-b9b8-767831fa7b75"
+              "__uuid__": "b3f04605-8970-4c8a-b415-0850b83b1bec"
             }
           }
         ]

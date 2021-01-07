@@ -13,6 +13,8 @@ cc.Class({
 		this.coll={
 			collFloorCnt:0,
 			collFloorDir:{},
+			collFloorLavaCnt:0,
+
 			collCeilCnt:0,
 			collCeilDir:{},
 			collSideCnt:[0,0],//collSideCnt[0]是左
@@ -201,7 +203,6 @@ cc.Class({
 					}
 				}
 			}
-			
 			if(other.name.indexOf("WATER")!=-1){
 				this.intoWater();
 			}
@@ -230,6 +231,7 @@ cc.Class({
 					if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
 						this.coll.collFloorDir[other._id]=other;
 						this.coll.collFloorCnt++;
+						this.coll.collFloorLavaCnt+=other.name.indexOf("LAVA")!=-1?1:0;//脚踩熔浆
 					}
 					if(cf.x==-1&&!this.coll.collSideDir[0][other._id]){
 						this.coll.collSideDir[0][other._id]=other;
@@ -285,6 +287,10 @@ cc.Class({
 				if(this.coll.collFloorDir[other._id]){
 					delete this.coll.collFloorDir[other._id];
 					this.coll.collFloorCnt--;
+					this.coll.collFloorLavaCnt-=other.name.indexOf("LAVA")!=-1?1:0;//脚踩熔浆
+					if(this.coll.collFloorLavaCnt<0){
+						cc.log("this.coll.collFloorLavaCnt错误："+this.coll.collFloorLavaCnt);
+					}
 				}
 				if(this.coll.collSideDir[0][other._id]){
 					delete this.coll.collSideDir[0][other._id];
@@ -330,6 +336,7 @@ cc.Class({
 					if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
 						this.coll.collFloorDir[other._id]=other;
 						this.coll.collFloorCnt++;
+						this.coll.collFloorLavaCnt+=other.name.indexOf("LAVA")!=-1?1:0;//脚踩熔浆
 					}
 					if(cf.x==-1&&!this.coll.collSideDir[0][other._id]){
 						this.coll.collSideDir[0][other._id]=other;
@@ -587,7 +594,9 @@ cc.Class({
 			}
 		}
 
-		
+		if(this.coll.collFloorLavaCnt>0&&this.data.state[2]=="Fierydragon"){
+			this.data.act+="_lava";
+		}
 		//以上是改变this.data.act
 		
 		var nowDraw=this.data.state[2]+"_"+this.data.act;

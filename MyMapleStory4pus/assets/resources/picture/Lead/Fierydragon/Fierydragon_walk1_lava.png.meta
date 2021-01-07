@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "97aa60fc-7a79-45ef-82ce-fb50b75274a1",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "Fierydragon_walk1_lava": {
+      "ver": "1.0.4",
+      "uuid": "b3f04605-8970-4c8a-b415-0850b83b1bec",
+      "rawTextureUuid": "97aa60fc-7a79-45ef-82ce-fb50b75274a1",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 134,
+      "height": 155,
+      "rawWidth": 134,
+      "rawHeight": 155,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
