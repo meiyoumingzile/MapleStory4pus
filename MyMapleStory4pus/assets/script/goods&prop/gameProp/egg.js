@@ -15,6 +15,15 @@ cc.Class({
         this.judge();
         this.thing.active=false;
         this.node.getComponent(cc.Sprite).spriteFrame=this.invisible?this.pics[0]:null;
+        var tsp=this.thing.getComponent(cc.Sprite);
+        if(SAVE.SaveLead&&(tsp.spriteFrame==ALL.RES.GamePropFrame["heart2"]||tsp.spriteFrame==ALL.RES.GamePropFrame["halfHeart2"])){
+            var sc=this.thing.getComponent("addLife");
+            if(SAVE.SaveLead.lifeUpJudge[sc.lifeId]){
+                tsp.spriteFrame=ALL.RES.GamePropFrame["heart1"];
+                sc.chLife=1; //加血
+                sc.chLifeUp=0; //加血
+            }
+        }
     },
 
     

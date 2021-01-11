@@ -24,7 +24,8 @@ cc.Class({
         this.node.height=phySize.y;
         this.phyColl.apply();
         this.node.scaleX=ALL.scaleLead.x;
-		this.node.scaleY=ALL.scaleLead.y;
+        this.node.scaleY=ALL.scaleLead.y;
+        this.node.collWood=null;
     },
 
     update :function(dt) {
@@ -32,6 +33,7 @@ cc.Class({
         this.node.y=ALL.Lead.y+this.beginOffset.y;
     },
     onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
+        
         if(other.node.name.indexOf("Enemy")==0&&this.ap.category!="umbrella"){
 			var js=other.node.getComponent("EnemyPublic");
             if(js&&js.specialEffect=="null"){
@@ -40,6 +42,15 @@ cc.Class({
 					MainLead.body.linearVelocity=cc.v2(MainLead.body.linearVelocity.x,300);
                 }
             }
+        }else if(other.node.name.indexOf("WOOD")!=-1){
+            this.node.collWood=other;
+        }
+    },
+    onEndContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
+        if(other.node.name.indexOf("Enemy")==0&&this.ap.category!="umbrella"){
+			
+        }else if(other.node.name.indexOf("WOOD")!=-1){
+            this.node.collWood=null;
         }
     },
 });

@@ -54,7 +54,7 @@ cc.Class({
     },
     onPreSolve:function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
         var sp=MainLead.body.linearVelocity;
-		if(other.node.name=="Lead"&&other.tag==0&&MainLead.coll.collFloorDir[self._id]){
+		if(other.node.name=="Lead"&&other.tag==0&&MainLead.coll.collFloorDir[self._id]&&!MainLead.key.jump){
             MainLead.body.linearVelocity=cc.v2(sp.x,this.body.linearVelocity.y);
         }
 		

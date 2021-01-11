@@ -21,6 +21,10 @@ cc.Class({
 			collSideDir:[{},{}],
 			collWaterCnt:0,
 			collWaterDir:{},
+
+			collEnemyDir:{},
+			collEnemyCnt:0,
+
 			Laddder:[null,null],//0是梯子，1是梯子头
 			liftingOb:[null,null],//0举着的物体,1时前面的物体
 			willLiftingOb:false,
@@ -56,7 +60,8 @@ cc.Class({
 	        //speed: cc.v2(0, 0),
 			jumpSpeedy: 0,      //跳跃初始速度
 			jumptime:0,
-			jumoAidTime:0,
+			jumpAidTime:0,
+			injuringTime:0,//受到刺和熔浆上海
 
 	        maxSpeedx:0,        //限制的最大速度
 			maxSpeedup:0, 		//限制的最大速度
@@ -73,8 +78,8 @@ cc.Class({
 			halfHeart:false,
 
 			//以下是宝物和武器是否拥有
-			lifeUpJudge:[false,false,false,false,false,false,false,false,false],//体力上限是否吃到
-			goods:{goods_axe:true},
+			lifeUpJudge:[false,false,false, false,false ,false,false ,false,false],//体力上限是否吃到
+			goods:{goods_axe:true,goods_spear:true,},
 			potCnt:0,
 			potBit:[false,false,false,false,false,false,false,false,false],//哪个瓶子有没有
 			chooseDragon:"",//选择的龙
@@ -219,15 +224,21 @@ cc.Class({
 			}
 			if(other.name.indexOf("jumpAid")!=-1&&other.node.script){//碰到弹跳器
 				if(this.body.linearVelocity.y<0&&other.node.script.jumpState){
-					other.node.script.jumpState();//在里面实现人物速度，this.data.jumoAidTime=20;
+					other.node.script.jumpState();//在里面实现人物速度，this.data.jumpAidTime=20;
 				}
 			}
 			if(other.node.name.indexOf("Enemy")!=-1){
-				this.collEnemy(contact, other,cf);
+				if(!this.coll.collEnemyDir[other._id]){
+					this.coll.collEnemyDir[other._id]=other;
+					this.coll.collEnemyCnt++;
+				}
+				this.collEnemy(other);
 			}else if(other.node.name.indexOf("Object")!=-1){
 				if(other.node.name.indexOf("Object2")!=-1&&(cf.y!=-1||this.data.isClimb)){
 					contact.disabled=true;
 				}else{
+					//cc.log(cf);
+					
 					if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
 						this.coll.collFloorDir[other._id]=other;
 						this.coll.collFloorCnt++;
@@ -283,6 +294,13 @@ cc.Class({
 			if(other.node.name=="Object_Ladder"){//爬梯子
 				this.coll.Laddder[1]=null;
 			}
+
+			if(other.node.name.indexOf("Enemy")!=-1){
+				if(this.coll.collEnemyDir[other._id]){
+					delete this.coll.collEnemyDir[other._id];
+					this.coll.collEnemyCnt--;
+				}
+			}
 			if(other.node.name.indexOf("Object")!=-1){
 				if(this.coll.collFloorDir[other._id]){
 					delete this.coll.collFloorDir[other._id];
@@ -311,6 +329,7 @@ cc.Class({
 		if(this.data.pause){
 			return ;
 		}
+		
 		var sc=Math.abs(this.data.preScaleX-this.node.scaleX);
 		if(self.tag==1){
 		}else{//self.tag==0
@@ -350,7 +369,8 @@ cc.Class({
 				}
 			}
 		}
-    }, 
+	}, 
+	
 	onCollisionEnter: function (other, self){
 		if(this.data.pause)
 			return ;
@@ -395,7 +415,7 @@ cc.Class({
 			this.setPhy(this.data.state[2],true);
 			this.body.linearVelocity = this.data.speed;
 		}else{
-			this.changeLife(2,8);
+			this.changeLife(2,2);
 			this.changeTime(5);
 			this.setHalfHeart();
 			ALL.MainCanSc.usingArm.getComponent(cc.Sprite).spriteFrame=ALL.RES.GamePropFrame["goods_"+this.data.nowArms];
@@ -446,8 +466,8 @@ cc.Class({
 		//cc.log(this.data.isLie);
 		if(this.data.state[0].indexOf("air")!=-1){
 			var maxJumptime=8;
-			if(this.data.jumoAidTime>0){
-				this.data.jumoAidTime--;
+			if(this.data.jumpAidTime>0){
+				this.data.jumpAidTime--;
 				speed.y=this.data.jumpSpeedy*2;
 			}else if(this.key.attack&&this.coll.collWaterCnt>0&&this.data.state[2]=="umbrellaLead"){
 				speed.y=0;
@@ -524,6 +544,21 @@ cc.Class({
 				this.data.maxSpeedx=LEADDATA.MaxSpeedKind["water"][this.data.state[1]][this.data.state[2]];
 				leadAcc=LEADDATA.BeginAccKind["water"][this.data.state[1]][this.data.state[2]];
 			}
+		}else if(this.data.nowArms=="spear"){//拿了毛并且攻击了
+			var arm=this.data.armColl[this.data.nowArms];
+			if(!this.data.isLie&&arm&&arm.collWood){
+				leadAcc=0;
+				var wood=arm.collWood.node;
+				var woodBody=wood.getComponent(cc.RigidBody);
+				if(wood.angle==0){
+					speed.x=woodBody.linearVelocity.x;
+				}else if(wood.angle==90||wood.angle==270){
+					speed.x=woodBody.linearVelocity.x;
+					speed.y=woodBody.linearVelocity.y;
+				}
+			}else if(arm&&!arm.collWood&&arm.protecting==false){
+				arm.die();
+			}
 		}
 
 		this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
@@ -545,8 +580,19 @@ cc.Class({
 			this.data.scaleReverse=false;
 			return;
 		}
+
+		//处理碰撞敌人
+		//
+		for(var en in this.coll.collEnemyDir){
+			this.collEnemy(this.coll.collEnemyDir[en]);
+		}
+
+
 		if(this.judgeJumpScene()){
 			return;
+		}else if(this.data.injuringTime>0){//判断落入刺和熔浆被打
+			this.data.act="injuring";
+			this.data.injuringTime--;
 		}else if(this.judgeAttack()){//返回是否处在攻击动作
 		}else if(this.data.state[0].indexOf("air")!=-1){
 			if(this.coll.collWaterCnt>0&&this.key.attack&&this.data.state[0]=="air"){//举着伞按了攻击
@@ -613,6 +659,8 @@ cc.Class({
 			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"]/4;
 		}else if(this.data.state[2]=="umbrellaLead"&&speed.y<-1){//向下运动且举着雨伞，则中立减半
 			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"]/8;
+		}else if(this.data.nowArms=="spear"&&!this.data.isLie&&this.data.armColl[this.data.nowArms]&&this.data.armColl[this.data.nowArms].collWood){
+			this.body.gravityScale=0;
 		}else{
 			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"];
 		}
@@ -631,10 +679,9 @@ cc.Class({
 		if(Math.abs(speed.x)<1&&this.data.selfacc.x<5){//控制精度
 			speed.x=0;
 		}
-		
 	},
 
-	collEnemy:function(contact,other,cf){
+	collEnemy:function(other){
 		var ep=other.node.getComponent("EnemyPublic");
 		if(ep==null){
 			cc.log("公用怪物脚本丢失");
@@ -646,7 +693,7 @@ cc.Class({
 			if(ep.specialEffect=="null"){
 				if(this.data.state[2]=="Stegosaurus"&&this.data.act.indexOf("attack")!=-1){//是剑龙攻击     
 					ep.changeLife(-LEADDATA.DAM["Stegosaurus"],"Stegosaurus");//怪物掉血，剑龙攻击成功
-				}else if(this.data.state[2]=="scooterLead"&&cf.y==-1){
+				}else if(this.data.state[2]=="scooterLead"){
 					
 				}else{
 					this.speed=this.body.linearVelocity;
@@ -690,16 +737,24 @@ cc.Class({
 			}else if(ep.specialEffect=="twinkle"){
 				
 			}else if(ep.specialEffect=="invincible"){
-				this.speed=this.body.linearVelocity;
-				this.speed.x=300*(this.node.x>other.node.x?1:-1)
-				this.body.linearVelocity=this.speed;
-				if(this.data.state[2]=="Lead"&&this.data.specialEffect=="null"){//是主角本人则掉血
-					this.changeLife(-ep.damage,0);//主角掉血
-				}else if(this.data.state[2]!="Lead"&&this.data.specialEffect=="null"){
-					this.changeLife(0,0);
-					ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
-					ep.die();
-					this.setPhy();
+				if(this.data.state[2]=="Fierydragon"&&(ep.category=="lava"||other.node.name.indexOf("LAVA")!=-1)){//是喷火龙
+					//喷火龙碰到岩浆什么都不做
+				}else{
+					this.speed=this.body.linearVelocity;
+					this.speed.x=300*(this.node.x>other.node.x?1:-1)
+					if(this.speed.y<0&&(ep.category=="lava"||ep.category=="stab")){
+						this.speed.y=300;
+						this.data.injuringTime=20;
+					}
+					this.body.linearVelocity=this.speed;
+					if(this.data.state[2]=="Lead"&&this.data.specialEffect=="null"){//是主角本人则掉血
+						this.changeLife(-ep.damage,0);//主角掉血
+					}else if(this.data.state[2]!="Lead"&&this.data.specialEffect=="null"){
+						this.changeLife(0,0);
+						ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
+						ep.die();
+						this.setPhy();
+					}
 				}
 			}
 		}
@@ -884,6 +939,7 @@ cc.Class({
 			var attackActCnt=LEADDATA.AttackTime["yes"][this.data.nowArms]*10;
 			var cnt=0;
 			newarm=cc.instantiate(ALL.RES.FAB["Arm_short"]);
+			newarm.protecting=true;
 			this.scheduleDir[this.data.nowArms] = function(){//无前摇
 				if(!newarm){
 					this.unschedule(this.scheduleDir[this.data.nowArms]);
@@ -904,7 +960,10 @@ cc.Class({
 					this.data.armColl[this.data.nowArms]=newarm;
 
 				}else if(cnt==attackActCnt){
-					this.data.armColl[this.data.nowArms]&&newarm.die();
+					if(this.data.armColl[this.data.nowArms]&&!this.data.armColl[this.data.nowArms].collWood){
+						newarm.die();
+					}
+					newarm.protecting=false;
 					this.unschedule(this.scheduleDir[this.data.nowArms]);
 				}
 				cnt++;
@@ -993,12 +1052,12 @@ cc.Class({
 		for(var i=0;i<points.length;i++){
 			if(is)
 				cc.log("i:"+i,this.borderY(-1)+2-points[i].y,this.coll.collFloorCnt);
-			if(points[i].x<this.borderX(-1)+2){
+			if(points[i].x<this.borderX(-1)+2){		//接触时，获得的是接触前的borderX，borderY
 				cnt[0]++;
 			}else if(points[i].x>this.borderX(1)-2){
 				cnt[1]++;
 			}
-			if(points[i].y<this.borderY(-1)+1){
+			if(points[i].y<this.borderY(-1)+0.6){
 				cnt[2]++;
 			}else if(points[i].y>this.borderY(1)-2){
 				cnt[3]++;
@@ -1019,6 +1078,9 @@ cc.Class({
 	},
 	judgeAttack:function(){//返回是否处理后面动作。false代表继续处理
 		//cc.log(this.data.nowArmsCnt[this.data.nowArms]);
+		if(this.key.attack&&this.data.armColl[this.data.nowArms]&&this.data.armColl[this.data.nowArms].collWood){
+			this.data.armColl[this.data.nowArms].die();
+		}
 		if(this.coll.liftingOb[1]&&this.key.attack&&this.data.theKeyliftOb==false){
 			var fp=Math.sign(this.coll.liftingOb[1].x-this.node.x);
 			if(fp==-1&&this.key.left||fp==1&&this.key.right){
@@ -1052,8 +1114,7 @@ cc.Class({
 			}
 			this.schedule(this.scheduleDir["attackStop"],0.1,sumCnt,0);
 			return this.data.isAttackAct;
-		}
-		if(this.data.nowArms=="umbrella"){
+		}else if(this.data.nowArms=="umbrella"){
 			if(this.data.state[2]!="umbrellaLead"&&this.key.attack//没举着雨伞 且按了攻击
 				&&!this.data.isLie&&!this.data.isClimb&&!this.data.isFall&&this.data.state[0]!="water"){
 				this.setPhy("umbrellaLead");
@@ -1062,7 +1123,28 @@ cc.Class({
 				this.delArm();
 			}
 			return false;
+		}else if(this.data.nowArms=="spear"){//武器是矛
+			var arm=this.data.armColl[this.data.nowArms];
+			if(!this.data.isLie&&arm&&arm.collWood){
+				var wood=arm.collWood.node;
+				if(wood.angle==0&&(this.data.act=="attack_spearUp_wood"||this.data.act=="attack_spearUp")){
+					this.data.act="attack"+"_"+this.data.nowArms+"Up"+"_wood";
+					var pos=wood.convertToWorldSpaceAR(cc.v2(0,0));
+					this.node.y=pos.y-arm.collWood.size.height-this.phyColl.size.height/2;
+					wood.isCollLead=true;//把碰撞状态置为true
+					return true;
+				}else if((wood.angle==90||wood.angle==270)&&(this.data.act=="attack_spear_wood"||this.data.act=="attack_spear")){
+					this.data.act="attack"+"_"+this.data.nowArms+"_wood";
+					var pos=wood.convertToWorldSpaceAR(cc.v2(0,0));
+					var fp=-this.node.scaleX;
+					this.node.x=pos.x+fp*arm.collWood.size.width/2+fp*this.phyColl.size.width/2;
+					wood.isCollLead=true;//把碰撞状态置为true
+					return true;
+				}
+			}
 		}
+
+
 		if(this.data.isFall||this.data.isClimb||this.data.nowArms=="scooter"){
 			return false;
 		}

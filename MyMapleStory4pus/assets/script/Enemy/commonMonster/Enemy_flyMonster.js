@@ -71,7 +71,7 @@ cc.Class({
 			return  ml+mr;
 		return  this.binsim(l,m,ml,a,h)+this.binsim(m,r,mr,a,h);
 	},
-	//以上是辛普森法计算过程
+	//以上是计算函数   ，在[l,r]上的定积分,
 	
 	onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
 		if(other.node.name=="Lead"){//在人物里处理了碰撞效果
