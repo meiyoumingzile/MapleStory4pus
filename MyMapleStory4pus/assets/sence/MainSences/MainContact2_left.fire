@@ -96,13 +96,13 @@
         "__id__": 38
       },
       {
-        "__id__": 98
+        "__id__": 99
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 101
+        "__id__": 102
       }
     ],
     "_prefab": null,
@@ -4319,6 +4319,9 @@
       },
       {
         "__id__": 97
+      },
+      {
+        "__id__": 98
       }
     ],
     "_prefab": null,
@@ -4453,6 +4456,17 @@
     "_id": "4azmR45LZOD5K/vl/J6WGL"
   },
   {
+    "__type__": "7eea3uRVmZILo72j1q0zudy",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 94
+    },
+    "_enabled": true,
+    "state": 4,
+    "_id": "2agx9PjIdOOoQ8MY6yFgmZ"
+  },
+  {
     "__type__": "cc.Node",
     "_name": "camera",
     "_objFlags": 512,
@@ -4463,10 +4477,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 99
+        "__id__": 100
       },
       {
-        "__id__": 100
+        "__id__": 101
       }
     ],
     "_prefab": null,
@@ -4494,7 +4508,7 @@
       "array": [
         282.581,
         -2904.773,
-        369.79284741595535,
+        371.5248982235242,
         0,
         0,
         0,
@@ -4522,7 +4536,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 98
+      "__id__": 99
     },
     "_enabled": true,
     "_cullingMask": 4294967295,
@@ -4558,7 +4572,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 98
+      "__id__": 99
     },
     "_enabled": true,
     "target": {

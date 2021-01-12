@@ -78,6 +78,7 @@ cc.Class({
 			halfHeart:false,
 
 			//以下是宝物和武器是否拥有
+			nowStage:6,
 			lifeUpJudge:[false,false,false, false,false ,false,false ,false,false],//体力上限是否吃到
 			goods:{goods_axe:true,goods_spear:true,},
 			potCnt:0,
