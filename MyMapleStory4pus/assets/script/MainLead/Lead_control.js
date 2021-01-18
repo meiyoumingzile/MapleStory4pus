@@ -466,7 +466,7 @@ cc.Class({
 		this.data.isLie=this.judgeIsLie();
 		//cc.log(this.data.isLie);
 		if(this.data.state[0].indexOf("air")!=-1){
-			var maxJumptime=8;
+			var maxJumptime=9;
 			if(this.data.jumpAidTime>0){
 				this.data.jumpAidTime--;
 				speed.y=this.data.jumpSpeedy*2;
@@ -483,7 +483,6 @@ cc.Class({
 						speed.y=0;
 					}
 				}else if(this.coll.collFloorCnt>0){//如果在地面上，且 按了跳跃，则就挑起
-			
 					speed.y=this.data.jumpSpeedy;
 					this.data.jumptime=1;
 				}else if(this.data.jumptime>0&&this.data.jumptime<maxJumptime){//如果不在地面上且还按了跳跃且之前几帧按过跳跃可以“大跳”
@@ -563,10 +562,12 @@ cc.Class({
 		}
 
 		this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
+		
 		if(this.coll.collFloorCnt==0&&(this.coll.collSideCnt[0]>0&&keyFp==-1||this.coll.collSideCnt[1]>0&&keyFp==1||this.data.act=="climb")){
 			this.data.selfacc.x=0;
 		}else if(keyFp!=0){//左右运动
 			this.setScaleX(ALL.scaleLead.x,keyFp);
+			
 			this.data.selfacc.x=keyFp*leadAcc*(keyFp==Math.sign(speed.x)?1:0.8);//加速度方向和脸的方向一样。
 		}else{
 			this.data.selfacc.x=0;
@@ -670,6 +671,7 @@ cc.Class({
 	},
 	calSpeed: function(dt,speed){
 		var nextx=speed.x+this.data.selfacc.x* dt;
+		
 		if(Math.abs(nextx) < this.data.maxSpeedx||Math.abs(nextx) < Math.abs(speed.x)){
 			speed.x=nextx;
 		}
@@ -680,6 +682,9 @@ cc.Class({
 		if(Math.abs(speed.x)<1&&this.data.selfacc.x<5){//控制精度
 			speed.x=0;
 		}
+		if(this.coll.collSideDir[1]){
+			//cc.log(this.coll.collSideDir[1]);
+		}
 	},
 
 	collEnemy:function(other){
@@ -688,7 +693,6 @@ cc.Class({
 			cc.log("公用怪物脚本丢失");
 			return;
 		}
-		//cc.log(other.node.name);
 		if(this.data.specialEffect=="null"){
 			
 			if(ep.specialEffect=="null"){
@@ -1093,7 +1097,7 @@ cc.Class({
 		}else if(this.coll.liftingOb[0]&&this.key.attack&&this.data.theKeyliftOb==false){
 			var liftObBody=this.coll.liftingOb[0].getComponent(cc.RigidBody);
 			if(liftObBody){
-				liftObBody.linearVelocity=cc.v2(500*this.node.scaleX,300);
+				liftObBody.linearVelocity=cc.v2(400*this.node.scaleX,500);
 			}
 			this.data.theKeyliftOb=true;
 			this.coll.liftingOb[0]=null;
@@ -1405,8 +1409,11 @@ cc.Class({
 		this.coll.liftingOb[0]=node;
 	},
 	setLiftOb:function(){
-		this.coll.liftingOb[0].x=this.node.x;
-		this.coll.liftingOb[0].y=this.borderY(1)+this.coll.liftingOb[0].height/2;
+		var h=this.coll.liftingOb[0].getComponent(cc.PhysicsBoxCollider).size.height;
+		var c=cc.v2(MainLead.node.x,MainLead.borderY(1)+h/2);
+		this.coll.liftingOb[0].x=c.x;
+		this.coll.liftingOb[0].y=c.y;
+		this.coll.liftingOb[0].script.changeLifted();
 	},
 	delArm:function(){
 		if(this.data.armColl[this.data.nowArms]){

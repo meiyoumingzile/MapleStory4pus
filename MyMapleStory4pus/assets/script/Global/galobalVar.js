@@ -34,7 +34,7 @@ window.ALL = {
     
     EnemyScript:[],
     enemyUpdateSize:cc.v2(1000,1000),//怪物刷新范围
-    obUpdateSize:cc.v2(1000,1000),//怪物墙的范围
+    obUpdateSize:cc.v2(2000,2000),//怪物墙的范围
 	scaleLead:cc.v2(1,1),
 	scaleEnemy:cc.v2(1,1),
     scaleOb:cc.v2(1,1),
