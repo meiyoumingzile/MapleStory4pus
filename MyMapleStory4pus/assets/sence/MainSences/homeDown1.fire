@@ -5258,7 +5258,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "mainContact1",
+    "_name": "MainContact1",
     "_objFlags": 0,
     "_parent": {
       "__id__": 108
@@ -17700,8 +17700,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -3133.68,
-        -76.982,
+        -1194.945,
+        175.14,
         0,
         0,
         0,

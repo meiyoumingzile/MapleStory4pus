@@ -1,6 +1,6 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "Object_lava2",
+  "_name": "Object_lava2_ob",
   "_objFlags": 0,
   "_native": "",
   "_duration": 0.7666666666666667,
@@ -14,25 +14,25 @@
           {
             "frame": 0,
             "value": {
-              "__uuid__": "2ac48d67-e281-4770-8516-14fefb9e570a"
+              "__uuid__": "b8f698e2-fa7b-483d-b84b-a1c3c1b2a633"
             }
           },
           {
             "frame": 0.25,
             "value": {
-              "__uuid__": "edee97cf-690b-44de-a05c-7927b405f622"
+              "__uuid__": "8fa9243a-c259-4305-84ab-7cab0c1b0c69"
             }
           },
           {
             "frame": 0.5,
             "value": {
-              "__uuid__": "c6ff30a5-a645-4d73-b58c-fa16c55cf940"
+              "__uuid__": "1b20025b-6063-4884-84aa-9103e770c760"
             }
           },
           {
             "frame": 0.75,
             "value": {
-              "__uuid__": "2ac48d67-e281-4770-8516-14fefb9e570a"
+              "__uuid__": "b8f698e2-fa7b-483d-b84b-a1c3c1b2a633"
             }
           }
         ]

@@ -17,7 +17,7 @@ cc.Class({
     },
     jumpState(){//人物脚本调用
         if(this.sp.spriteFrame!=ALL.RES.GamePropFrame["jumpAid1_0"]){
-            MainLead.data.jumoAidTime=20;
+            MainLead.data.jumpAidTime=5;
             this.sp.spriteFrame=ALL.RES.GamePropFrame["jumpAid1_2"];
             this.schedule1 = function(){
 				this.sp.spriteFrame=ALL.RES.GamePropFrame["jumpAid1_1"];

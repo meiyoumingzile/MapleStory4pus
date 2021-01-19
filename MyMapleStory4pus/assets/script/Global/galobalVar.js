@@ -43,15 +43,19 @@ window.ALL = {
 };
 
 window.SAVE={
-    SaveLead:null,
-    targetPos:null,//不设置则调到门附近
+    SaveLead_data:null,
+    LeadBegin:{
+        targetPos:null,//不设置则调到门附近
+        saveDeviation:cc.v2(0,0),
+        scaleX:0,
+    },
     preSence:"",
     preDoor:{
         kind:"",
         tag:"",
         name:"",
     },
-
+   
 };
 window.KEY={
     up:cc.macro.KEY.w,

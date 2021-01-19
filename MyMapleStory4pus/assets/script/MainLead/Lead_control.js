@@ -41,7 +41,6 @@ cc.Class({
 		},
 		this.data={
 			throughSences:[],
-			saveDeviation:cc.v2(0,0),
 	        state:["air","walk","Lead"],
 			specialEffect:"null",
 /*状态，三个代表：第1个代表周围环境，第2个代表人的运动状态：或walk,run ;
@@ -100,6 +99,7 @@ cc.Class({
     },
 
     onKeyDown (event) {
+		cc.log("h");
 		if(this.data.pause)
 			return ;
         switch(event.keyCode) {
@@ -344,7 +344,7 @@ cc.Class({
 			}
 			
 			if(other.node.name.indexOf("Enemy")!=-1){
-				this.collEnemy(contact, other,cf);
+				this.collEnemy(other);
 			}else if(other.node.name.indexOf("Object")!=-1){
 				if(other.node.name.indexOf("Object2")!=-1&&(cf.y!=-1||this.data.isClimb||this.key.down&&this.key.jump)){
 					contact.disabled=true;
@@ -393,16 +393,16 @@ cc.Class({
 		for(var i=0;i<ALL.RES.LeadAnim.length;i++){
 			an.addClip(ALL.RES.LeadAnim[i]);
 		}
-		if(SAVE.SaveLead!=null){
-			this.changeLife(SAVE.SaveLead.life.x,SAVE.SaveLead.life.y);
-			this.changeTime(SAVE.SaveLead.time.x);
+		if(SAVE.SaveLead_data!=null){//从上一个场景而来
+			this.changeLife(SAVE.SaveLead_data.life.x,SAVE.SaveLead_data.life.y);
+			this.changeTime(SAVE.SaveLead_data.time.x);
 			ALL.MainCanSc.usingArm.getComponent(cc.Sprite).spriteFrame=ALL.RES.GamePropFrame["goods_"+this.data.nowArms];
 			//以上是初始化人物界面
-			this.data=SAVE.SaveLead;
+			this.data=SAVE.SaveLead_data;
 			var find=ALL.MainCanSc.findChildren;
-			var p=SAVE.targetPos;
+			var p=SAVE.LeadBegin.targetPos;
 			try{
-				if(SAVE.targetPos==null){
+				if(SAVE.LeadBegin.targetPos==null){
 					p=find(find(find(ALL.jumpSenceDoor,SAVE.preDoor.kind),SAVE.preDoor.tag),SAVE.preSence);
 				}
 			}catch(ex){
@@ -410,11 +410,19 @@ cc.Class({
 			}
 			this.setHalfHeart();
 			//cc.log(p);
-			this.node.setPosition(cc.v2(p.x+this.data.saveDeviation.x,p.y+this.data.saveDeviation.y));
+			this.node.setPosition(cc.v2(p.x+SAVE.LeadBegin.saveDeviation.x,p.y+SAVE.LeadBegin.saveDeviation.y));
 			ALL.CamNode.getComponent("camera_control").setCameraPos(this.node.position);
-			SAVE.SaveLead=null;
+			SAVE.SaveLead_data=null;
 			this.setPhy(this.data.state[2],true);
+			this.setScaleX(SAVE.LeadBegin.scaleX);
 			this.body.linearVelocity = this.data.speed;
+			if(this.data.speed.y>0&&this.data.speed.y<300&&SAVE.LeadBegin.saveDeviation.y>0){//如果是从下往上
+				this.body.linearVelocity=cc.v2(this.data.speed.x,400);
+				if(this.key.jump){
+					this.data.jumptime=1;
+					cc.log("按了跳");
+				}
+			}
 		}else{
 			this.changeLife(2,2);
 			this.changeTime(5);
@@ -431,7 +439,6 @@ cc.Class({
 		}
 		ALL.menuSc.init();
 		var nowDraw=this.data.state[2]+"_"+this.data.act;
-		this.node.scale=ALL.scaleLead; //人物大小适配场景
 		this.player.play(nowDraw);
 		this.data.preDraw=nowDraw;
 
@@ -566,7 +573,7 @@ cc.Class({
 		if(this.coll.collFloorCnt==0&&(this.coll.collSideCnt[0]>0&&keyFp==-1||this.coll.collSideCnt[1]>0&&keyFp==1||this.data.act=="climb")){
 			this.data.selfacc.x=0;
 		}else if(keyFp!=0){//左右运动
-			this.setScaleX(ALL.scaleLead.x,keyFp);
+			this.setScaleX(keyFp);
 			
 			this.data.selfacc.x=keyFp*leadAcc*(keyFp==Math.sign(speed.x)?1:0.8);//加速度方向和脸的方向一样。
 		}else{
@@ -603,7 +610,7 @@ cc.Class({
 				//cc.log(this.node.scaleX);
 				var x=Math.abs(Math.ceil(this.node.x/20))%2;
 				var y=Math.abs(Math.ceil(this.node.y/30))%2;
-				this.setScaleX(ALL.scaleLead.x,(x+y==1?1:-1));
+				this.setScaleX((x+y==1?1:-1));
 				this.data.act="climb";
 			}else if(this.data.isLie){
 				if(Math.abs(speed.x)<10){//在地板上,判断速度
@@ -631,7 +638,7 @@ cc.Class({
 			if(this.data.isClimb){
 				var x=Math.abs(Math.ceil(this.node.x/20))%2;
 				var y=Math.abs(Math.ceil(this.node.y/30))%2;
-				this.setScaleX(ALL.scaleLead.x,(x+y==1?1:-1));
+				this.setScaleX((x+y==1?1:-1));
 				this.data.act="climb";
 			}else if(this.coll.collFloorCnt<=0){//没在地板上就跳
 				this.data.act="swim";
@@ -1435,8 +1442,8 @@ cc.Class({
 			cc.director.resume();
 		}
 	},
-	setScaleX:function(v,fp){
-		var sc=v*fp;
+	setScaleX:function(fp){
+		var sc=ALL.scaleLead.x*fp;
 		if(sc>0&&this.node.scaleX<0||sc<0&&this.node.scaleX>0){
 			this.data.scaleReverse=true;
 		}
@@ -1467,10 +1474,11 @@ cc.Class({
 	saveData:function(deviation,targetPos=null){//deviation代表偏移距离
 		SAVE.preSence=cc.director.getScene().name;
 		this.clearSelf();
-		this.data.saveDeviation=deviation;
+		SAVE.LeadBegin.saveDeviation=deviation;
 		this.memsetKey(false);
-		SAVE.SaveLead=cc.instantiate(this.data);
-		SAVE.targetPos=targetPos;
+		SAVE.SaveLead_data=cc.instantiate(this.data);
+		SAVE.LeadBegin.targetPos=targetPos;
+		SAVE.LeadBegin.scaleX=Math.sign(this.node.scaleX);
 	},
 	saveDragon(){
 		if(LEADDATA.Pets.indexOf(this.data.chooseDragon)!=-1&&this.data.state[2]!="lieLead"){

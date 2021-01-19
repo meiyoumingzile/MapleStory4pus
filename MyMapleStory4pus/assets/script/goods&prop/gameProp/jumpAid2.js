@@ -12,7 +12,7 @@ cc.Class({
         if(this.sp.spriteFrame!=ALL.RES.GamePropFrame["jumpAid1_0"]){
             if(this.sp.spriteFrame==ALL.RES.GamePropFrame["jumpAid2_1"]){
                 this.sp.spriteFrame=ALL.RES.GamePropFrame["jumpAid2_2"];
-                MainLead.data.jumoAidTime=20;
+                MainLead.data.jumpAidTime=20;
             }else if(this.sp.spriteFrame==ALL.RES.GamePropFrame["jumpAid2_2"]){
                 this.sp.spriteFrame=ALL.RES.GamePropFrame["jumpAid2_1"];
             }
