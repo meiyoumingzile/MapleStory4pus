@@ -99,7 +99,7 @@ cc.Class({
     },
 
     onKeyDown (event) {
-		cc.log("h");
+		//cc.log("h");
 		if(this.data.pause)
 			return ;
         switch(event.keyCode) {
@@ -416,12 +416,11 @@ cc.Class({
 			this.setPhy(this.data.state[2],true);
 			this.setScaleX(SAVE.LeadBegin.scaleX);
 			this.body.linearVelocity = this.data.speed;
-			if(this.data.speed.y>0&&this.data.speed.y<300&&SAVE.LeadBegin.saveDeviation.y>0){//如果是从下往上
-				this.body.linearVelocity=cc.v2(this.data.speed.x,400);
-				if(this.key.jump){
-					this.data.jumptime=1;
-					cc.log("按了跳");
-				}
+			if(this.data.speed.y>0&&this.data.speed.y<810&&SAVE.LeadBegin.saveDeviation.y>0&&this.data.state[2]!="Pterosaur"){//如果是从下往上
+
+				this.body.linearVelocity=cc.v2(this.data.speed.x,810);
+				this.data.jumptime=1;
+				//cc.log(this.data.jumptime);
 			}
 		}else{
 			this.changeLife(2,2);

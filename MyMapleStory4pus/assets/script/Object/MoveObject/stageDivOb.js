@@ -18,7 +18,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        if(SAVE.SaveLead&&SAVE.SaveLead.nowStage>=this.state){
+        if(SAVE.SaveLead_data&&SAVE.SaveLead_data.nowStage>=this.state){
             this.node.destroy();
         }
     },

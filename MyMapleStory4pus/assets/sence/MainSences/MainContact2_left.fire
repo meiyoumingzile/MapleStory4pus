@@ -4426,7 +4426,7 @@
     "_fixedRotation": false,
     "enabledContactListener": false,
     "bullet": false,
-    "awakeOnLoad": false,
+    "awakeOnLoad": true,
     "_id": "519QUNcd9FiYL4gI0ytxEw"
   },
   {
