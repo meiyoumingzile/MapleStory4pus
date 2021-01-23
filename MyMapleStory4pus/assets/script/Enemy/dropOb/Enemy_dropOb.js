@@ -48,6 +48,9 @@ cc.Class({
 	
     update: function (dt) {
 		this.ep.visDie();
+		if(this.ep.kind==7&&Math.sign(this.body.linearVelocity.y)*Math.sign(this.node.scaleY)==1){
+			this.node.scaleY=-this.node.scaleY;
+		}
 		if(this.motionFun!=null){
 			this.motionFun();
 		}

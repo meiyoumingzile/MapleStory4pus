@@ -100,6 +100,9 @@
     "_components": [
       {
         "__id__": 169
+      },
+      {
+        "__id__": 170
       }
     ],
     "_prefab": null,
@@ -8072,7 +8075,7 @@
       "array": [
         0,
         0,
-        369.79284741595535,
+        371.5248982235242,
         0,
         0,
         0,
@@ -8165,5 +8168,23 @@
     "usingArm": null,
     "fruitFrameList": [],
     "_id": "5e213U63xJAIoT/pJRlphp"
+  },
+  {
+    "__type__": "cc.AudioSource",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "_clip": {
+      "__uuid__": "19b07332-593a-45a3-b2c3-fe1a586ffbdf"
+    },
+    "_volume": 1,
+    "_mute": false,
+    "_loop": true,
+    "playOnLoad": true,
+    "preload": false,
+    "_id": "90U4t5d8JLfJuGbkwA78YG"
   }
 ]

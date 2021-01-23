@@ -40,5 +40,5 @@
     "skipRecord": false
   },
   "appBundle": false,
-  "includeAnySDK": null
+  "includeAnySDK": false
 }

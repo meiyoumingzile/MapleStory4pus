@@ -1,0 +1,43 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Object_lava3_floor",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.7666666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "cf3ed7db-06c5-4393-bfc7-74a6f111bab9"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "99f589f3-2231-47dc-883c-c2d914e9d010"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "0e9d7442-19d1-44d8-b2e1-a27fa07bd722"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "cf3ed7db-06c5-4393-bfc7-74a6f111bab9"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
