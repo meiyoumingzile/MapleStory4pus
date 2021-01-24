@@ -1,6 +1,6 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "cloud1_3_1",
+  "_name": "cloud3_b",
   "_objFlags": 0,
   "_native": "",
   "_duration": 0.85,
@@ -14,19 +14,19 @@
           {
             "frame": 0,
             "value": {
-              "__uuid__": "01e60bc9-fe36-43de-af35-8f76f127b368"
+              "__uuid__": "bc4d76cc-8e98-4b9a-a61f-8dc395fd1b8f"
             }
           },
           {
             "frame": 0.4166666666666667,
             "value": {
-              "__uuid__": "02b50f25-fe82-4aea-8ef4-e70e20b12c34"
+              "__uuid__": "df292522-c5c0-47b8-8274-1e4d51f823e2"
             }
           },
           {
             "frame": 0.8333333333333334,
             "value": {
-              "__uuid__": "01e60bc9-fe36-43de-af35-8f76f127b368"
+              "__uuid__": "bc4d76cc-8e98-4b9a-a61f-8dc395fd1b8f"
             }
           }
         ]
