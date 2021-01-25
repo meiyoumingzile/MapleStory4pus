@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "b2caa4bc-abe9-4b50-b894-e100e85fa5a8",
+  "uuid": "b423e1e2-093c-4f77-837b-2dd9bcd9847c",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "ornament_magma2_2": {
+    "object_pl": {
       "ver": "1.0.4",
-      "uuid": "8683159f-9094-4f99-b0ef-b9de79e0fb98",
-      "rawTextureUuid": "b2caa4bc-abe9-4b50-b894-e100e85fa5a8",
+      "uuid": "3091616d-0fbc-45c6-aa06-25d7372ba0f1",
+      "rawTextureUuid": "b423e1e2-093c-4f77-837b-2dd9bcd9847c",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 44,
-      "height": 30,
-      "rawWidth": 44,
-      "rawHeight": 30,
+      "width": 172,
+      "height": 116,
+      "rawWidth": 172,
+      "rawHeight": 116,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

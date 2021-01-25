@@ -2,8 +2,8 @@
   "__type__": "cc.AnimationClip",
   "_name": "Object_lava1",
   "_objFlags": 0,
-  "_rawFiles": null,
-  "_duration": 0.5166666666666667,
+  "_native": "",
+  "_duration": 0.7666666666666667,
   "sample": 60,
   "speed": 1,
   "wrapMode": 2,
@@ -14,25 +14,25 @@
           {
             "frame": 0,
             "value": {
-              "__uuid__": "9567d644-c0af-4c36-bfe2-64b7d09a693b"
+              "__uuid__": "fddb78ec-73a4-49f9-a808-dd0f625ea074"
             }
           },
           {
-            "frame": 0.16666666666666666,
+            "frame": 0.25,
             "value": {
-              "__uuid__": "f88b73b8-8a71-46bb-a4e5-18da7d2b72e4"
-            }
-          },
-          {
-            "frame": 0.3333333333333333,
-            "value": {
-              "__uuid__": "d78b91ed-ac12-44cc-97de-d6906fce394c"
+              "__uuid__": "0d822a03-f916-4abf-af03-f6dcd990f1ad"
             }
           },
           {
             "frame": 0.5,
             "value": {
-              "__uuid__": "9567d644-c0af-4c36-bfe2-64b7d09a693b"
+              "__uuid__": "b2807e60-6707-4a19-a6ca-ce96c9b1a9e0"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "fddb78ec-73a4-49f9-a808-dd0f625ea074"
             }
           }
         ]

@@ -1,0 +1,43 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Object_lava1_bgtop",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.7666666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "37887c0e-bed5-480c-81c0-e2172f69ac7d"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "69c451cf-c742-4dd2-9ba1-3fe70219c8b4"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "fea3f407-2524-434e-88ed-11401641e443"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "37887c0e-bed5-480c-81c0-e2172f69ac7d"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
