@@ -16,12 +16,19 @@ cc.Class({
         this.thing.active=false;
         this.node.getComponent(cc.Sprite).spriteFrame=this.invisible?this.pics[0]:null;
         var tsp=this.thing.getComponent(cc.Sprite);
-        if(SAVE.SaveLead&&(tsp.spriteFrame==ALL.RES.GamePropFrame["heart2"]||tsp.spriteFrame==ALL.RES.GamePropFrame["halfHeart2"])){
+        if(SAVE.SaveLead_data&&(tsp.spriteFrame==ALL.RES.GamePropFrame["heart2"]||tsp.spriteFrame==ALL.RES.GamePropFrame["halfHeart2"])){
             var sc=this.thing.getComponent("addLife");
-            if(SAVE.SaveLead.lifeUpJudge[sc.lifeId]){
+            if(SAVE.SaveLead_data.lifeUpJudge[sc.lifeId]){
                 tsp.spriteFrame=ALL.RES.GamePropFrame["heart1"];
                 sc.chLife=1; //加血
                 sc.chLifeUp=0; //加血
+            }
+        }
+        tsp=this.thing.getComponent("permanentKey");
+        if(tsp){//有了钥匙
+            var have=SAVE.SaveLead_data&&SAVE.SaveLead_data.keyBit[tsp.keyId];
+            if(have&&have==true){
+                this.node.destroy();
             }
         }
     },

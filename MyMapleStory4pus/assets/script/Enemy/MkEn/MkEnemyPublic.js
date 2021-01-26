@@ -35,7 +35,7 @@ cc.Class({
 				ALL.MainCanvas.addChild(newpre);
 				this.__cnt++;
 			}else{
-				cc.log("加载怪物失败");
+				cc.log("加载怪物:\"Enemy_"+str+"\"失败");
 				return ;
 			}
         }

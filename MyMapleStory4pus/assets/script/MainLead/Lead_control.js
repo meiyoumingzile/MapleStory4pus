@@ -82,6 +82,7 @@ cc.Class({
 			goods:{goods_axe:true,goods_spear:true,},
 			potCnt:0,
 			potBit:[false,false,false,false,false,false,false,false,false],//哪个瓶子有没有
+			keyBit:[false,false,true,false,false,false,false,false,false],//哪个钥匙有没有
 			chooseDragon:"",//选择的龙
 			isSaveDragon:false,//有没有存包里
     	};
@@ -1321,7 +1322,8 @@ cc.Class({
 			for(var j=0;j<sc.length;j++){
 				var ch=sc[j].getChildren();
 				for(var i=0;i< ch.length;i++){
-					if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2){
+					var isInDoor=ch[i].isInDoor==undefined||ch[i].isInDoor&&ch[i].isInDoor==true;
+					if(Math.abs(this.node.x-ch[i].x)<ch[i].width/2&&Math.abs(this.node.y-ch[i].y)<ch[i].height/2&&isInDoor){
 						this.saveData(cc.v2(0,0));
 						SAVE.preDoor.kind=ALL.scDoor.name;
 						SAVE.preDoor.tag=sc[j].name;

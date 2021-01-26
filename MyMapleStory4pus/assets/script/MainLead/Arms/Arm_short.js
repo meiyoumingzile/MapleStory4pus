@@ -39,7 +39,7 @@ cc.Class({
             if(js&&js.specialEffect=="null"){
                 var d=js.changeLife(-this.ap.damage,this.ap.category);
                 if(this.ap.category=="scooter"){
-					MainLead.body.linearVelocity=cc.v2(MainLead.body.linearVelocity.x,300);
+					MainLead.body.linearVelocity=cc.v2(MainLead.body.linearVelocity.x,MainLead.key.jump?550:250);
                 }
             }
         }else if(other.node.name.indexOf("WOOD")!=-1){
