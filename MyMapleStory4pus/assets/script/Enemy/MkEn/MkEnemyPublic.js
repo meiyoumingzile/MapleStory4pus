@@ -10,6 +10,7 @@ cc.Class({
 		noteSpeed:cc.v2(0,0),//注释速度，看具体场景，不一定有效
 		otherData:"",//其他数据
 		maxCnt:1,
+		deathThing:cc.Node,//死亡后产生道具
     },
 
     onLoad: function () {
@@ -20,6 +21,7 @@ cc.Class({
             this.mainPos.y+=i.y;
         }
 		this.__cnt=0;
+		this.isDeathrattle=false;
     },
 
     update: function (dt) {

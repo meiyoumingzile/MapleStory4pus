@@ -133,7 +133,7 @@ cc.Class({
     },
     visDie:function(fun=null){
         if(this.life.x<=0||Math.abs(this.node.x-ALL.Lead.x)>this.dieDis.x||Math.abs(this.node.y-ALL.Lead.y)>this.dieDis.y){
-            this.die(fun);
+			this.life.x<=0?this.attackedDie(fun):this.die(fun);//如果血量是0，说明被打死
             ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
         }
     },
@@ -147,6 +147,15 @@ cc.Class({
 			}
 			this.node.destroy();
 		}
+	},
+	attackedDie:function(fun=null){//被人物打死
+		if(this.mkScript&&!this.mkScript.isDeathrattle&&this.mkScript.deathThing){
+			this.mkScript.isDeathrattle=true;
+			this.mkScript.deathThing.x=this.node.x;
+			this.mkScript.deathThing.y=this.node.y;
+			this.mkScript.deathThing.active=true;
+		}
+		this.die(fun);
 	},
 	setScaleX:function(fp=1){
 		this.node.scaleX= ALL.scaleEnemy.x*this.mkscx*fp;

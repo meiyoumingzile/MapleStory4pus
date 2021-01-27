@@ -741,7 +741,7 @@ cc.Class({
 						}else{
 							this.changeLife(0,0);
 							ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
-							ep.die();
+							ep.attackedDie();
 							this.setPhy();
 						}
 					}
@@ -764,7 +764,7 @@ cc.Class({
 					}else if(this.data.state[2]!="Lead"&&this.data.specialEffect=="null"){
 						this.changeLife(0,0);
 						ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
-						ep.die();
+						ep.attackedDie();
 						this.setPhy();
 					}
 				}
