@@ -1,0 +1,43 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Object_lava2_bg",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.7666666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "cc54e98d-6a42-4861-9872-ee9e10e644b2"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "4f801cb2-9c7f-4975-8758-0eca108f764e"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "ed463ce8-00d0-48a6-bf09-ee4c22a43b46"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "cc54e98d-6a42-4861-9872-ee9e10e644b2"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

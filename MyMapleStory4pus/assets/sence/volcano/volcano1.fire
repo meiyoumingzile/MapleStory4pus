@@ -482,7 +482,7 @@
     "tag": 0,
     "_density": 1,
     "_sensor": false,
-    "_friction": 0.2,
+    "_friction": 0,
     "_restitution": 0,
     "body": null,
     "_offset": {
@@ -860,6 +860,7 @@
     "cnt": 4,
     "speedH": 800,
     "attackTime": 3,
+    "deathThing": null,
     "_id": "3cPzu+X95Fdra6iWjcTOM3"
   },
   {
@@ -935,6 +936,7 @@
     "cnt": 4,
     "speedH": 800,
     "attackTime": 3,
+    "deathThing": null,
     "_id": "abi78qxOpIMbRBv8nykHKB"
   },
   {
@@ -1010,6 +1012,7 @@
     "cnt": 4,
     "speedH": 800,
     "attackTime": 3,
+    "deathThing": null,
     "_id": "e7ZuPEIXxHdL6p/TzDj2e8"
   },
   {
@@ -1085,6 +1088,7 @@
     "cnt": 4,
     "speedH": 800,
     "attackTime": 3,
+    "deathThing": null,
     "_id": "ebsRQXSR1JEbu+aoL1/aXY"
   },
   {
@@ -1160,6 +1164,7 @@
     "cnt": 4,
     "speedH": 800,
     "attackTime": 3,
+    "deathThing": null,
     "_id": "ef/3j3h6lD6InUdSgOwUrU"
   },
   {
@@ -1235,6 +1240,7 @@
     "cnt": 4,
     "speedH": 800,
     "attackTime": 3,
+    "deathThing": null,
     "_id": "79Aehz5cZH95T4Bp+omhZK"
   },
   {
@@ -1310,6 +1316,7 @@
     "cnt": 4,
     "speedH": 800,
     "attackTime": 3,
+    "deathThing": null,
     "_id": "95i6r8hERIzoFnU+TIn1Qt"
   },
   {
@@ -12579,7 +12586,7 @@
       "array": [
         0,
         0,
-        371.5248982235242,
+        351.60631393648214,
         0,
         0,
         0,
