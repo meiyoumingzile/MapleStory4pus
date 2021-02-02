@@ -10074,8 +10074,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -867.701,
-        166.546,
+        1697.817,
+        171.782,
         0,
         0,
         0,
@@ -10461,6 +10461,7 @@
     },
     "otherData": "",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "c8vZitEnVMI4o/udSA3jVW"
   },
   {
@@ -10545,6 +10546,7 @@
     },
     "otherData": "",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "fcDzUO9g5FsJG2mz72PMwx"
   },
   {
@@ -10629,6 +10631,7 @@
     },
     "otherData": "",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "52j9s7cNFKho5R8CpjMskX"
   },
   {
@@ -10713,6 +10716,7 @@
     },
     "otherData": "",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "2axbuOA3FIwLDqnICCGS+G"
   },
   {
@@ -10797,6 +10801,7 @@
     },
     "otherData": "",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "c2omusms9KV5MoF/vzad/+"
   },
   {
@@ -10881,6 +10886,7 @@
     },
     "otherData": "notespeed不接受0",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "79bRUnwwRAwKzVM+yVqoUX"
   },
   {
@@ -10965,6 +10971,7 @@
     },
     "otherData": "",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "6aKPf5Qx1NiormoCtXpRFZ"
   },
   {
@@ -11049,6 +11056,7 @@
     },
     "otherData": "",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "94Kgrd8rlDcZz62o5cobao"
   },
   {
@@ -11133,6 +11141,7 @@
     },
     "otherData": "y=0时不跳跃",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "f30q1TLzNC8YA83/v/HRy0"
   },
   {
@@ -11217,6 +11226,7 @@
     },
     "otherData": "y=0时不跳跃",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "4f4o1uJ0tLmqROzhN8uEwv"
   },
   {
@@ -11301,6 +11311,7 @@
     },
     "otherData": "",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "76J4GYaFNDHqTwVTLQPqUc"
   },
   {
@@ -11385,6 +11396,7 @@
     },
     "otherData": "notespeed可以设置速度",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "20jCcv5aFPuZzCUeILgJKT"
   },
   {
@@ -11714,6 +11726,7 @@
     },
     "otherData": "NoteSpeed.x用来确定单位速度,y用来确定高度",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "30u7olw4pM8KCBJz1LLvWQ"
   },
   {
@@ -11798,6 +11811,7 @@
     },
     "otherData": "canAttack不选中代表用默认速度",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "1d5AshyDZOFYm7i4UVX7A9"
   },
   {
@@ -11882,6 +11896,7 @@
     },
     "otherData": "canAttack不选中代表用默认速度",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "f1xi0qzCVNUo1HIqwZBZtk"
   },
   {
@@ -11966,6 +11981,7 @@
     },
     "otherData": "canAttack不选中代表用默认速度,调节mk节点size可调节怪物运动范围",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "17tSTCA+lITpAHbwJaBrdM"
   },
   {
@@ -12050,6 +12066,7 @@
     },
     "otherData": "y可以调整攻击距离",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "afAlrRapxLZLIURlK+6L2x"
   },
   {
@@ -12134,6 +12151,7 @@
     },
     "otherData": "noteSpeed.x设置速度",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "4aDxo7P9dOiLiax0hd63cc"
   },
   {
@@ -12218,6 +12236,7 @@
     },
     "otherData": "节点大小和rot属性可调节运动范围与方向",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "1bdrVQzVhAJYa+pPpLgEBQ"
   },
   {
@@ -12302,6 +12321,7 @@
     },
     "otherData": "不能设置",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "86I/rnxztMcKm5CSJat0Eq"
   },
   {
@@ -12312,7 +12332,7 @@
       "__id__": 321
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 367
@@ -12377,6 +12397,7 @@
     "cnt": 4,
     "speedH": 200,
     "attackTime": 3,
+    "deathThing": null,
     "_id": "f3my5IT5VOX65KTccJT4Vs"
   },
   {
@@ -20126,7 +20147,7 @@
       "array": [
         0,
         0,
-        371.5248982235242,
+        351.60631393648214,
         0,
         0,
         0,

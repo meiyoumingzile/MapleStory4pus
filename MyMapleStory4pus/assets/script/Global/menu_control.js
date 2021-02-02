@@ -140,7 +140,12 @@ cc.Class({
         }else if(name=="markEgg"){//如果是标记点
             cc.log("标记点");
         }else if(name=="dragon"){//如果是龙
-            if(MainLead.data.isLie||MainLead.data.isClimb||MainLead.data.state[2]!=MainLead.data.chooseDragon&&MainLead.data.isSaveDragon==false){
+            var sand=MainLead.coll.collSand;
+            if(sand)
+                cc.log(ALL.MainCanSc.getBorderY(sand,1),MainLead.borderY(1));
+            if(MainLead.data.isLie||MainLead.data.isClimb||
+                MainLead.data.state[2]!=MainLead.data.chooseDragon&&MainLead.data.isSaveDragon==false||
+                MainLead.data.chooseDragon=='Stegosaurus'&&sand&&ALL.MainCanSc.getBorderY(sand,1)+10>MainLead.borderY(1)){
                 return false;
             }
             MainLead.saveDragon();

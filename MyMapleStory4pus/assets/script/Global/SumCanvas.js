@@ -232,4 +232,30 @@ cc.Class({
 		}
 		return 0; 
 	},
+	getBorderX:function(self,fp=1){//self是碰撞体
+		if(self.size.width){
+			var x=0;
+			var node=self.node;
+			while(node&&node!=this.node){
+				x+=node.x;
+				node=node.parent;
+			}
+			return x+self.offset.x+self.size.width/2*fp;
+		}
+		cc.log("不是矩形碰撞体");
+		return self.node.x;
+	},
+	getBorderY:function(self,fp=1){//self是碰撞体
+		if(self.size.height){
+			var y=0;
+			var node=self.node;
+			while(node&&node!=this.node){
+				y+=node.y;
+				node=node.parent;
+			}
+			return y+self.offset.y+self.size.height/2*fp;
+		}
+		cc.log("不是矩形碰撞体");
+		return self.node.y;
+	},
 });

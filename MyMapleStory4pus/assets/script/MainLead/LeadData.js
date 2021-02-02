@@ -165,7 +165,7 @@ window.LEADDATA={
 				Brontosaurus:600,
 				Seadragon:450,
 				Pterosaur:600,
-				Stegosaurus:600,
+				Stegosaurus:900,
 			},
 			run:{
 				Lead:700,
@@ -178,7 +178,7 @@ window.LEADDATA={
 				Brontosaurus:700,
 				Seadragon:580,
 				Pterosaur:700,
-				Stegosaurus:700,
+				Stegosaurus:1200,
 			},
 		},
 	},

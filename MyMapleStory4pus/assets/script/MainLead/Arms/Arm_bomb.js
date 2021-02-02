@@ -31,10 +31,7 @@ cc.Class({
 				this.node.removeComponent(cc.PhysicsCircleCollider);
 				this.body.linearVelocity=cc.v2(0,0);
 				this.body.type="Static";
-				if(MainLead.coll.collFloorDir[this.phyCir._id]){
-					delete MainLead.coll.collFloorDir[this.phyCir._id];
-					MainLead.coll.collFloorCnt--;
-				}
+				
 				this.phyBox.apply();
 			}else if(cnt==sumCnt){
 				this.ap.die();

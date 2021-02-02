@@ -1,0 +1,43 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "sand1",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.7666666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "911bdfbc-8577-436d-95a8-4e534394dd7c"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "a720a33c-e515-4a8d-ac32-dd78097c3698"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "503a3d97-6435-45aa-a05d-3cdaaac52722"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "911bdfbc-8577-436d-95a8-4e534394dd7c"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

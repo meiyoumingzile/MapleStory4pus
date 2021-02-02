@@ -28,6 +28,7 @@ cc.Class({
 			Laddder:[null,null],//0是梯子，1是梯子头
 			liftingOb:[null,null],//0举着的物体,1时前面的物体
 			willLiftingOb:false,
+			collSand:null,
 		},
 		this.key={
 			left:false,
@@ -198,6 +199,9 @@ cc.Class({
 		var sc=Math.abs(this.data.preScaleX-this.node.scaleX);
 		if(self.tag==1){
 			if(other.node.name.indexOf("Object")!=-1){
+				if(other.name.indexOf("SAND")!=-1){//沙子
+					this.intoSand(contact,other);
+				}
 				if(other.node.name.indexOf("Object2")!=-1&&cf.y!=-1||this.data.isClimb){
 					contact.disabled=true;
 				}else if(!this.coll.collCeilDir[other._id]){
@@ -240,7 +244,9 @@ cc.Class({
 					contact.disabled=true;
 				}else{
 					//cc.log(cf);
-					
+					if(other.name.indexOf("SAND")!=-1){//沙子
+						this.intoSand(contact,other);
+					}
 					if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
 						this.coll.collFloorDir[other._id]=other;
 						this.coll.collFloorCnt++;
@@ -312,6 +318,9 @@ cc.Class({
 						cc.log("this.coll.collFloorLavaCnt错误："+this.coll.collFloorLavaCnt);
 					}
 				}
+				if(other.name.indexOf("SAND")!=-1){//沙子
+					this.outSand();
+				}
 				if(this.coll.collSideDir[0][other._id]){
 					delete this.coll.collSideDir[0][other._id];
 					this.coll.collSideCnt[0]--;
@@ -354,6 +363,9 @@ cc.Class({
 						this.coll.collFloorCnt--;
 					}
 				}else{
+					if(other.name.indexOf("SAND")!=-1){//沙子
+						this.intoSand(contact,other);
+					}
 					if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
 						this.coll.collFloorDir[other._id]=other;
 						this.coll.collFloorCnt++;
@@ -445,6 +457,7 @@ cc.Class({
 	},
 	updatePhyColl:function(dt,speed){
 		//cc.log(this.phyColl);
+		
 		if(this.coll.liftingOb[0]){//有物体
 			this.setLiftOb();
 			if(this.data.state[2]=="Lead"){//是自身就变成“举”的动作
@@ -482,6 +495,9 @@ cc.Class({
 			}else if(this.key.jump&&!this.data.isLie&&!this.key.down){//按了跳跃还没有趴着
 				if(this.data.act=="climb"&&this.coll.Laddder[1]&&this.coll.Laddder[0]){
 					speed.y=this.data.jumpSpeedy;
+				}else if(this.coll.collSand&&speed.y<ALL.inf){//则就挑起.或者在流沙里,比飞龙优先
+					speed.y=this.data.jumpSpeedy;	//cc.log(this.coll.collSand&&speed.y>0,this.coll.collFloorCnt);
+					this.data.jumptime=4;
 				}else if(this.data.state[2].indexOf("Pterosaur")!=-1){
 					//cc.log(this.coll.collCeilCnt,speed.y);
 					if(this.coll.collCeilCnt==0){
@@ -489,8 +505,8 @@ cc.Class({
 					}else{
 						speed.y=0;
 					}
-				}else if(this.coll.collFloorCnt>0){//如果在地面上，且 按了跳跃，则就挑起
-					speed.y=this.data.jumpSpeedy;
+				}else if(this.coll.collFloorCnt>0){//如果在地面上，且 按了跳跃则就挑起
+					speed.y=this.data.jumpSpeedy;	//cc.log(this.coll.collSand&&speed.y>0,this.coll.collFloorCnt);
 					this.data.jumptime=1;
 				}else if(this.data.jumptime>0&&this.data.jumptime<maxJumptime){//如果不在地面上且还按了跳跃且之前几帧按过跳跃可以“大跳”
 					this.data.jumptime++;
@@ -538,8 +554,13 @@ cc.Class({
 		//cc.log(this.data.maxSpeedx);
 		this.data.maxSpeedup=LEADDATA.MaxSpeedKind[this.data.state[0]]["up"];
 		this.data.maxSpeeddown=LEADDATA.MaxSpeedKind[this.data.state[0]]["down"];
+		this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
 
-		if(this.data.state[2]=="Pterosaur"){//是飞龙下降速度减慢
+		if(this.coll.collSand&&this.data.state[2]!='Stegosaurus'){//在沙子里
+			this.data.maxSpeeddown=30;
+			this.data.maxSpeedx=LEADDATA.MaxSpeedKind[this.data.state[0]]["walk"][this.data.state[2]];
+			this.data.jumpSpeedy=80;
+		}else if(this.data.state[2]=="Pterosaur"){//是飞龙下降速度减慢
 			this.data.maxSpeeddown/=3;
 		}else if(this.data.state[2]=="scooterLead"){//是滑板车
 			if(speed.x*keyFp<0){//如果减速,则加速度减半
@@ -567,8 +588,6 @@ cc.Class({
 				arm.die();
 			}
 		}
-
-		this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
 		
 		if(this.coll.collFloorCnt==0&&(this.coll.collSideCnt[0]>0&&keyFp==-1||this.coll.collSideCnt[1]>0&&keyFp==1||this.data.act=="climb")){
 			this.data.selfacc.x=0;
@@ -618,7 +637,7 @@ cc.Class({
 				}else{
 					this.data.act="run";
 				}
-			}else if(this.coll.collFloorCnt<=0){//没在地板上就跳
+			}else if(this.coll.collFloorCnt<1&&!this.coll.collSand||this.coll.collSand&&speed.y>0){//没在地板上或者在流沙里就跳
 				this.data.act=this.data.isFall?"fall":"jump";
 			}else{
 				
@@ -673,8 +692,11 @@ cc.Class({
 		}else{
 			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"];
 		}
-		
 		this.body.linearDamping=LEADDATA.PhysicalPara[this.data.state[0]]["linearDamping"];
+		if(this.coll.collSand&&this.data.state[2]!='Stegosaurus'){
+			this.body.gravityScale=LEADDATA.PhysicalPara[this.data.state[0]]["gravityScale"]/8;
+			this.body.linearDamping*=2;
+		}
 	},
 	calSpeed: function(dt,speed){
 		var nextx=speed.x+this.data.selfacc.x* dt;
@@ -1052,7 +1074,7 @@ cc.Class({
 	borderX:function(fp=1){//
 		return this.node.x+this.phyColl.offset.x+this.phyColl.size.width/2*fp;
 	},
-	borderY:function(fp=1){//判断是不是站在地面上
+	borderY:function(fp=1){//边界
 		return this.node.y+this.phyColl.offset.y+this.phyColl.size.height/2*fp;
 	},
 	collFp:function(contact,is=false){//判断碰撞物关系，一个向量,不确定返回(0,0)，若怪物的坐标大于碰撞点的坐标，结果是-1
@@ -1313,6 +1335,14 @@ cc.Class({
 				this.setPhy("lieLead");
 				return true;
 			}
+		}else if(this.key.down&&this.coll.collSand){//碰撞了沙子按了下
+			if(this.coll.Laddder[1]==null&&this.data.nowArms!="scooter"){
+				this.setPhy("lieLead");
+				return true;
+			}else if(this.coll.Laddder[1]&&(this.coll.Laddder[0]==null||Math.abs(this.node.x-this.coll.Laddder[0].x)>=4)){
+				this.setPhy("lieLead");
+				return true;
+			}
 		}
 		return false;
 	},
@@ -1413,6 +1443,19 @@ cc.Class({
 			this.setPhy();
 		}
 	},
+	outWater: function(){
+		this.data.state[0]="air";
+	},
+	intoSand: function(contact,other){
+	
+		if(this.data.state[2]!='Stegosaurus'){
+			contact.disabled=true;
+		}
+		this.coll.collSand=other;
+	},
+	outSand: function(){
+		this.coll.collSand=null;
+	},
 	putLiftOb:function(node){
 		this.coll.liftingOb[0]=node;
 	},
@@ -1487,6 +1530,11 @@ cc.Class({
 				this.data.isSaveDragon=true;
 				ALL.menuSc.displayDragon();
 				this.setPhy();
+				var sand=this.coll.collSand;
+			//	cc.log(ALL.MainCanSc.getBorderY(sand,1),this.borderY(-1));
+				if(sand&&ALL.MainCanSc.getBorderY(sand,1)<this.borderY(-1)){
+					this.outSand();
+				}
 			}else if(this.data.state[2]!=this.data.chooseDragon&&this.data.isSaveDragon==true){//召唤龙
 				this.data.isSaveDragon=false;
 				ALL.menuSc.displayDragon();
@@ -1505,4 +1553,3 @@ cc.Class({
         
     }
 });
-
