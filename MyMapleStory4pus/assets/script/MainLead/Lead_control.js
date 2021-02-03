@@ -199,7 +199,7 @@ cc.Class({
 		var sc=Math.abs(this.data.preScaleX-this.node.scaleX);
 		if(self.tag==1){
 			if(other.node.name.indexOf("Object")!=-1){
-				if(other.name.indexOf("SAND")!=-1){//沙子
+				if(other.name.indexOf("SAND")!=-1&&this.data.speed.y<0){//沙子
 					this.intoSand(contact,other);
 				}
 				if(other.node.name.indexOf("Object2")!=-1&&cf.y!=-1||this.data.isClimb){
@@ -244,7 +244,7 @@ cc.Class({
 					contact.disabled=true;
 				}else{
 					//cc.log(cf);
-					if(other.name.indexOf("SAND")!=-1){//沙子
+					if(other.name.indexOf("SAND")!=-1&&this.data.speed.y<0){//沙子
 						this.intoSand(contact,other);
 					}
 					if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
@@ -363,7 +363,7 @@ cc.Class({
 						this.coll.collFloorCnt--;
 					}
 				}else{
-					if(other.name.indexOf("SAND")!=-1){//沙子
+					if(other.name.indexOf("SAND")!=-1&&this.data.speed.y<0){//沙子
 						this.intoSand(contact,other);
 					}
 					if(cf.y==-1&&!this.coll.collFloorDir[other._id]){
@@ -1451,7 +1451,7 @@ cc.Class({
 		if(this.data.state[2]!='Stegosaurus'){
 			contact.disabled=true;
 		}
-		this.coll.collSand=other;
+		this.coll.collSand=other.name.indexOf("TOP")!=-1?null:other;
 	},
 	outSand: function(){
 		this.coll.collSand=null;
