@@ -53,7 +53,7 @@ cc.Class({
 
     update: function (dt) {
         this.ep.visDie();
-        this.changeAction();
+		this.changeAction();
     },
 	
 	onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次

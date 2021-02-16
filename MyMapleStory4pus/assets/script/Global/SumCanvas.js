@@ -201,7 +201,8 @@ cc.Class({
         var newEbullet=cc.instantiate(ALL.RES.FAB["Enemy_Ebullet_A"]);
         newEbullet.getComponent("Enemy_Ebullet_A").init(kind,dir);
         newEbullet.setPosition(X,Y);
-        ALL.MainCanvas.addChild(newEbullet);
+		ALL.MainCanvas.addChild(newEbullet);
+		return newEbullet;
     },
 	randomNum:function(minNum,maxNum){
 		switch(arguments.length){
