@@ -6140,8 +6140,8 @@
     "_enabled": true,
     "tag": 1,
     "_density": 0,
-    "_sensor": false,
-    "_friction": 0.5,
+    "_sensor": true,
+    "_friction": 0,
     "_restitution": 0,
     "body": null,
     "_offset": {

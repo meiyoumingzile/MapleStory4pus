@@ -219,7 +219,7 @@ cc.Class({
 	},
 	getWindows:function(){
 		let windowSize=cc.view.getVisibleSize();
-		return cc.v2(windowSize.width,windowSize.height);
+		return cc.v2(1024,768);
 	},
 
 	isBaseVar(a){

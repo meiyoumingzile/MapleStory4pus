@@ -361,6 +361,7 @@
     },
     "otherData": "canAttack不选中代表用默认速度",
     "maxCnt": 1,
+    "deathThing": null,
     "_id": "0aB4wF5CVPobUbHTVYBt15"
   },
   {
@@ -13382,8 +13383,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -631.708,
-        -49.506,
+        -1668.55,
+        442.1,
         0,
         0,
         0,

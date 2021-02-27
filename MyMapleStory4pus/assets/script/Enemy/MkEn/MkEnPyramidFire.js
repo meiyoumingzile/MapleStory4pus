@@ -7,7 +7,7 @@ cc.Class({
 
     onLoad: function () {
 		this.mainPos=cc.v2(0,0);
-        for(var i=this.node;i.name!="MainCanvas";i=i.parent){//在主场景的位置
+        for(var i=this.node;i&&i.name!="MainCanvas";i=i.parent){//在主场景的位置
             this.mainPos.x+=i.x;
             this.mainPos.y+=i.y;
 		}
@@ -16,16 +16,16 @@ cc.Class({
     },
 
     update: function (dt) {
-		if(this.visCanvas()==true&&this.canLoad){//判断是否在屏幕中,并且可以加载
+		if(this.canLoad){//判断是否在屏幕中,并且可以加载this.visCanvas()==true&&
 			this.canLoad=false;
-			this.fireNode=ALL.MainCanSc.addEbulletA(5,this.mainPos.x+(this.node.width/2+20)*this.node.scaleX,this.mainPos.y,cc.v2(this.node.scaleX,0));
+			this.fireNode=ALL.MainCanSc.addEbulletA(5,this.mainPos.x+(this.node.width/2+this.node.width/6)*this.node.scaleX,this.mainPos.y,cc.v2(this.node.scaleX,0));
 			this.scheduleFun = function(){
 				this.canLoad=true;
 				this.unschedule(this.scheduleFun);
 			}
-			this.schedule(this.scheduleFun,this.attackTime);
+			this.schedule(this.scheduleFun,this.attackTime,1,0);
 		}
-		if(this.fireNode&&cc.v2(this.mainPos.x-this.fireNode.x,this.mainPos.y-this.fireNode.y).mag()>600){
+		if(cc.isValid(this.fireNode)&&cc.v2(this.mainPos.x-this.fireNode.x,this.mainPos.y-this.fireNode.y).mag()>600){
 			this.fireNode.getComponent("EnemyPublic").die();
 			this.fireNode=null;
 		}

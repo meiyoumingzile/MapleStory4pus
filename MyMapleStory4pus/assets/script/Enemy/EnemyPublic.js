@@ -141,12 +141,11 @@ cc.Class({
 		if(fun){
 			fun();
 		}
-		if(this.canDie){
-			if(this.mkScript){
-				this.mkScript.__cnt--;
-			}
-			this.node.destroy();
+		
+		if(this.mkScript){
+			this.mkScript.__cnt--;
 		}
+		this.node.destroy();
 	},
 	attackedDie:function(fun=null){//被人物打死
 		if(this.mkScript&&!this.mkScript.isDeathrattle&&this.mkScript.deathThing){
@@ -155,7 +154,9 @@ cc.Class({
 			this.mkScript.deathThing.y=this.node.y;
 			this.mkScript.deathThing.active=true;
 		}
-		this.die(fun);
+		if(this.canDie){
+			this.die(fun);	
+		}
 	},
 	setScaleX:function(fp=1){
 		this.node.scaleX= ALL.scaleEnemy.x*this.mkscx*fp;
