@@ -436,7 +436,7 @@ cc.Class({
 				//cc.log(this.data.jumptime);
 			}
 		}else{
-			this.changeLife(2,2);
+			this.changeLife(8,8);
 			this.changeTime(5);
 			this.setHalfHeart();
 			ALL.MainCanSc.usingArm.getComponent(cc.Sprite).spriteFrame=ALL.RES.GamePropFrame["goods_"+this.data.nowArms];
