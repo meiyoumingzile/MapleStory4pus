@@ -8711,13 +8711,13 @@
     "body": null,
     "_offset": {
       "__type__": "cc.Vec2",
-      "x": -0.2,
-      "y": 54.8
+      "x": 199,
+      "y": 55
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 885.5,
-      "height": 343.2
+      "width": 1284,
+      "height": 343
     },
     "_id": "11qbBzuUpGhqNFZOZmx1V1"
   },
@@ -29645,8 +29645,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -1161.094,
-        38.555,
+        158.414,
+        1131.108,
         0,
         0,
         0,

@@ -412,6 +412,7 @@ cc.Class({
 			ALL.MainCanSc.usingArm.getComponent(cc.Sprite).spriteFrame=ALL.RES.GamePropFrame["goods_"+this.data.nowArms];
 			//以上是初始化人物界面
 			this.data=SAVE.SaveLead_data;
+			this.data.specialEffect="null";
 			var find=ALL.MainCanSc.findChildren;
 			var p=SAVE.LeadBegin.targetPos;
 			try{
@@ -761,6 +762,7 @@ cc.Class({
 								this.changeLife(-ep.damage,0);//主角掉血
 							}
 						}else{
+							//cc.log();
 							this.changeLife(0,0);
 							ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
 							ep.attackedDie();
@@ -781,9 +783,9 @@ cc.Class({
 						this.data.injuringTime=20;
 					}
 					this.body.linearVelocity=this.speed;
-					if(this.data.state[2]=="Lead"&&this.data.specialEffect=="null"){//是主角本人则掉血
+					if(this.data.state[2].indexOf("Lead")!=-1&&this.data.specialEffect=="null"){//是主角本人则掉血
 						this.changeLife(-ep.damage,0);//主角掉血
-					}else if(this.data.state[2]!="Lead"&&this.data.specialEffect=="null"){
+					}else if(this.data.state[2].indexOf("Lead")==-1&&this.data.specialEffect=="null"){
 						this.changeLife(0,0);
 						ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
 						ep.attackedDie();

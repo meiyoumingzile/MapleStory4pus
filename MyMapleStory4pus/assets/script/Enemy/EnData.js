@@ -286,7 +286,7 @@ window.ENDATA={
 		stopGap:[1],
 		safeDis:[cc.v2(144,200)],
 		beginSpeed:[cc.v2(300,0)],
-		phySize:[cc.v2(-40,10),cc.v2(40,10),cc.v2(40,-10),cc.v2(-40,-10)],
+		phySize:[cc.v2(-40,10),cc.v2(40,10),cc.v2(40,-5),cc.v2(-40,-5)],
 		walkPhySize:[cc.v2(-40,30),cc.v2(45,70),cc.v2(45,0),cc.v2(-40,0)],
 		life:[4],
 	},

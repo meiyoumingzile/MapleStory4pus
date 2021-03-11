@@ -81,7 +81,8 @@ cc.Class({
 		}
 		return fp;
 	},
-    changeLife:function(value,arm=""){//返回值结果用来判断怎么处理
+	changeLife:function(value,arm=""){//返回值结果用来判断怎么处理
+		//cc.log(value,arm);
 		if(value<0){//{//受到伤害的动画效果
 			if(this.specialEffect=="null"){
 				var li=ENDATA[this.category]["damArm"];

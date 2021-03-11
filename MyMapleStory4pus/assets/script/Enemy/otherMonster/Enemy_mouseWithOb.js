@@ -68,7 +68,6 @@ cc.Class({
 				this.body.linearVelocity=cc.v2(-this.body.linearVelocity.x,0);
 			}
         }else if(other.node.name.indexOf("Arm_")!=-1){//碰到了人物武器,在人物武器类里实现
-			
 		}
     },
     
@@ -81,12 +80,12 @@ cc.Class({
     },
 	justOb(is=true){//is==true时出现，false时消失
 		if(is){
-			var points=ENDATA[this.ep.category]["phySize"];
+			var points=ENDATA[this.ep.category]["walkPhySize"];
 			this.phyColl.points=points;
 			this.phyColl.apply();
 			this.ep.specialEffect="null";
 		}else if(is==false){
-			var points=ENDATA[this.ep.category]["walkPhySize"];
+			var points=ENDATA[this.ep.category]["phySize"];
 			this.phyColl.points=points;
 			this.phyColl.apply();
 			this.ep.specialEffect="invincible";

@@ -2,6 +2,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+
 		tarPrefab:cc.Prefab,
 		tarNode:null,
     },
@@ -20,7 +21,7 @@ cc.Class({
 
     update: function (dt) {
         this.updateOb();
-        if(this.visCanvas()==true&&!this.isLoad&&this.tarNode==null&&(MainLead.coll.liftingOb[0]==null||MainLead.coll.liftingOb[0]!=this.tarNode)){//判断是否在屏幕中
+        if(this.visCanvas()==true&&!this.isLoad&&(MainLead.coll.liftingOb[0]==null||MainLead.coll.liftingOb[0]!=this.tarNode)){//判断是否在屏幕中
             this.isLoad=true;
             if(this.tarPrefab){
 				var newpre=cc.instantiate(this.tarPrefab);
@@ -45,7 +46,7 @@ cc.Class({
     },
     
     updateOb:function(){
-        if(this.tarNode&&this.tarNode.die&&Math.abs(ALL.Lead.y-this.tarNode.y)>ALL.obUpdateSize.y){
+        if(this.tarNode&&this.tarNode.die&&Math.abs(this.tarNode.y)>ALL.MainCanvas.height/2){
             this.tarNode.die();
         }
     },

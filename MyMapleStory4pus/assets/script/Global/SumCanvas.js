@@ -34,7 +34,7 @@ cc.Class({
         } else { // 关闭调试信息
             cc.director.getPhysicsManager().debugDrawFlags = 0;
 		}
-		
+		this.preLoadSence();
 		cc.director.getPhysicsManager().gravity = this.gravity;// 重力加速度的配置
 	},
 	__preload: function () {
@@ -80,11 +80,23 @@ cc.Class({
 		}
 		return null;
 	},
-    getIntoSence:function(next,X,Y){//进入下一个场景
-        ALL.NextSence=next;
-        
-        
-        cc.director.loadScene("Waiting");
+	preLoadSence:function(){//进入下一个场景
+		var sc=ALL.scDoor.getChildren();
+		var ch=sc[0].getChildren();//只加载0
+		for(var i=0;i< ch.length;i++){
+			cc.log(ch);
+			cc.director.preloadScene(ch[i].name,function () {
+				//cc.log("Next scene preloaded:");
+			});
+		}
+		var sc=ALL.comScDoor.getChildren();
+		var ch=sc[0].getChildren();//只加载0
+		for(var i=0;i< ch.length;i++){
+			//cc.log(ch);
+			cc.director.preloadScene(ch[i].name,function () {
+				//cc.log("Next scene preloaded");
+			});
+		}
     },
 
     addEffect:function(X,Y,self,effect){//添加效果
@@ -219,7 +231,7 @@ cc.Class({
 	},
 	getWindows:function(){
 		let windowSize=cc.view.getVisibleSize();
-		return cc.v2(1024,768);
+		return cc.v2(windowSize.width,windowSize.height);
 	},
 
 	isBaseVar(a){
@@ -259,4 +271,5 @@ cc.Class({
 		cc.log("不是矩形碰撞体");
 		return self.node.y;
 	},
+
 });

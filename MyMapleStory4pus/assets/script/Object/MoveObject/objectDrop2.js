@@ -17,7 +17,7 @@ cc.Class({
     
     update: function (dt) {
         if(this.isCollLead&&(Math.abs(MainLead.node.position.x-this.node.position.x)>this.winSz.x*2||Math.abs(MainLead.node.position.y-this.node.position.y)>this.winSz.y*2)){
-            this.node.destroy();
+            this.die();
         }
     },
 
@@ -48,5 +48,8 @@ cc.Class({
             MainLead.body.linearVelocity=cc.v2(MainLead.body.linearVelocity.x,0);
             this.onDisable=false;
         }
+    },
+    die:function(){
+        this.node.destroy();
     },
 });

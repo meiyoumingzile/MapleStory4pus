@@ -35,6 +35,7 @@ cc.Class({
             this.ap.die();
         }else if(other.node.name.indexOf("Enemy")==0){
 			var js=other.node.getComponent("EnemyPublic");
+			//cc.log(js,js.specialEffect);
             if(js&&js.specialEffect=="null"){
 				var d=js.changeLife(-this.ap.damage,this.ap.category);
 				if(d==1){
