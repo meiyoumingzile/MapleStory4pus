@@ -8,7 +8,7 @@ cc.Class({
             type:cc.List,
 		},
 		is_debug: true, // 是否显示调试信息;
-        gravity: cc.v2(0, -800), // 系统默认的
+		gravity: cc.v2(0, -800), // 系统默认的
 		lifeGroup:[],
 		timeGroup:[],
 		halfHeart:cc.Node,
@@ -60,6 +60,7 @@ cc.Class({
 		this.timeGroup=this.findChildren(this.bottomBar,"timeGroup");
 		this.halfHeart=this.findChildren(this.bottomBar,"halfHeart");
 		this.usingArm=this.findChildren(this.bottomBar,"usingArm");
+		ALL.bgMusic=this.node.getComponent(cc.AudioSource);
 		MainLead.dataBegin();
 		//以下是屏幕适配
 		let sz=cc.view.getVisibleSize();
@@ -84,7 +85,6 @@ cc.Class({
 		var sc=ALL.scDoor.getChildren();
 		var ch=sc[0].getChildren();//只加载0
 		for(var i=0;i< ch.length;i++){
-			cc.log(ch);
 			cc.director.preloadScene(ch[i].name,function () {
 				//cc.log("Next scene preloaded:");
 			});
@@ -141,7 +141,7 @@ cc.Class({
     },*/
 	onLoadResources:function(){//加载资源
 		var self=this;
-		var oll=[false,false,false];
+		var oll=[false,false,false,false];
 		var resSuccess=function(){//临时函数，判断异步加载完毕
 			var i=0;
 			for(i=0;i<oll.length&&oll[i];i++);
@@ -180,6 +180,15 @@ cc.Class({
 				ALL.RES.GamePropFrame[assets[i].name]=assets[i];
 			}
 			oll[2]=true;
+			if(resSuccess()){
+				cc.director.resume();
+			}
+		});
+		cc.loader.loadResDir("music/highFre",function (err, assets) {
+			for(var i=0;i<assets.length;i++){
+				ALL.RES.LeadMusic[assets[i].name]=assets[i];
+			}
+			oll[3]=true;
 			if(resSuccess()){
 				cc.director.resume();
 			}
@@ -271,5 +280,5 @@ cc.Class({
 		cc.log("不是矩形碰撞体");
 		return self.node.y;
 	},
-
+	
 });

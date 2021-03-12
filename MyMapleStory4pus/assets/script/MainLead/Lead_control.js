@@ -43,7 +43,7 @@ cc.Class({
 		this.data={
 			throughSences:[],
 	        state:["air","walk","Lead"],
-			specialEffect:"null",
+			specialEffect:"null",//有null,twinkle,invincible三种，null是正常状态，twinkle不能被攻击，invincible为无敌，碰到其他人其他人掉血
 /*状态，三个代表：第1个代表周围环境，第2个代表人的运动状态：或walk,run ;
 第3个代表碰撞体状态有："Lead","lieLead","Fierydragon","Brontosaurus","Pterosaur","Stegosaurus","Seadragon"。
 */			
@@ -86,6 +86,8 @@ cc.Class({
 			keyBit:[false,false,true,false,false,false,false,false,false],//哪个钥匙有没有
 			chooseDragon:"",//选择的龙
 			isSaveDragon:false,//有没有存包里
+			nowMusic:{},
+			exScheVar:{},//可持久的计时器变量
     	};
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
@@ -436,6 +438,8 @@ cc.Class({
 				this.data.jumptime=1;
 				//cc.log(this.data.jumptime);
 			}
+			this.resumeSche();
+			this.resumeMusic();
 		}else{
 			this.changeLife(8,8);
 			this.changeTime(5);
@@ -734,41 +738,40 @@ cc.Class({
 					this.speed=this.body.linearVelocity;
 					this.speed.x=300*(this.node.x>other.node.x?1:-1)
 					this.body.linearVelocity=this.speed;
-					if(this.data.specialEffect=="null"){//主角本人状态正常
-						if(this.data.state[2].indexOf("Lead")!=-1){//是主角本人则掉血
-							if(other.node.name.indexOf("specialStone")!=-1){//是specialStone掉时间
-								//this.setPhy();//改变碰撞体在update里
-								if(this.data.isFall==false){
-									this.data.isFall=true;
-									this.data.specialEffect="twinkle";
-									var count = 0;
-									this.callbackCollSpecialStone = function(){
-										if(count === 20) {
-											this.node.opacity=255;
-											this.data.specialEffect="null";
-											this.data.isFall=false;
-											this.unschedule(this.callbackCollSpecialStone);
-										}else{
-											this.node.opacity=count%2*255;
-											count++;
-										}
+					if(this.data.state[2].indexOf("Lead")!=-1){//是主角本人则掉血
+						if(other.node.name.indexOf("specialStone")!=-1){//是specialStone掉时间
+							//this.setPhy();//改变碰撞体在update里
+							if(this.data.isFall==false){
+								this.data.isFall=true;
+								this.data.specialEffect="twinkle";
+								var count = 0;
+								this.callbackCollSpecialStone = function(){
+									if(count === 20) {
+										this.node.opacity=255;
+										this.data.specialEffect="null";
+										this.data.isFall=false;
+										this.unschedule(this.callbackCollSpecialStone);
+									}else{
+										this.node.opacity=count%2*255;
+										count++;
 									}
-									this.schedule(this.callbackCollSpecialStone,0.0500,80,0);
-									this.body.linearVelocity=cc.v2(300*(this.node.scaleX>0?1:-1),300);
-									this.changeTime(-2);//主角掉时间
 								}
-							}else{//是普通怪物掉血
-								this.data.isFall=false;
-								this.changeLife(-ep.damage,0);//主角掉血
+								this.schedule(this.callbackCollSpecialStone,0.0500,80,0);
+								this.body.linearVelocity=cc.v2(300*(this.node.scaleX>0?1:-1),300);
+								this.changeTime(-2);//主角掉时间
 							}
-						}else{
-							//cc.log();
-							this.changeLife(0,0);
-							ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
-							ep.attackedDie();
-							this.setPhy();
+						}else{//是普通怪物掉血
+							this.data.isFall=false;
+							this.changeLife(-ep.damage,0);//主角掉血
 						}
+					}else{
+						//cc.log();
+						this.changeLife(0,0);
+						ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
+						ep.attackedDie();
+						this.setPhy();
 					}
+					
 				}
 			}else if(ep.specialEffect=="twinkle"){
 				
@@ -783,9 +786,9 @@ cc.Class({
 						this.data.injuringTime=20;
 					}
 					this.body.linearVelocity=this.speed;
-					if(this.data.state[2].indexOf("Lead")!=-1&&this.data.specialEffect=="null"){//是主角本人则掉血
+					if(this.data.state[2].indexOf("Lead")!=-1){//是主角本人则掉血
 						this.changeLife(-ep.damage,0);//主角掉血
-					}else if(this.data.state[2].indexOf("Lead")==-1&&this.data.specialEffect=="null"){
+					}else if(this.data.state[2].indexOf("Lead")==-1){
 						this.changeLife(0,0);
 						ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
 						ep.attackedDie();
@@ -793,6 +796,20 @@ cc.Class({
 					}
 				}
 			}
+		}else if(this.data.specialEffect=="invincible"){//主角是无敌
+			if(ep.specialEffect=="null"){
+				if(ep.node.name.indexOf("BOSS")==-1){
+					ep.attackedDie();
+				}
+			}else if(ep.specialEffect=="twinkle"){
+				if(ep.node.name.indexOf("BOSS")==-1){
+					ep.attackedDie();
+				}
+			}else if(ep.specialEffect=="invincible"){
+				
+			}
+		}else if(this.data.specialEffect=="twinkle"){
+			//什么都不做
 		}
 	},
 	
@@ -829,6 +846,7 @@ cc.Class({
 				child[i].getComponent(cc.Sprite).spriteFrame = ALL.RES.GamePropFrame["life_true"];
 			}
 		}else if(chLife<0){
+			cc.audioEngine.play(ALL.RES.LeadMusic["injured"],false,ALL.musicVolume);
 			var cnt=Math.min(-chLife,this.data.life.x);//掉几滴血
 			var X=this.data.life.x;//初始血量
 			this.data.life.x-=cnt;//数值上的扣血
@@ -1056,11 +1074,6 @@ cc.Class({
 			this.node.parent.addChild(arm);
 		}
     },
-	
-	
-	
-	
-	
 	
 	
 	//小型函数。
@@ -1475,19 +1488,55 @@ cc.Class({
 		}
 	},
 	pause:function(is=true){
+		var musicSt=cc.audioEngine.getState(this.data.nowMusic["invincibleStar"]);
 		if(is){
 			this.data.pause=true;
 			this.player.pause();
 			ALL.menu.active=true;
 			cc.director.pause();
+			ALL.bgMusic.pause();
+			if(musicSt==1)//这个音乐正在播放
+				cc.audioEngine.pause(this.data.nowMusic["invincibleStar"]);
 			this.clearSelf();
 		}else{
 			this.data.pause=false;
 			this.player.resume();
 			ALL.menu.active=false;
 			cc.director.resume();
+			if(musicSt==-1){//没播放无敌
+				ALL.bgMusic.rewind();
+				ALL.bgMusic.resume();
+			}else{
+				cc.audioEngine.resume(this.data.nowMusic["invincibleStar"]);
+			}
 		}
 	},
+
+	getInvincibleStar:function(preCount=0){//吃到星星
+		this.data.nowMusic["invincibleStar"]=cc.audioEngine.play(ALL.RES.LeadMusic["invincibleStar"], true, ALL.musicVolume);
+		if(preCount>0){
+			cc.audioEngine.setCurrentTime(this.data.nowMusic["invincibleStar"],preCount/220*11);
+		}
+		this.data.specialEffect="invincible";
+		ALL.bgMusic.pause();
+		this.data.exScheVar["invincibleStar"]=preCount;
+		this.cbfun = function(){//InvincibleTime
+			if(this.data.exScheVar["invincibleStar"] === 20*11) {
+				cc.audioEngine.stop(this.data.nowMusic["invincibleStar"]);
+				ALL.bgMusic.rewind();
+				ALL.bgMusic.resume();
+				this.node.opacity=255;
+				this.data.specialEffect="null";
+				this.data.exScheVar["invincibleStar"]=0;
+				this.unschedule(this.cbfun);
+			}else{
+				this.node.opacity=this.data.exScheVar["invincibleStar"]%2*255;
+				this.data.exScheVar["invincibleStar"]++;
+			}
+		}
+		this.schedule(this.cbfun,0.0500,1000,0);
+	},
+
 	setScaleX:function(fp){
 		var sc=ALL.scaleLead.x*fp;
 		if(sc>0&&this.node.scaleX<0||sc<0&&this.node.scaleX>0){
@@ -1519,6 +1568,8 @@ cc.Class({
 	},
 	saveData:function(deviation,targetPos=null){//deviation代表偏移距离
 		SAVE.preSence=cc.director.getScene().name;
+		this.saveMusic();
+		this.saveSche();
 		this.clearSelf();
 		SAVE.LeadBegin.saveDeviation=deviation;
 		this.memsetKey(false);
@@ -1526,6 +1577,24 @@ cc.Class({
 		SAVE.LeadBegin.targetPos=targetPos;
 		SAVE.LeadBegin.scaleX=Math.sign(this.node.scaleX);
 	},
+	resumeSche:function(){
+		if(this.data.exScheVar["invincibleStar"]>0)
+			this.getInvincibleStar(this.data.exScheVar["invincibleStar"]);
+	},
+	saveSche:function(){
+	},
+	resumeMusic:function(){
+		if(this.data.bgmName==ALL.bgMusic.clip.name){
+			ALL.bgMusic.setCurrentTime(this.data.bgmTime);
+		}
+	},
+	saveMusic:function(){
+		cc.audioEngine.stopAll();
+		this.data.bgmTime=ALL.bgMusic.getCurrentTime();
+		this.data.bgmName=ALL.bgMusic.clip.name;
+		
+	},
+	
 	saveDragon(){
 		if(LEADDATA.Pets.indexOf(this.data.chooseDragon)!=-1&&this.data.state[2]!="lieLead"){
 			if(this.data.state[2]==this.data.chooseDragon&&this.data.isSaveDragon==false){//把有的龙存起来

@@ -90,6 +90,11 @@ cc.Class({
 					return 0;//自己不可被该武器攻击
 				}
 				this.life.x+=value;
+				if(this.life.x>0){
+					cc.audioEngine.play(ALL.RES.LeadMusic["monsterInjured"],false,ALL.musicVolume);
+				}else{//死亡
+
+				}
 				this.specialEffect="twinkle";
 				var count = 0;
 				this.callback = function(){
@@ -135,27 +140,26 @@ cc.Class({
     visDie:function(fun=null){
         if(this.life.x<=0||Math.abs(this.node.x-ALL.Lead.x)>this.dieDis.x||Math.abs(this.node.y-ALL.Lead.y)>this.dieDis.y){
 			this.life.x<=0?this.attackedDie(fun):this.die(fun);//如果血量是0，说明被打死
-            ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
         }
     },
 	die:function(fun=null){
 		if(fun){
 			fun();
 		}
-		
 		if(this.mkScript){
 			this.mkScript.__cnt--;
 		}
 		this.node.destroy();
 	},
 	attackedDie:function(fun=null){//被人物打死
-		if(this.mkScript&&!this.mkScript.isDeathrattle&&this.mkScript.deathThing){
-			this.mkScript.isDeathrattle=true;
-			this.mkScript.deathThing.x=this.node.x;
-			this.mkScript.deathThing.y=this.node.y;
-			this.mkScript.deathThing.active=true;
-		}
 		if(this.canDie){
+			if(this.mkScript&&!this.mkScript.isDeathrattle&&this.mkScript.deathThing){
+				this.mkScript.isDeathrattle=true;
+				this.mkScript.deathThing.x=this.node.x;
+				this.mkScript.deathThing.y=this.node.y;
+				this.mkScript.deathThing.active=true;
+			}
+			ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
 			this.die(fun);	
 		}
 	},

@@ -16,7 +16,7 @@ cc.Class({
         this.winSize=ALL.MainCanSc.getWindows();
         this.fixSz=cc.v2(this.winSize.x/16,0);
         this.setCameraPos(ALL.Lead.position);
-        cc.log(this.winSize);
+       // cc.log(this.winSize);
     },
 
     // called every frame, uncomment this function to activate update callback

@@ -228,7 +228,7 @@
         "__uuid__": "c001857f-6832-456d-bfd0-2d1d8ce7e701"
       }
     ],
-    "playOnLoad": false,
+    "playOnLoad": true,
     "_id": ""
   },
   {
@@ -249,6 +249,12 @@
     "damage": 1,
     "category": "",
     "kind": 1,
+    "canDie": true,
+    "dieDis": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
     "_id": ""
   },
   {

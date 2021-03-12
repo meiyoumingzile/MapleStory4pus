@@ -9,6 +9,7 @@ window.ALL = {
         GamePropFrame:{},//道具图标资源
         FAB:{},//预制体资源
         LeadAnim:[],
+        LeadMusic:[],
     },
 	GamePropFrame:{},//道具图标资源
     MainCanSc:{//公用脚本,也就是sumcanvas
@@ -40,6 +41,8 @@ window.ALL = {
     scaleOb:cc.v2(1,1),
     menu:null,
     menuSc:null,
+    bgMusic:null,
+    musicVolume:1,
 };
 
 window.SAVE={
