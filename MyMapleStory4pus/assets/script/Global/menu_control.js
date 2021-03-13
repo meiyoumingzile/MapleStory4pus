@@ -48,7 +48,11 @@ cc.Class({
                 this.updateHand(cc.v2(0,1));
                 break;
             case KEY.jump:
-                this.sel();
+                if(this.sel()){
+                    cc.audioEngine.play(ALL.RES.LeadMusic["menu_selTrue"], false, ALL.musicVolume);
+                }else{
+                    cc.audioEngine.play(ALL.RES.LeadMusic["menu_selFalse"], false, ALL.musicVolume);
+                }
                 break;
             case KEY.pause:
 				MainLead.pause(false);
@@ -99,6 +103,7 @@ cc.Class({
     },
 
     updateHand(fp){//fp是方向cc.v2类型
+        cc.audioEngine.play(ALL.RES.LeadMusic["menu_move"], false, ALL.musicVolume);
         this.item_i+=fp.y*this.item_sz.x;
         this.item_i+=fp.x;
         this.item_i= (this.item_i+ this.itemList.length)%this.itemList.length;
@@ -107,6 +112,7 @@ cc.Class({
     },
     sel(){
         if(this.itemList[this.item_i].getComponent(cc.Sprite).spriteFrame==this.withoutIco){
+            
             return false;
         }
         var name=this.itemList[this.item_i].name;

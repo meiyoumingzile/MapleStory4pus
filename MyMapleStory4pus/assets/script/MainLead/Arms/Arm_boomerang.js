@@ -9,6 +9,7 @@ cc.Class({
 	init: function(beginSpeed,rotFp,beginAngle){//rotFp==1代表逆时针
 		this.ap=this.node.getComponent("ArmPublic");
 		this.ap.category="boomerang";
+		cc.audioEngine.play(ALL.RES.LeadMusic[this.node.name], false, ALL.musicVolume);
 		MainLead.data.nowArmsCnt[this.ap.category]++;
 		this.node.scale=ALL.scaleLead;
         this.body = this.getComponent(cc.RigidBody);

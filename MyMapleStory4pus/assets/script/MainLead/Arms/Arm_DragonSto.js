@@ -9,6 +9,7 @@ cc.Class({
     start:function(){
     },
 	init: function(beginSpeed,beginPos){
+		cc.audioEngine.play(ALL.RES.LeadMusic[this.node.name], false, ALL.musicVolume);
 		this.ap=this.node.getComponent("ArmPublic");
 		this.ap.category="DragonSto";
 		MainLead.data.nowArmsCnt[this.ap.category]++;

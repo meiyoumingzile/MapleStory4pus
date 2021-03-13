@@ -15,6 +15,7 @@ cc.Class({
         MainLead.data.nowArmsCnt[this.ap.category]++;
 		
         this.node.name="Arm_"+category;
+        cc.audioEngine.play(ALL.RES.LeadMusic[this.node.name], false, ALL.musicVolume);
         this.beginOffset=offset;
         this.beginOffset.x=Math.abs(this.beginOffset.x);
         this.phyColl=this.node.getComponent(cc.PhysicsBoxCollider);

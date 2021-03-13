@@ -158,6 +158,17 @@ cc.Class({
 				this.mkScript.deathThing.x=this.node.x;
 				this.mkScript.deathThing.y=this.node.y;
 				this.mkScript.deathThing.active=true;
+			}else if(this.mkScript&&this.mkScript.deathThing==null){
+				var num=Math.random();
+				if(num<0.05){
+					var neweffect=cc.instantiate(ALL.RES.FAB["invincibleStar"]);
+					neweffect.setPosition(this.node.x,this.node.y);
+					ALL.MainCanvas.addChild(neweffect);
+				}else if(num<0.5){
+					var neweffect=cc.instantiate(ALL.RES.FAB["fruit"]);
+					neweffect.setPosition(this.node.x,this.node.y);
+					ALL.MainCanvas.addChild(neweffect);
+				}
 			}
 			ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
 			this.die(fun);	

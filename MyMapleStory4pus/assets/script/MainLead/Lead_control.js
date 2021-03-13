@@ -73,7 +73,7 @@ cc.Class({
 			hiddenProp:{},
 			armColl:{},
 			life:cc.v2(0,0),
-			time:cc.v2(0,8),
+			time:cc.v2(0,16),
 			pause:false,
 			halfHeart:false,
 
@@ -409,7 +409,7 @@ cc.Class({
 			an.addClip(ALL.RES.LeadAnim[i]);
 		}
 		if(SAVE.SaveLead_data!=null){//从上一个场景而来
-			this.changeLife(SAVE.SaveLead_data.life.x,SAVE.SaveLead_data.life.y);
+			this.changeLife(SAVE.SaveLead_data.life.x,SAVE.SaveLead_data.life.y,false);
 			this.changeTime(SAVE.SaveLead_data.time.x);
 			ALL.MainCanSc.usingArm.getComponent(cc.Sprite).spriteFrame=ALL.RES.GamePropFrame["goods_"+this.data.nowArms];
 			//以上是初始化人物界面
@@ -441,7 +441,7 @@ cc.Class({
 			this.resumeSche();
 			this.resumeMusic();
 		}else{
-			this.changeLife(8,8);
+			this.changeLife(8,8,false);
 			this.changeTime(5);
 			this.setHalfHeart();
 			ALL.MainCanSc.usingArm.getComponent(cc.Sprite).spriteFrame=ALL.RES.GamePropFrame["goods_"+this.data.nowArms];
@@ -454,6 +454,8 @@ cc.Class({
 			this.data.jumpSpeedy=LEADDATA.BeginSpeedKind[this.data.state[0]]["jump"];
 			this.setPhy();
 		}
+		this.runTime();//时间流动
+
 		ALL.menuSc.init();
 		var nowDraw=this.data.state[2]+"_"+this.data.act;
 		this.player.play(nowDraw);
@@ -758,7 +760,7 @@ cc.Class({
 								}
 								this.schedule(this.callbackCollSpecialStone,0.0500,80,0);
 								this.body.linearVelocity=cc.v2(300*(this.node.scaleX>0?1:-1),300);
-								this.changeTime(-2);//主角掉时间
+								this.changeTime(-4);//主角掉时间
 							}
 						}else{//是普通怪物掉血
 							this.data.isFall=false;
@@ -826,7 +828,7 @@ cc.Class({
 			ALL.MainCanSc.halfHeart.getComponent(cc.Sprite).spriteFrame=this.data.halfHeart?ALL.RES.GamePropFrame["halfHeart2"]:null;
 		}
 	},
-	changeLife: function(chLife,chLifeUp=0){//改变体力和体力上限
+	changeLife: function(chLife,chLifeUp=0,effect=true){//改变体力和体力上限,和是否有效果
 		var child = ALL.MainCanSc.lifeGroup.getChildren();
 		var i=child.length;
 		while(chLifeUp>0&&this.data.life.y<LEADDATA.LIFE.up){//加一个上限
@@ -839,6 +841,11 @@ cc.Class({
 			chLifeUp--;this.data.life.y++;
 		}
 		if(chLife>0){
+			if(chLife<=3&&effect){
+				cc.audioEngine.play(ALL.RES.LeadMusic["getChangeLife1"], false, ALL.musicVolume);
+			}else if(effect){
+				cc.audioEngine.play(ALL.RES.LeadMusic["getChangeLifeAll"], false, ALL.musicVolume);
+			}
 			var cnt=Math.min(chLife,this.data.life.y-this.data.life.x);//要回复几滴血
 			var X=this.data.life.x;//初始血量位置
 			this.data.life.x+=cnt;//数值上的回血
@@ -846,26 +853,29 @@ cc.Class({
 				child[i].getComponent(cc.Sprite).spriteFrame = ALL.RES.GamePropFrame["life_true"];
 			}
 		}else if(chLife<0){
-			cc.audioEngine.play(ALL.RES.LeadMusic["injured"],false,ALL.musicVolume);
+			
 			var cnt=Math.min(-chLife,this.data.life.x);//掉几滴血
 			var X=this.data.life.x;//初始血量
 			this.data.life.x-=cnt;//数值上的扣血
 			for(var i=X-1;i>=X-cnt;i--){
 				child[i].getComponent(cc.Sprite).spriteFrame = ALL.RES.GamePropFrame["life_false"];
 			}
-			this.data.specialEffect="twinkle";
-			var count = 0;
-			this.callbackChangeLife = function(){
-				if(count === 50) {
-					this.node.opacity=255;
-					this.data.specialEffect="null";
-					this.unschedule(this.callbackChangeLife);
-				}else{
-					this.node.opacity=count%2*255;
-					count++;
+			if(effect){
+				cc.audioEngine.play(ALL.RES.LeadMusic["injured"],false,ALL.musicVolume);
+				this.data.specialEffect="twinkle";
+				var count = 0;
+				this.callbackChangeLife = function(){
+					if(count === 50) {
+						this.node.opacity=255;
+						this.data.specialEffect="null";
+						this.unschedule(this.callbackChangeLife);
+					}else{
+						this.node.opacity=count%2*255;
+						count++;
+					}
 				}
+				this.schedule(this.callbackChangeLife,0.0500,80,0);
 			}
-			this.schedule(this.callbackChangeLife,0.0500,80,0);
 			if(this.data.life.x==0){
 				this.die();
 			}
@@ -878,19 +888,25 @@ cc.Class({
 			var cnt=Math.min(chTime,this.data.time.y-this.data.time.x);//要回复几个时间
 			var X=this.data.time.x;//初始时间位置
 			this.data.time.x+=cnt;//数值上的加时间GamePropFrame
-			for(var i=X;i<X+cnt;i++){
+			for(var i=Math.floor(X/2);i<Math.floor((X+cnt)/2);i++){
 				child[i].getComponent(cc.Sprite).spriteFrame = ALL.RES.GamePropFrame["time_true"];
+			}
+			if(this.data.time.x%2==1){
+				child[Math.floor((X+cnt)/2)].getComponent(cc.Sprite).spriteFrame = ALL.RES.GamePropFrame["time_half"];
 			}
 		}else{
 			var cnt=Math.min(-chTime,this.data.time.x);//掉几时间
 			var X=this.data.time.x;//初始时间
 			this.data.time.x-=cnt;//数值上的扣时间
-			for(var i=X-1;i>=X-cnt;i--){
+			for(var i=Math.floor(X/2-0.5);i>=Math.floor((X-cnt)/2);i--){
 				child[i].getComponent(cc.Sprite).spriteFrame = ALL.RES.GamePropFrame["time_false"];
 			}
+			if(this.data.time.x%2==1){
+				child[Math.floor((X-cnt)/2)].getComponent(cc.Sprite).spriteFrame = ALL.RES.GamePropFrame["time_half"];
+			}
 			if(this.data.time.x==0){
-				this.changeLife(-1);
-				this.changeTime(8);
+				this.changeLife(-1,0,false);
+				this.changeTime(16);
 			}
 		}
 	},
@@ -938,6 +954,7 @@ cc.Class({
 			this.node.parent.addChild(newarm);
 		}else if(this.data.nowArms=="Stegosaurus"){
 			this.data.nowArmsCnt[this.data.nowArms]=0;
+			cc.audioEngine.play(ALL.RES.LeadMusic["Arm_Stegosaurus"], false, ALL.musicVolume);
 		}else if(this.data.nowArms=="waterGun"){
 			this.scheduleDir[this.data.nowArms] = function(){//前摇时间0.2
 				var newarm=cc.instantiate(ALL.RES.FAB["Arm_waterGun"]);
@@ -1308,6 +1325,24 @@ cc.Class({
 			}
 		}
 	},
+	removeColl:function(other){
+		if(MainLead.coll.collFloorDir[other._id]){//移除碰撞状体
+			delete MainLead.coll.collFloorDir[other._id];
+			MainLead.coll.collFloorCnt--;
+		}
+		if(MainLead.coll.collSideDir[0][other._id]){
+			delete MainLead.coll.collSideDir[0][other._id];
+			MainLead.coll.collSideCnt[0]--;
+		}
+		if(MainLead.coll.collSideDir[1][other._id]){
+			delete MainLead.coll.collSideDir[1][other._id];
+			MainLead.coll.collSideCnt[1]--;
+		}
+		if(MainLead.coll.collCeilDir[other._id]){
+			delete MainLead.coll.collCeilDir[other._id];
+			MainLead.coll.collCeilCnt--;
+		}
+	},
 	die:function(){
 		// newLife.spriteFrame=this.img_false;
 	},
@@ -1495,6 +1530,7 @@ cc.Class({
 			ALL.menu.active=true;
 			cc.director.pause();
 			ALL.bgMusic.pause();
+			cc.audioEngine.play(ALL.RES.LeadMusic["menu_into"], false, ALL.musicVolume);//播放音乐
 			if(musicSt==1)//这个音乐正在播放
 				cc.audioEngine.pause(this.data.nowMusic["invincibleStar"]);
 			this.clearSelf();
@@ -1536,7 +1572,15 @@ cc.Class({
 		}
 		this.schedule(this.cbfun,0.0500,1000,0);
 	},
-
+	runTime:function(){//时间流动
+		//添加一个计时器
+		if(!this.data.goods["clock"]){
+			this.callbackRumTime = function(){
+				this.changeTime(-1);
+			}
+			this.schedule(this.callbackRumTime,5,8000,0);
+		}
+	},
 	setScaleX:function(fp){
 		var sc=ALL.scaleLead.x*fp;
 		if(sc>0&&this.node.scaleX<0||sc<0&&this.node.scaleX>0){

@@ -10,6 +10,7 @@ cc.Class({
 	init: function(beginSpeed){
 		this.ap=this.node.getComponent("ArmPublic");
 		this.ap.category="waterGun";
+		cc.audioEngine.play(ALL.RES.LeadMusic[this.node.name], false, ALL.musicVolume);
 		MainLead.data.nowArmsCnt[this.ap.category]++;
 		this.node.scale=ALL.scaleLead;
         this.body = this.getComponent(cc.RigidBody);

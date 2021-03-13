@@ -25,13 +25,15 @@ cc.Class({
 			if(cnt==t1){
 				this.isDam=true;
 				this.node.name="Arm_bomb";
+				cc.audioEngine.play(ALL.RES.LeadMusic[this.node.name], false, ALL.musicVolume);
 				this.player.play("blast2");
 				this.node.group="Arm";
 				this.phyBox.enabled=true;
+				MainLead.removeColl(this.phyCir);
+				
 				this.node.removeComponent(cc.PhysicsCircleCollider);
 				this.body.linearVelocity=cc.v2(0,0);
 				this.body.type="Static";
-				
 				this.phyBox.apply();
 			}else if(cnt==sumCnt){
 				this.ap.die();

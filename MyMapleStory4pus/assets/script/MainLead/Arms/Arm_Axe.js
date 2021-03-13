@@ -9,6 +9,7 @@ cc.Class({
 		this.ap=this.node.getComponent("ArmPublic");
     },
 	init: function(beginSpeed){
+		cc.audioEngine.play(ALL.RES.LeadMusic[this.node.name], false, ALL.musicVolume);
 		this.ap=this.node.getComponent("ArmPublic");
 		this.ap.category="axe";
 		MainLead.data.nowArmsCnt[this.ap.category]++;
@@ -32,7 +33,11 @@ cc.Class({
     },
     onBeginContact: function (contact, self, other) {// 只在两个碰撞体开始接触时被调用一次
         if(other.node.name.indexOf("Object0")!=-1){//碰撞的了第一类物体，就消失
-            this.ap.die();
+			if(this.body.linearVelocity.y<0){
+				this.ap.die();
+			}else{
+				contact.disabled=true;
+			}
         }else if(other.node.name.indexOf("Enemy")==0){
 			var js=other.node.getComponent("EnemyPublic");
 			//cc.log(js,js.specialEffect);

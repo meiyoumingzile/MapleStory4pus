@@ -13,7 +13,6 @@ cc.Class({
 		timeGroup:[],
 		halfHeart:cc.Node,
 		usingArm:cc.Node,
-		fruitFrameList:[],
     },
  
 	// use this for initialization
@@ -225,7 +224,7 @@ cc.Class({
 		ALL.MainCanvas.addChild(newEbullet);
 		return newEbullet;
     },
-	randomNum:function(minNum,maxNum){
+	randomNum:function(minNum,maxNum){//[minNum,maxNum]
 		switch(arguments.length){
 			case 1:
 			return parseInt(Math.random()*minNum+1,10);
