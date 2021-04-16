@@ -100,6 +100,9 @@
       },
       {
         "__id__": 357
+      },
+      {
+        "__id__": 358
       }
     ],
     "_prefab": null,
@@ -14116,7 +14119,6 @@
     "timeGroup": [],
     "halfHeart": null,
     "usingArm": null,
-    "fruitFrameList": [],
     "_id": "44X71FIaJLJKU1sc9tOOUO"
   },
   {
@@ -14150,5 +14152,23 @@
     "_isTrimmedMode": true,
     "_atlas": null,
     "_id": "88CpBbfJ9K+Kpsx2ln7Bc9"
+  },
+  {
+    "__type__": "cc.AudioSource",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "_clip": {
+      "__uuid__": "cceabebf-8cc7-4262-a2cc-3b1bde3f4ba4"
+    },
+    "_volume": 1,
+    "_mute": false,
+    "_loop": true,
+    "playOnLoad": true,
+    "preload": false,
+    "_id": "a2tqNCvAhJnJhKOsO/uddl"
   }
 ]

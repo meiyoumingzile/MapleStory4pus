@@ -17,7 +17,7 @@
         "__id__": 2
       },
       {
-        "__id__": 406
+        "__id__": 407
       }
     ],
     "_active": true,
@@ -112,6 +112,9 @@
     "_components": [
       {
         "__id__": 405
+      },
+      {
+        "__id__": 406
       }
     ],
     "_prefab": null,
@@ -17620,7 +17623,7 @@
       "array": [
         323,
         -1025.284,
-        371.5248982235242,
+        351.60631393648214,
         0,
         0,
         0,
@@ -17711,8 +17714,25 @@
     "timeGroup": [],
     "halfHeart": null,
     "usingArm": null,
-    "fruitFrameList": [],
     "_id": "01xSMfxwRJjKbgPGmW4sx5"
+  },
+  {
+    "__type__": "cc.AudioSource",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "_clip": {
+      "__uuid__": "d7943721-81c5-474d-9789-70185408ead2"
+    },
+    "_volume": 1,
+    "_mute": false,
+    "_loop": true,
+    "playOnLoad": true,
+    "preload": false,
+    "_id": "bcnwlaaRxO97nXOhdE9/wH"
   },
   {
     "__type__": "cc.Node",
@@ -17725,7 +17745,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 407
+        "__id__": 408
       }
     ],
     "_prefab": null,
@@ -17781,7 +17801,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 406
+      "__id__": 407
     },
     "_enabled": true,
     "_materials": [

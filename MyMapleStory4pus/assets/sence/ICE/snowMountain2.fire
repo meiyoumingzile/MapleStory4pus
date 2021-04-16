@@ -27884,7 +27884,7 @@
       "array": [
         323,
         -1025.284,
-        371.5248982235242,
+        351.60631393648214,
         0,
         0,
         0,
@@ -28069,7 +28069,6 @@
     "timeGroup": [],
     "halfHeart": null,
     "usingArm": null,
-    "fruitFrameList": [],
     "_id": "33e87EqvpMTISypHkYx1H4"
   },
   {
@@ -28081,13 +28080,13 @@
     },
     "_enabled": true,
     "_clip": {
-      "__uuid__": "11ce5715-478b-473d-8336-84efa211503b"
+      "__uuid__": "d7943721-81c5-474d-9789-70185408ead2"
     },
     "_volume": 1,
     "_mute": false,
     "_loop": true,
     "playOnLoad": true,
     "preload": false,
-    "_id": "12jNyCEtpBObA6YcYAMwv+"
+    "_id": "2eMAZuSANBR7+31Kex0PE7"
   }
 ]

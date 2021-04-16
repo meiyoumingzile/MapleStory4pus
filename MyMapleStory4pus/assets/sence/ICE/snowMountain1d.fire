@@ -243,7 +243,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "4e0f7fc7-51e8-4505-becb-83f0543aaca6"
+      "__uuid__": "05d5c8fe-538c-43a7-8beb-045a31720b15"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -19602,7 +19602,7 @@
       "array": [
         323,
         -1025.284,
-        371.5248982235242,
+        351.60631393648214,
         0,
         0,
         0,
@@ -19881,7 +19881,6 @@
     "timeGroup": [],
     "halfHeart": null,
     "usingArm": null,
-    "fruitFrameList": [],
     "_id": "77ay/PyNdAoYuG0U1fwL/E"
   },
   {
@@ -19900,6 +19899,6 @@
     "_loop": true,
     "playOnLoad": true,
     "preload": false,
-    "_id": "0fzTO4bh5IvrqW+AgSTWG2"
+    "_id": "a4PvNMZ7pKQZGOXAPBVtDq"
   }
 ]

@@ -43,6 +43,9 @@ cc.Class({
             if(other.node.ap&&LEADDATA.ARMS.disappearEGG.indexOf(other.node.ap.category)!=-1){
                 other.node.die();
             }
+            if(other.node.group=="Arm"){
+                cc.audioEngine.play(ALL.RES.LeadMusic["invisibleEgg"], false, ALL.musicVolume);
+            }
             if(other.node.name=="Lead"&&other.tag==0){
                 contact.disabled=true;
             }
@@ -53,6 +56,7 @@ cc.Class({
             if(other.node.ap&&other.node.ap.damage){
                 if(LEADDATA.ARMS.disappearEGG.indexOf(other.node.ap.category)!=-1){
                     other.node.die();
+                    
                 }
                 this.life-=other.node.ap.damage;
                 if(this.life<1){

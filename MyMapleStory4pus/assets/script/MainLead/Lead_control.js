@@ -1474,9 +1474,10 @@ cc.Class({
 		return false;
 	},
 	intoWater: function(){
+
 		this.data.state[0]="water";
 		if(this.data.state[2].indexOf("Lead")!=-1){
-			if(LEADDATA.Pets.indexOf(this.data.chooseDragon)!=-1&&this.data.chooseDragon!="Seadragon"){
+			if(LEADDATA.Pets.indexOf(this.data.chooseDragon)!=-1&&this.data.chooseDragon!="Seadragon"&&this.data.isSaveDragon){
 				ALL.MainCanSc.addEffect(this.node.x,this.node.y,this,"blast");
 				this.data.isSaveDragon=false;
 				ALL.menuSc.displayDragon();
@@ -1663,7 +1664,7 @@ cc.Class({
 			ALL.menuSc.displayProp(name);
 			this.data.isSaveDragon=false;
 			ALL.menuSc.displayDragon();
-			this.useGoods("Pterosaur");
+			this.data.state[0]=='air'?this.useGoods("Pterosaur"):this.useGoods("Seadragon");
         }
         
     }

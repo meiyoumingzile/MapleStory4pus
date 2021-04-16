@@ -109,6 +109,9 @@
     "_components": [
       {
         "__id__": 458
+      },
+      {
+        "__id__": 459
       }
     ],
     "_prefab": null,
@@ -21034,7 +21037,24 @@
     "timeGroup": [],
     "halfHeart": null,
     "usingArm": null,
-    "fruitFrameList": [],
     "_id": "ceniNjbOtIz47msqow3p9M"
+  },
+  {
+    "__type__": "cc.AudioSource",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "_clip": {
+      "__uuid__": "7e4fe79b-34de-4c50-b4c3-1140ae31c562"
+    },
+    "_volume": 1,
+    "_mute": false,
+    "_loop": true,
+    "playOnLoad": true,
+    "preload": false,
+    "_id": "baxGMTRsNNbqBt+LuKgrCY"
   }
 ]

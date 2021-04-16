@@ -13998,8 +13998,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -5297.552,
-        -521.503,
+        6346.875,
+        -341.743,
         0,
         0,
         0,
@@ -15306,7 +15306,7 @@
       "array": [
         244.979,
         1295.143,
-        351.60631393648214,
+        363.73066958946424,
         0,
         0,
         0,
@@ -15397,7 +15397,6 @@
     "timeGroup": [],
     "halfHeart": null,
     "usingArm": null,
-    "fruitFrameList": [],
     "_id": "4fTQdf6UxLW6xq7rDZAfEb"
   },
   {

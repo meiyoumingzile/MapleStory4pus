@@ -167,7 +167,7 @@
       "__id__": 2
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 4
@@ -177,7 +177,7 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
+      "r": 0,
       "g": 0,
       "b": 0,
       "a": 255
@@ -52290,7 +52290,7 @@
       "array": [
         323,
         -1025.284,
-        371.5248982235242,
+        351.60631393648214,
         0,
         0,
         0,
@@ -52381,7 +52381,6 @@
     "timeGroup": [],
     "halfHeart": null,
     "usingArm": null,
-    "fruitFrameList": [],
     "_id": "3bADXmM3tIr6cy6ug3Ha23"
   },
   {
