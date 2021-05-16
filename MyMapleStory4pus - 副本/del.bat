@@ -1,1 +1,0 @@
-del Z:\cocos2d\MyMapleStory20200126\assets\*.meta
